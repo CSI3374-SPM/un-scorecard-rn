@@ -1,0 +1,32 @@
+name: Main workflow
+on: [push]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get Nodejs
+        uses: actions/setup-node@v1
+        with:
+          node-version: "15"
+
+      # Cache build files
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+          key: ${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install Yarn Dependencies
+        run: yarn install --production=false
+
+      - name: Type-check
+        run: yarn tsc
+
+      - name: Run Tests
+        run: yarn test
