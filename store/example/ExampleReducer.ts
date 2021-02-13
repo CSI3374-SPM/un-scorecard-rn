@@ -1,28 +1,37 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { ExampleActionTypes, FirstAction, SecondAction, exampleReduxName } from './ExampleActions';
+import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
+import {
+  ExampleActionTypes,
+  UpdateAction,
+  exampleReduxName,
+} from "./ExampleActions";
 
 // The data field for the state
 export interface ExampleData {
-  // ...
+  n: number;
+}
+
+interface State {
+  data: ExampleData;
 }
 
 // Create the example state slice
 const exampleSlice = createSlice({
   name: exampleReduxName,
   initialState: {
-    data: {}
+    data: {
+      n: 0,
+    },
   },
   reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(ExampleActionTypes.FIRST_ACTION, (state: any, action: FirstAction) => {
-      state.data = action.payload;
-      return state;
-    });
-    builder.addCase(ExampleActionTypes.SECOND_ACTION, (state: any, action: SecondAction) => {
-      state.data = action.payload;
-      return state;
-    });
-  }
+  extraReducers: (builder: ActionReducerMapBuilder<State>) => {
+    builder.addCase(
+      ExampleActionTypes.UPDATE_ACTION,
+      (state: any, action: UpdateAction) => {
+        state.data = action.payload;
+        return state;
+      }
+    );
+  },
 });
 
 export default exampleSlice;

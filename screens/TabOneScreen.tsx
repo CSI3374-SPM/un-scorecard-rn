@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { View } from "react-native";
 import { Text, Button } from "react-native-paper";
+import Counter from "../components/example/CounterRedux";
 
 export default function TabOneScreen() {
   return (
@@ -11,6 +12,7 @@ export default function TabOneScreen() {
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} />
       <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+      <Counter />
     </View>
   );
 }
