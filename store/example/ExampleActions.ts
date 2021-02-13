@@ -1,20 +1,14 @@
 import { ExampleData } from "./ExampleReducer";
 
-export const exampleReduxName = "user";
+export const exampleReduxName = "example";
 export enum ExampleActionTypes {
-  FIRST_ACTION = "example/first",
-  SECOND_ACTION = "example/second"
+  UPDATE_ACTION = "example/update",
 }
 
-// Aggregate action type; | all action types together
-export type ExampleAction = FirstAction | SecondAction;
+// Aggregate action type; | all action types together => FirstAction | SecondAction
+export type ExampleAction = UpdateAction;
 
-export interface FirstAction {
-  type: ExampleActionTypes.FIRST_ACTION;
-  payload: ExampleData;
-}
-
-export interface SecondAction {
-  type: ExampleActionTypes.SECOND_ACTION;
+export interface UpdateAction {
+  type: ExampleActionTypes.UPDATE_ACTION;
   payload: ExampleData;
 }

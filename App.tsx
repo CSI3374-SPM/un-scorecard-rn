@@ -1,15 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ThemeProvider } from 'react-native-elements';
-import { PersistGate } from 'redux-persist/integration/react';
-import { persistStore } from 'redux-persist';
-import { Provider as StoreProvider } from 'react-redux';
-import { buildStore } from './store/redux';
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Provider as ThemeProvider } from "react-native-paper";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+import { Provider as StoreProvider } from "react-redux";
+import { buildStore } from "./store/redux";
 
-import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
-import Navigation from './navigation';
+import { DefaultTheme, DarkTheme } from "./constants/Colors";
+import useCachedResources from "./hooks/useCachedResources";
+import useColorScheme from "./hooks/useColorScheme";
+import Navigation from "./navigation";
 
 let initialState = {};
 let store = buildStore(initialState);
@@ -28,9 +29,11 @@ export default function App() {
     return (
       <StoreProvider store={store}>
         <PersistGate persistor={persistor}>
-          <ThemeProvider>
+          <ThemeProvider
+            theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
             <SafeAreaProvider>
-              <Navigation colorScheme={colorScheme} />
+              <Navigation />
               <StatusBar />
             </SafeAreaProvider>
           </ThemeProvider>
