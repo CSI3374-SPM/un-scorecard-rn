@@ -4,15 +4,15 @@ import { StyleSheet } from "react-native";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { View } from "react-native";
 import { Text, Button } from "react-native-paper";
-import Counter from "../components/example/CounterRedux";
+import Question from "../components/question/QuestionRedux";
 
 export default function TabOneScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
+      {/* <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-      <Counter />
+      <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}
+      <Question />
     </View>
   );
 }
@@ -20,7 +20,7 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    //alignItems: "center",
     justifyContent: "center",
   },
   title: {

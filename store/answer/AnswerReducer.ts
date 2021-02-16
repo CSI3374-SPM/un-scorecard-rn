@@ -1,32 +1,34 @@
 import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import {
-  ExampleActionTypes,
-  UpdateAction,
-  exampleReduxName,
-} from "./ExampleActions";
+  AnswerActionTypes,
+  AnswerAction,
+  answerReduxName,
+} from "./AnswerAction";
 
 // The data field for the state
-export interface ExampleData {
-  n: number;
+export interface AnswerData {
+  // Score restricted to 0 to 5
+  score: number;
+  justification?: string;
 }
 
 interface State {
-  data: ExampleData;
+  data: AnswerData;
 }
 
 // Create the example state slice
-const exampleSlice = createSlice({
-  name: exampleReduxName,
+const answerSlice = createSlice({
+  name: answerReduxName,
   initialState: {
     data: {
-      n: 0,
+      score: 0,
     },
   },
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<State>) => {
     builder.addCase(
-      ExampleActionTypes.UPDATE_ACTION,
-      (state: any, action: UpdateAction) => {
+      AnswerActionTypes.UPDATE_ACTION,
+      (state: any, action: AnswerAction) => {
         state.data = action.payload;
         return state;
       }
@@ -34,4 +36,4 @@ const exampleSlice = createSlice({
   },
 });
 
-export default exampleSlice;
+export default answerSlice;
