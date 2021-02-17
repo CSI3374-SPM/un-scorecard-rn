@@ -9,9 +9,9 @@ Developers:
 <ul>
   
   <li> <a href="https://github.com/nnazo" > Jacob Curtis </a> </li>
-  <li> <a href="https://github.com" > Owen Murphy </a> </li>
+  <li> <a href="https://github.com/olmurphy" > Owen Murphy </a> </li>
   <li> <a href="https://github.com/Josekeitor"> José Carlos Acosta </a> </li>
-  <li> <a href=""> Peiyang Chang </a> </li>
+  <li> <a href="https://github.com/peiyang-chang"> Peiyang Chang </a> </li>
   <li> <a href="https://github.com/leightonglim" > Leighton Glim </a> </li>
   
 </ul>
