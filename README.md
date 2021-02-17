@@ -43,6 +43,6 @@ Available scripts:
   <li> yarn web </li>
   <li> yarn eject </li>
   <li> yarn jest </li>
-  <li> yarn jest:watch <li>
+  <li> yarn jest:watch </li>
   
 </ul>
