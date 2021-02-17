@@ -38,6 +38,9 @@ Available scripts:
 <ul>
   
   <li> yarn start (options: --android, --ios, --web) </li>
+  <li> yarn android </li>
+  <li> yarn ios </li>
+  <li> yarn web </li>
   <li> yarn eject </li>
   <li> yarn jest (option: --wathcALL) </li>
   
