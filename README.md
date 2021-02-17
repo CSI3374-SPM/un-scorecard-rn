@@ -42,6 +42,7 @@ Available scripts:
   <li> yarn ios </li>
   <li> yarn web </li>
   <li> yarn eject </li>
-  <li> yarn jest (option: --watchALL) </li>
+  <li> yarn jest </li>
+  <li> yarn jest:watch <li>
   
 </ul>
