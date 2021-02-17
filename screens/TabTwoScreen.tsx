@@ -4,13 +4,15 @@ import { StyleSheet } from "react-native";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { View } from "react-native";
 import { Text } from "react-native-paper";
+import Answer from "../components/answer/AnswerRedux";
 
 export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
+      {/* <Text style={styles.title}>Tab Two</Text>
       <View style={styles.separator} />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      <EditScreenInfo path="/screens/TabTwoScreen.tsx" /> */}
+      <Answer />
     </View>
   );
 }
@@ -18,7 +20,7 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    // alignItems: "center",
     justifyContent: "center",
   },
   title: {
