@@ -7,12 +7,12 @@ const api = axios.create({
 });
 
 /**
- * Create a survey and return the survey ID.
+ * Send a request to the API with the given configuration
  *
- * @param city_name The name of the city to create the survey for
+ * @param config The request configuration
  * @param onFail A callback to do any desired error handling
  */
-export const request = async (
+const request = async (
   config: AxiosRequestConfig,
   onFail: (e: any) => void = console.log
 ) => {
