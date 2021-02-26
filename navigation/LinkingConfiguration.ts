@@ -4,6 +4,12 @@ export default {
   prefixes: [Linking.makeUrl('/')],
   config: {
     screens: {
+      Landing:{
+        screens:{
+          Generate: 'generate',
+          Join: 'join',
+        },
+      },
       Root: {
         screens: {
           TabOne: {

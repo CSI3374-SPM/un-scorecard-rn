@@ -6,6 +6,7 @@ import { DefaultTheme, DarkTheme } from "../constants/Colors";
 
 import NotFoundScreen from "../screens/NotFoundScreen";
 import { RootStackParamList } from "../types";
+import LandingPageNavigator from "./LandingPageNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
 
@@ -30,8 +31,9 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
-      <Stack.Screen
+        <Stack.Screen name="Landing" component={LandingPageNavigator} />
+        <Stack.Screen name="Root" component={BottomTabNavigator} />
+        <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}
         options={{ title: "Oops!" }}
