@@ -1,6 +1,11 @@
+import { CompositeNavigationProp } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { StackNavigationProp } from "@react-navigation/stack";
+
 export type RootStackParamList = {
   Root: undefined;
   NotFound: undefined;
+  Landing: undefined;
 };
 
 export type BottomTabParamList = {
@@ -15,3 +20,16 @@ export type TabOneParamList = {
 export type TabTwoParamList = {
   TabTwoScreen: undefined;
 };
+
+export type LandingParamList = {
+  Generate: undefined;
+  Join: undefined;
+};
+
+export type RootNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<BottomTabParamList, "TabOne">,
+  CompositeNavigationProp<
+    StackNavigationProp<RootStackParamList, "Root">,
+    StackNavigationProp<LandingParamList, "Generate">
+  >
+>;
