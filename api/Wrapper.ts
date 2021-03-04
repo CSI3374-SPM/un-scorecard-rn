@@ -206,43 +206,46 @@ export const fetchSurveyResults = async (
     onFail
   );
   if (!_.isNull(data)) {
-    const rawResults: any = data.Data[0];
+    const rawResponses: any[] = data.Data;
 
-    const results = Object.keys(rawResults)
-      .map((key) => {
-        // Find the question with the right key in the questions
-        const question = questions.find(
-          (question) => question.question === key
-        );
-        if (_.isUndefined(question)) {
-          return null;
-        }
+    const results = rawResponses.map((rawResults) => {
+      return Object.keys(rawResults)
+        .map((key) => {
+          // Find the question with the right key in the questions
+          const question = questions.find(
+            (question) => question.question === key
+          );
+          if (_.isUndefined(question)) {
+            return null;
+          }
 
-        // Get the question string (e.g. 'A.1.1') and find the
-        // corresponding justification key in the raw results
-        let qNum = question.question.split(" ")[0];
-        const justificationKey = Object.keys(rawResults).find(
-          (justification) =>
-            justification.startsWith("Option:") && justification.endsWith(qNum)
-        );
-        if (_.isUndefined(justificationKey)) {
-          return null;
-        }
+          // Get the question string (e.g. 'A.1.1') and find the
+          // corresponding justification key in the raw results
+          let qNum = question.question.split(" ")[0];
+          const justificationKey = Object.keys(rawResults).find(
+            (justification) =>
+              justification.startsWith("Option:") &&
+              justification.endsWith(qNum)
+          );
+          if (_.isUndefined(justificationKey)) {
+            return null;
+          }
 
-        // Get the justification and score
-        const justification: string = rawResults[justificationKey];
-        const score: number = parseInt(rawResults[key]);
+          // Get the justification and score
+          const justification: string = rawResults[justificationKey];
+          const score: number = parseInt(rawResults[key]);
 
-        const index = questions.indexOf(question);
-        const response: SurveyResponse = {
-          questionIndex: index,
-          score,
-          justification:
-            justification === "No response given" ? undefined : justification,
-        };
-        return response;
-      })
-      .filter((response): response is SurveyResponse => !_.isNull(response));
+          const index = questions.indexOf(question);
+          const response: SurveyResponse = {
+            questionIndex: index,
+            score,
+            justification:
+              justification === "No response given" ? undefined : justification,
+          };
+          return response;
+        })
+        .filter((response): response is SurveyResponse => !_.isNull(response));
+    });
 
     return results;
   }
