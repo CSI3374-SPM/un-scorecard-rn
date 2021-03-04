@@ -206,7 +206,7 @@ export const fetchSurveyResults = async (
     onFail
   );
   if (!_.isNull(data)) {
-    const rawResults: any = data.Data;
+    const rawResults: any = data.Data[0];
 
     const results = Object.keys(rawResults)
       .map((key) => {
@@ -221,14 +221,9 @@ export const fetchSurveyResults = async (
         // Get the question string (e.g. 'A.1.1') and find the
         // corresponding justification key in the raw results
         let qNum = question.question.split(" ")[0];
-        const justificationKey = _.findKey(
-          rawResults,
-          (justification: string) => {
-            return (
-              justification.startsWith("Option:") &&
-              justification.endsWith(qNum)
-            );
-          }
+        const justificationKey = Object.keys(rawResults).find(
+          (justification) =>
+            justification.startsWith("Option:") && justification.endsWith(qNum)
         );
         if (_.isUndefined(justificationKey)) {
           return null;
