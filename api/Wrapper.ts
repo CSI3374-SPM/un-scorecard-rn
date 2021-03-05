@@ -263,11 +263,13 @@ export type SurveyResponse = {
  *
  * @param surveyId The survey's ID we are getting results from
  * @param responses The question responses
+ * @param responseId The response ID from the previous response addition request.
  * @param onFail A callback to do any desired error handling
  */
-export const createSurveyResponse = async (
+export const addSurveyResponse = async (
   surveyId: string,
   responses: SurveyResponse[],
+  responseId: string | null,
   onFail: (e: any) => void = console.log
 ) => {
   let convertedResponses = {};
@@ -276,16 +278,26 @@ export const createSurveyResponse = async (
     {
       method: "POST",
       url: `/api/create/response/${surveyId}`,
-      data: convertedResponses,
+      data: {
+        response_id: responseId,
+        ...convertedResponses,
+      },
       headers: {
         "Content-Type": "application/json",
       },
     },
     onFail
   );
-  if (!_.isNull(data) && data.status !== "OK") {
+  if (_.isNull(data) || data.status !== "OK") {
     onFail("Survey response creation failed");
+    return null;
   }
+
+  // Return the response ID from the endpoint so that
+  // subsequent requests can take advantage of it
+  // for grouping answers.
+  const newResponseId: string = data.responseId;
+  return newResponseId;
 };
 
 const convertResponse = (response: SurveyResponse, map: any) => {
