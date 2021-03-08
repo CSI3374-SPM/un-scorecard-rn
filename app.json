@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "unnamed-mobile-application",
-    "slug": "unnamed-mobile-application",
+    "name": "un-scorecard-rn",
+    "slug": "un-scorecard-rn",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

@@ -1,48 +1,46 @@
 # UN_Scorecard_RN
 
-Introduction
-------------
+## Introduction
 
+---
 
-Developers:
+### Developers:
 
-<ul>
-  
-  <li> <a href="https://github.com/nnazo" > Jacob Curtis </a> </li>
-  <li> <a href="https://github.com/olmurphy" > Owen Murphy </a> </li>
-  <li> <a href="https://github.com/Josekeitor"> José Carlos Acosta </a> </li>
-  <li> <a href="https://github.com/peiyang-chang"> Peiyang Chang </a> </li>
-  <li> <a href="https://github.com/leightonglim" > Leighton Glim </a> </li>
-  
-</ul>
+- [Jacob Curtis](https://github.com/nnazo)
+- [Owen Murphy](https://github.com/olmurphy)
+- [Jose Carlos Acosta](https://github.com/Josekeitor)
+- [Peiyang Chang](https://github.com/peiyang-chang)
+- [Leighton Glim](https://github.com/leightonglim)
 
-Advisors:
+### Advisors:
 
-<ul>
-  
-  <li> Dr. Matthew Fendt </li>
-  <li> Dr. Pablo Rivas </li>
-  <li> Dr. Benjamin Ryan </li>
-  
-</ul>
+- Dr. Matthew Fendt
+- Dr. Pablo Rivas
+- Dr. Benjamin Ryan
 
 This app is being developed in an effort to improve collaboration and discussion as well as data visualization when compared to the existing UN Scorecard website.
 
-Setup
-------
+## Setup
 
-This app was bootstraped with <a href="https://expo.io">expo</a>, using the React Navigation Template with <a href="https://www.typescriptlang.org">Typescript</a>
+---
 
-Available scripts:
+This app was bootstraped with [Expo](https://expo.io), using the React Navigation Template with [TypeScript](https://www.typescriptlang.org).
 
-<ul>
-  
-  <li> yarn start (options: --android, --ios, --web) </li>
-  <li> yarn android </li>
-  <li> yarn ios </li>
-  <li> yarn web </li>
-  <li> yarn eject </li>
-  <li> yarn jest </li>
-  <li> yarn jest:watch </li>
-  
-</ul>
+### Available scripts:
+
+- `yarn start [--android | --ios | --web]`
+- `yarn android`
+- `yarn ios`
+- `yarn web`
+- `yarn eject`
+- `yarn jest`
+- `yarn jest:watch`
+
+### Environment
+
+- Copy the `.env.example` file to a `.env` file in the same directory (the root of the project)
+  - `cp .env.example .env`
+
+The following environment variables can be modified:
+
+- `API_URL` which indicates the URL of the backend that the mobile application sends requests to.
