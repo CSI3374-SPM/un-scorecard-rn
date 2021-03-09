@@ -9,7 +9,14 @@ import { RootStackParamList } from "../types";
 import LandingPageNavigator from "./LandingPageNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
+import {useState} from "react";
 
+import mapDispatchToProps from "../components/generate_code/JoinScreenD2P";
+import {mapStateToProps} from "../components/generate_code/JoinScreenRedux";
+import {connect} from "react-redux";
+import {idProps} from "../components/generate_code/JoinScreen";
+
+import JoinScreen from "../components/generate_code/JoinScreen";
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
 export default function Navigation() {
@@ -28,16 +35,24 @@ export default function Navigation() {
 // Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator<RootStackParamList>();
 
-function RootNavigator() {
+const RootNavigator = connect(mapStateToProps, mapDispatchToProps)((props: idProps) => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Landing" component={LandingPageNavigator} />
-        <Stack.Screen name="Root" component={BottomTabNavigator} />
-        <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
-    </Stack.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {props.data.id ? (
+            <><Stack.Screen name="Root" component={BottomTabNavigator}/>
+              <Stack.Screen
+                  name="NotFound"
+                  component={NotFoundScreen}
+                  options={{title: "Oops!"}}/></>
+        ):(
+            <><Stack.Screen name="Landing" component={LandingPageNavigator} />
+              <Stack.Screen
+                  name="NotFound"
+                  component={NotFoundScreen}
+                  options={{title: "Oops!"}} /></>
+        )}
+
+
+      </Stack.Navigator>
   );
-}
+});

@@ -3,7 +3,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import OptionsScreen from "../components/generate_code/OptionsScreen";
 import GenerateCodeScreen from "../components/generate_code/GenerateCodeScreen";
-import JoinScreen from "../components/generate_code/JoinScreen";
+import JoinScreen from "../components/generate_code/JoinScreenRedux";
 
 const Stack = createStackNavigator();
 

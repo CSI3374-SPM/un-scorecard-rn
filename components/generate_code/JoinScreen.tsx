@@ -3,8 +3,16 @@ import { Button, TextInput } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "../../types";
+import BottomTabNavigator from "../../navigation/BottomTabNavigator";
+import {idData} from "../../store/id/idReducer";
 
-export default function JoinScreen() {
+
+export type idProps = {
+  data: idData;
+  updateid: (id: idData) => void;
+};
+
+export default function JoinScreen(props: idProps) {
   const [id, setID] = useState("");
   const navigation = useNavigation<RootNavigationProp>();
   return (
@@ -14,7 +22,12 @@ export default function JoinScreen() {
         value={id}
         onChangeText={(id) => setID(id)}
       />
-      <Button mode="contained" onPress={() => navigation.navigate("Root")}>
+      <Button mode="contained" onPress={() => {
+        props.updateid({
+          id: id,
+        });
+        setID("");
+      }}>
         Join
       </Button>
     </View>
