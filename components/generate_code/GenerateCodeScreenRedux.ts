@@ -5,7 +5,7 @@ import mapDispatchToProps from "./GenerateCodeScreenD2P";
 
 export function mapStateToProps(state: any, myProps: any) {
     return {
-        authenticationData: state.authentication.data,
+        data: state.authentication.data,
     };
 }
 

@@ -1,31 +1,38 @@
 import React, { useState } from "react";
-import { Button, TextInput } from "react-native-paper";
+import {Button, Text, TextInput} from "react-native-paper";
 import { StyleSheet, View } from "react-native";
-import {idProps} from "../generate_code/JoinScreen";
-import {fetchSurveyResults} from "../../api/Wrapper";
 
-export default function OrganizerScreen(props: idProps) {
+import {fetchSurveyResults} from "../../api/Wrapper";
+import {authenticationProps} from "../generate_code/GenerateCodeScreen";
+import {connect} from "react-redux";
+import {mapStateToProps} from "../generate_code/GenerateCodeScreenRedux";
+import mapDispatchToProps from "../generate_code/GenerateCodeScreenD2P";
+
+function OrganizerScreen(props: authenticationProps) {
     const [id, setID] = useState("");
+    const [results, setResults] = useState([]);
+
+
     return (
         <View style={styles.container}>
-            <TextInput
-                label="Organizer screen"
-                value={id}
-                onChangeText={(id) => setID(id)}
-            />
+            <Text style={styles.title}>{props.data.id}</Text>
+            <Text>{results}</Text>
             <Button mode="contained" onPress={() => {
-                props.updateid({
-                    id: id,
-                });
-                setID("");
+                props.updateAuthentication({isOrganizer: false, id:""})
             }}>
-
+            Reset props
             </Button>
         </View>
     );
 }
 
+export default connect(mapStateToProps, mapDispatchToProps)(OrganizerScreen)
 
+async function getResults(id: string){
+    let surveyResults = await fetchSurveyResults(id);
+
+    return surveyResults;
+}
 
 const styles = StyleSheet.create({
     container: {

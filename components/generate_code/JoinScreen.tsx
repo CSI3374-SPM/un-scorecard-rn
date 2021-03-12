@@ -9,7 +9,7 @@ import {authenticationProps} from "./GenerateCodeScreen";
 import {mapStateToProps} from "./GenerateCodeScreenRedux";
 import mapDispatchToProps from "./GenerateCodeScreenD2P";
 import {connect} from "react-redux";
-
+import _ from "lodash";
 
 function JoinScreen(props: authenticationProps) {
   const [id, setID] = useState("");
@@ -30,8 +30,8 @@ function JoinScreen(props: authenticationProps) {
 
 async function validateId(id: string, props: authenticationProps){
   let surveyResults = await fetchSurveyResults(id);
-
-  if (surveyResults != null){
+  console.log("Survey results ", surveyResults);
+  if (!_.isNull(surveyResults)){
     props.updateAuthentication({isOrganizer: false, id: id});
   }else{
     console.log("invalid id")

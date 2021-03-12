@@ -40,7 +40,9 @@ async function generateID(city: string, props: authenticationProps){
 
     let id = surveyData?.id
     if (id != null){
+        console.log("generated id "+ id);
         props.updateAuthentication({isOrganizer: true, id: id});
+
     }
 }
 

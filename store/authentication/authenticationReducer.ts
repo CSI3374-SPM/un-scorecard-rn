@@ -7,8 +7,9 @@ import {
 
 // The data field for the state
 export interface authenticationData {
-    // isauthentication boolean value
+    // isOrganizer boolean value
     isOrganizer: boolean;
+    // id String
     id: string;
 }
 

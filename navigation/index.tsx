@@ -38,7 +38,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 const RootNavigator = connect(mapStateToProps, mapDispatchToProps)((props: authenticationProps) => {
   return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {props.data.id ? (
+        {props.data.id != "" ? (
             props.data.isOrganizer ?(
                 <><Stack.Screen name="Organizer" component={OrganizerScreen}/>
                   <Stack.Screen
