@@ -2,8 +2,8 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import OptionsScreen from "../components/generate_code/OptionsScreen";
-import GenerateCodeScreen from "../components/generate_code/GenerateCodeScreen";
-import JoinScreen from "../components/generate_code/JoinScreenRedux";
+import GenerateCodeScreen from "../components/generate_code/GenerateCodeScreenRedux";
+import JoinScreen from "../components/generate_code/JoinScreen";
 
 const Stack = createStackNavigator();
 

@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native";
 import { View } from "react-native";
 import LandingPageNavigator from "../navigation/LandingPageNavigator";
 
-export default function TabOneScreen() {
+export default function LandingScreen() {
     return (
         <View style={styles.container}>
             <LandingPageNavigator/>

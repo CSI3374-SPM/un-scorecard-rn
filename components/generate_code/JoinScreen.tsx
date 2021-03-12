@@ -4,15 +4,14 @@ import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "../../types";
 import BottomTabNavigator from "../../navigation/BottomTabNavigator";
-import {idData} from "../../store/id/idReducer";
+import {fetchSurveyResults} from "../../api/Wrapper";
+import {authenticationProps} from "./GenerateCodeScreen";
+import {mapStateToProps} from "./GenerateCodeScreenRedux";
+import mapDispatchToProps from "./GenerateCodeScreenD2P";
+import {connect} from "react-redux";
 
 
-export type idProps = {
-  data: idData;
-  updateid: (id: idData) => void;
-};
-
-export default function JoinScreen(props: idProps) {
+function JoinScreen(props: authenticationProps) {
   const [id, setID] = useState("");
   const navigation = useNavigation<RootNavigationProp>();
   return (
@@ -22,17 +21,24 @@ export default function JoinScreen(props: idProps) {
         value={id}
         onChangeText={(id) => setID(id)}
       />
-      <Button mode="contained" onPress={() => {
-        props.updateid({
-          id: id,
-        });
-        setID("");
-      }}>
+      <Button mode="contained" onPress={async () => {await validateId(id, props); setID("")}}>
         Join
       </Button>
     </View>
   );
 }
+
+async function validateId(id: string, props: authenticationProps){
+  let surveyResults = await fetchSurveyResults(id);
+
+  if (surveyResults != null){
+    props.updateAuthentication({isOrganizer: false, id: id});
+  }else{
+    console.log("invalid id")
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(JoinScreen)
 
 const styles = StyleSheet.create({
   container: {

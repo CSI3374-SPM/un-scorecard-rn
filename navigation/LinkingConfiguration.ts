@@ -4,6 +4,7 @@ export default {
   prefixes: [Linking.makeUrl('/')],
   config: {
     screens: {
+      Organizer: 'organizer',
       Landing:{
         screens:{
           Generate: 'generate',

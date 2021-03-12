@@ -3,11 +3,19 @@ import { Button, TextInput } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "../../types";
+import {createSurvey} from "../../api/Wrapper";
 
-export default function GenerateCodeScreen() {
+import {authenticationData} from "../../store/authentication/authenticationReducer";
+
+export type authenticationProps = {
+    data: authenticationData;
+    updateAuthentication: (auth: authenticationData) => void;
+};
+
+export default function GenerateCodeScreen(props: authenticationProps) {
   const [city, setCity] = useState("");
   const [email, setEmail] = useState("");
-  const navigation = useNavigation<RootNavigationProp>();
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -20,11 +28,20 @@ export default function GenerateCodeScreen() {
         value={email}
         onChangeText={(email) => setEmail(email)}
       />
-      <Button mode="contained" onPress={() => navigation.navigate("Root")}>
+      <Button mode="contained" onPress={async () => await generateID(city, props)}>
         Generate code
       </Button>
     </View>
   );
+}
+
+async function generateID(city: string, props: authenticationProps){
+    var surveyData = await createSurvey(city);
+
+    let id = surveyData?.id
+    if (id != null){
+        props.updateAuthentication({isOrganizer: true, id: id});
+    }
 }
 
 const styles = StyleSheet.create({
