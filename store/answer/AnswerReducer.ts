@@ -8,6 +8,7 @@ import {
 // The data field for the state
 export interface AnswerData {
   // Score restricted to 0 to 5
+  num: number;
   score: number;
   justification?: string;
 }
@@ -21,6 +22,7 @@ const answerSlice = createSlice({
   name: answerReduxName,
   initialState: {
     data: {
+      num: 0,
       score: 0,
     },
   },

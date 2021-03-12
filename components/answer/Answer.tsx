@@ -5,6 +5,9 @@ import { AnswerProps, description, rating } from "../question/Question";
 export default function Answer(props: AnswerProps) {
   return (
     <>
+      <Title>Number of Answers</Title>
+      <Text>{`${props.data.num}`}</Text>
+
       <Title>Score</Title>
       <Text>{`${props.data.score} (${
         description[rating(props.data.score)]
