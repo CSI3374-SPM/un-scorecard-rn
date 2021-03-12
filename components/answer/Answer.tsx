@@ -5,20 +5,20 @@ import {fetchSurveyResults, SurveyResponse} from "../../api/Wrapper"
 
 export default function Answer(props: AnswerProps) {
   var res = fetchSurveyResults("1");
+
+  //for (let index = 0; index < props.data.length; index++) {
+    let x = props.data.length;
   return (
-    <>
     
-      {res.map((items: any[], index: any) => {
-        return (
-          <ol>
-            {items.map((subItems, sIndex) => {
-              return <li> {subItems} </li>;
-            })}
-          </ol>
-        );
-      })}
-    </>
-      
+    <>
+    {props.data.forEach(function (value) {
+      <><Title>Score</Title><Text>{`${value.score} (${description[rating(value.score)]})`}</Text><Title>Justification</Title>
+        <Text>{`${value.justification === undefined
+            ? "None provided"
+            : value.justification}`}</Text></>
+})}
+      </>
+  
    /* <>
       <Title>Number of Answers</Title>
       <Text>{`${props.data.num}`}</Text>
@@ -36,5 +36,6 @@ export default function Answer(props: AnswerProps) {
       }`}</Text>
     </>*/
   );
+   // }
 
 }
