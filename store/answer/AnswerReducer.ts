@@ -1,4 +1,6 @@
 import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
+//import { State } from "react-native-gesture-handler";
+import { act } from "react-test-renderer";
 import {
   AnswerActionTypes,
   AnswerAction,
@@ -14,7 +16,7 @@ export interface AnswerData {
 }
 
 interface State {
-  data: AnswerData;
+  data: AnswerData[];
 }
 
 // Create the example state slice
@@ -27,12 +29,17 @@ const answerSlice = createSlice({
     },
   },
   reducers: {},
-  extraReducers: (builder: ActionReducerMapBuilder<State>) => {
+  extraReducers: (builder: ActionReducerMapBuilder<any>) => {
     builder.addCase(
       AnswerActionTypes.UPDATE_ACTION,
       (state: any, action: AnswerAction) => {
-        state.data = action.payload;
-        return state;
+      return {
+        ...state,
+        data: [...state.data, action.payload] 
+      }
+       // state.data = action.payload;
+      //  state.data.push(action.payload);
+     //   return state;
       }
     );
   },

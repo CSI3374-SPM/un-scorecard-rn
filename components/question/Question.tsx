@@ -5,7 +5,7 @@ import { AnswerData } from "../../store/answer/AnswerReducer";
 import {questions} from "../../api/Wrapper"
 
 export type AnswerProps = {
-  data: AnswerData;
+  data: AnswerData[];
   updateAnswer: (answer: AnswerData) => void;
 };
 
@@ -56,10 +56,11 @@ if(index < 23){
               num: index,
               score: checked,
               justification: justification !== "" ? justification : undefined,
-            });
+            })
             setChecked(0);
             setJustification("");
-          }}
+            }
+          }
         >
           Save
         </Button>
