@@ -3,9 +3,7 @@ const nodemailer = require("nodemailer");
 const user = process.env.SMTP_USERNAME;
 const pass = process.env.STMP_PASSWORD;
 const gmailConfig = {
-  host: "smtp.googlemail.com",
-  port: 465,
-  secure: true,
+  service: "gmail",
   auth: {
     user,
     pass,
