@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
 
 const user = process.env.SMTP_USERNAME;
 const pass = process.env.STMP_PASSWORD;
