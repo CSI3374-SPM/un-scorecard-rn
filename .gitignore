@@ -9,7 +9,7 @@ npm-debug.*
 *.orig.*
 web-build/
 .env
-
+.prettierrc.json
 # macOS
 .DS_Store
 
