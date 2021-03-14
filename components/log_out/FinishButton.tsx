@@ -14,7 +14,7 @@ function FinishButton(props: authenticationProps) {
         props.updateAuthentication({ isOrganizer: false, id: "" });
       }}
     >
-      Finish
+      Finish Survey
     </Button>
   );
 }
