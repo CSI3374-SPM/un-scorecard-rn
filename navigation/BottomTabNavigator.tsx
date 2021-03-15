@@ -19,6 +19,7 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
           ),
+          
         }}
       />
       <BottomTab.Screen
@@ -26,7 +27,7 @@ export default function BottomTabNavigator() {
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <TabBarIcon name="ios-code" color={color}  />
           ),
         }}
       />
@@ -48,6 +49,7 @@ function TabBarIcon(props: {
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
 function TabOneNavigator() {
+  console.log("Tab 1");
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen

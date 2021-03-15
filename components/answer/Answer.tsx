@@ -1,8 +1,9 @@
-import { values } from "lodash";
 import React from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { Title, Text, Divider, Button } from "react-native-paper";
 import { AnswerProps, description, rating, ans } from "../question/Question";
+
+console.disableYellowBox = true;
 
 export default function Answer(props: AnswerProps) {
   return(

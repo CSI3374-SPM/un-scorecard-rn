@@ -23,7 +23,7 @@ export const ans: Array<AnswerData> = [];
 
 export default function Question({navigation}:{navigation : any}, props: AnswerProps) {
   const [index, setIndex]: [number, (index: number) => void] = useState(0);
-  const [checked, setChecked]: [number, (n: number) => void] = useState(0);
+  const [checked, setChecked]: [number, (n: number) => void] = useState(-1);
   const [justification, setJustification]: [
     string,
     (j: string) => void
@@ -54,13 +54,18 @@ if(index < questions.length-1){
         <Button
           mode="contained"
           onPress={() => {
+            if(checked > -1) {
             ans.push({
               score: checked,
               justification: justification !== "" ? justification : undefined, 
             });
-            setChecked(0);
+            setChecked(-1);
             setJustification("");
-            setIndex(index+1)
+            setIndex(index+1);
+            console.log(index);
+            } else {
+              alert("Please select a score");
+            }
           }}
         >
           Save
