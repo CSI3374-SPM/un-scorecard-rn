@@ -307,27 +307,27 @@ const convertResponse = (response: SurveyResponse, map: any) => {
   map[question.justification] = makeJustification(response.justification);
 };
 
-export const sendEmails = async (
-  emails: string[],
-  body: string,
-  onFail: (e: any) => void = console.log
-) => {
-  const data = await request(
-    {
-      method: "POST",
-      url: `/api/send/emails`,
-      data: {
-        recipients: emails,
-        body,
-      },
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    },
-    onFail
-  );
-  if (_.isNull(data) || data.status !== "OK") {
-    onFail("Failed to send emails");
-  }
-};
+// export const sendEmails = async (
+//   emails: string[],
+//   body: string,
+//   onFail: (e: any) => void = console.log
+// ) => {
+//   const data = await request(
+//     {
+//       method: "POST",
+//       url: `/api/send/emails`,
+//       data: {
+//         recipients: emails,
+//         body,
+//       },
+//       headers: {
+//         "Content-Type": "application/json",
+//         Accept: "application/json",
+//       },
+//     },
+//     onFail
+//   );
+//   if (_.isNull(data) || data.status !== "OK") {
+//     onFail("Failed to send emails");
+//   }
+// };

@@ -1,23 +1,17 @@
-import nodemailer from "nodemailer";
-
-const user = process.env.SMTP_USERNAME;
-const pass = process.env.STMP_PASSWORD;
-const gmailConfig = {
-  service: "gmail",
-  auth: {
-    user,
-    pass,
-  },
-};
-const transporter = nodemailer.createTransport(gmailConfig);
+import { Linking } from "react-native";
 
 export const sendEmails = async (emails: string[], body: string) => {
-  const info = await transporter.sendMail({
-    from: '"UN Scorecard" <info@unscorecard.baylor.edu>',
-    to: emails.join(", "),
-    subject: "UN Scorecard Survey Data",
-    text: body,
-    // html: "This email is sent through <b>GMAIL SMTP SERVER</b>", // html body
-  });
-  console.group(info);
+  const subject = encodeURIComponent("UN Scorecard Survey Data");
+  const emailBody = encodeURIComponent(
+    `Here is the result of your Disaster Resilience Scorecard for Cities report<br><br>${body}`
+  );
+  const url = `mailto:${emails.join(
+    ", "
+  )}?subject=${subject}&body=${emailBody}`;
+  console.log(url);
+  try {
+    await Linking.openURL(url);
+  } catch (e) {
+    console.log(e);
+  }
 };
