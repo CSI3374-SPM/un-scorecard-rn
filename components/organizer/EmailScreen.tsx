@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Text, Button, FAB, Subheading, TextInput } from "react-native-paper";
+import { Button, FAB, Subheading, TextInput } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 
 import { sendEmails } from "../../api/Wrapper";
@@ -16,6 +16,7 @@ export default function EmailScreen() {
   const [emails, setEmails]: [string[], (s: string[]) => void] = useState([""]);
   let defaultEditing = { index: -1, email: "" };
   const [editing, setEditing] = useState(defaultEditing);
+  const [message, setMessage] = useState("");
 
   return (
     <View style={styles.container}>
@@ -79,6 +80,7 @@ export default function EmailScreen() {
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+      <Subheading>{message}</Subheading>
       <View style={styles.buttonGroup}>
         <Button
           style={styles.item}
@@ -88,6 +90,12 @@ export default function EmailScreen() {
               emails.filter((email) => email !== ""),
               "This is some pretty cool test data. I feel like I have to change it every time or my SMTP account gets locked!"
             );
+            if (emails.filter((email) => email !== "").length > 0) {
+              setMessage("Survey data was sent via email");
+            } else {
+              setMessage("");
+            }
+            setEmails([""]);
           }}
         >
           Send Emails
@@ -111,10 +119,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-  item: {
-    margin: 12,
-    alignSelf: "stretch",
-  },
   scrollable: {
     maxHeight: "60%",
     flex: 1,
@@ -132,7 +136,8 @@ const styles = StyleSheet.create({
   },
   fabMinus: {
     padding: 8,
-    alignSelf: "flex-end",
+    marginHorizontal: 8,
+    alignSelf: "center",
   },
   email: {
     justifyContent: "center",
@@ -144,9 +149,12 @@ const styles = StyleSheet.create({
     maxWidth: "80%",
     alignSelf: "stretch",
   },
+  item: {
+    margin: 12,
+    alignSelf: "stretch",
+  },
   buttonGroup: {
     flexDirection: "row",
-    alignSelf: "flex-end",
-    alignItems: "center",
+    justifyContent: "center",
   },
 });
