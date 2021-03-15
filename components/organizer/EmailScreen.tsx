@@ -36,11 +36,10 @@ export default function EmailScreen() {
               }
             >
               {emails.map((email, index, emailArr) => (
-                <View style={styles.email}>
+                <View style={styles.email} key={`email-${index}`}>
                   <TextInput
                     mode="flat"
                     label="Enter email"
-                    key={`email-${index}`}
                     value={editing.index === index ? editing.email : email}
                     onChangeText={(newEmail) => {
                       setEditing({ index, email: newEmail.trim() });
