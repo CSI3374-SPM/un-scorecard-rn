@@ -30,7 +30,7 @@ const answerSlice = createSlice({
         state.data = action.payload;
         return state;
       }
-    )
+    );
   },
 });
 
