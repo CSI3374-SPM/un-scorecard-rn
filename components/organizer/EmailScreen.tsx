@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Text, Button, FAB, Subheading, TextInput } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 
-import { sendEmails } from "../../api/Email";
+import { sendEmails } from "../../api/Wrapper";
 import FinishButton from "../log_out/FinishButton";
 import _ from "lodash";
 import { ScrollView } from "react-native-gesture-handler";
@@ -16,11 +16,9 @@ export default function EmailScreen() {
   const [emails, setEmails]: [string[], (s: string[]) => void] = useState([""]);
   let defaultEditing = { index: -1, email: "" };
   const [editing, setEditing] = useState(defaultEditing);
-  const [thing, setThing] = useState("");
 
   return (
     <View style={styles.container}>
-      <Text>{thing}</Text>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
@@ -42,7 +40,7 @@ export default function EmailScreen() {
                   <TextInput
                     mode="flat"
                     label="Enter email"
-                    key={`${email}-${index}`}
+                    key={`email-${index}`}
                     value={editing.index === index ? editing.email : email}
                     onChangeText={(newEmail) => {
                       setEditing({ index, email: newEmail.trim() });
@@ -89,7 +87,7 @@ export default function EmailScreen() {
           onPress={async () => {
             sendEmails(
               emails.filter((email) => email !== ""),
-              "some data"
+              "This is some pretty cool test data. I feel like I have to change it every time or my SMTP account gets locked!"
             );
           }}
         >
