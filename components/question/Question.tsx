@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Button, Text, TextInput, Divider} from "react-native-paper";
-import { RadioButton } from "react-native-paper";
-import { AnswerData, State } from "../../store/answer/AnswerReducer";
-import { questions } from "../../api/Wrapper"
+import { RadioButton, Title } from "react-native-paper";
+import { AnswerData } from "../../store/answer/AnswerReducer";
+import {questions} from "../../api/Wrapper"
 
 export type AnswerProps = {
-  data: State;
-  updateAnswer: (answer: State) => void;
+  data: AnswerData;
 };
 
 export const description: string[] = [
@@ -20,22 +19,16 @@ export const description: string[] = [
 
 export const rating = (n: number) => 5 - n;
 
-const ans: AnswerData = {
-  num: 0,
-  score: 0,
-  justification: undefined,
-}
-const a: Array<AnswerData> = [];
+export const ans: Array<AnswerData> = [];
 
 export default function Question({navigation}:{navigation : any}, props: AnswerProps) {
-
   const [index, setIndex]: [number, (index: number) => void] = useState(0);
   const [checked, setChecked]: [number, (n: number) => void] = useState(0);
   const [justification, setJustification]: [
     string,
     (j: string) => void
   ] = useState("");
-  //const [answers, setAnswers]: [AnswerData, (ans: AnswerData) => void] = useState(AnswerData);
+  
 
 if(index < questions.length-1){
     return (
@@ -61,24 +54,17 @@ if(index < questions.length-1){
         <Button
           mode="contained"
           onPress={() => {
-            ans.num = index;
-            ans.score = checked;
-            ans.justification !== "" ? justification : undefined;
-            a.push(ans);
-            props.updateAnswer({
-              data: a,
+            ans.push({
+              score: checked,
+              justification: justification !== "" ? justification : undefined, 
             });
             setChecked(0);
             setJustification("");
-            }
-          }
+            setIndex(index+1)
+          }}
         >
           Save
         </Button>
-        <Divider></Divider>
-        <Button mode="contained" onPress={() => setIndex(index+1)}>
-                  Next
-              </Button>
       </>
     );
   }
@@ -87,8 +73,8 @@ if(index < questions.length-1){
       <>
         <Text>You finish the survery!</Text>
         <Divider></Divider>
-        <Button mode="contained">
-          Done
+        <Button mode="contained" onPress={() => navigation.navigate('Answer')}>
+          See Results
         </Button>
       </>
     );
