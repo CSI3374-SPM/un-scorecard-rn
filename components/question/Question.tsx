@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Button, Text, TextInput, Divider} from "react-native-paper";
 import { RadioButton } from "react-native-paper";
-import { AnswerData } from "../../store/answer/AnswerReducer";
-import {questions} from "../../api/Wrapper"
+import { AnswerData, State } from "../../store/answer/AnswerReducer";
+import { questions } from "../../api/Wrapper"
 
 export type AnswerProps = {
-  data: AnswerData[];
-  updateAnswer: (answer: AnswerData) => void;
+  data: State;
+  updateAnswer: (answer: State) => void;
 };
 
 export const description: string[] = [
@@ -20,15 +20,24 @@ export const description: string[] = [
 
 export const rating = (n: number) => 5 - n;
 
+const ans: AnswerData = {
+  num: 0,
+  score: 0,
+  justification: undefined,
+}
+const a: Array<AnswerData> = [];
+
 export default function Question({navigation}:{navigation : any}, props: AnswerProps) {
+
   const [index, setIndex]: [number, (index: number) => void] = useState(0);
   const [checked, setChecked]: [number, (n: number) => void] = useState(0);
   const [justification, setJustification]: [
     string,
     (j: string) => void
   ] = useState("");
+  //const [answers, setAnswers]: [AnswerData, (ans: AnswerData) => void] = useState(AnswerData);
 
-if(index < 23){
+if(index < questions.length-1){
     return (
       <> 
         <Text>{questions[index].question}</Text>
@@ -52,11 +61,13 @@ if(index < 23){
         <Button
           mode="contained"
           onPress={() => {
+            ans.num = index;
+            ans.score = checked;
+            ans.justification !== "" ? justification : undefined;
+            a.push(ans);
             props.updateAnswer({
-              num: index,
-              score: checked,
-              justification: justification !== "" ? justification : undefined,
-            })
+              data: a,
+            });
             setChecked(0);
             setJustification("");
             }
@@ -76,7 +87,7 @@ if(index < 23){
       <>
         <Text>You finish the survery!</Text>
         <Divider></Divider>
-        <Button mode="contained" onPress={() => navigation.navigate('Root')}>
+        <Button mode="contained">
           Done
         </Button>
       </>

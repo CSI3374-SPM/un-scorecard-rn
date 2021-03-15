@@ -15,7 +15,7 @@ export interface AnswerData {
   justification?: string;
 }
 
-interface State {
+export interface State {
   data: AnswerData[];
 }
 
@@ -33,13 +33,13 @@ const answerSlice = createSlice({
     builder.addCase(
       AnswerActionTypes.UPDATE_ACTION,
       (state: any, action: AnswerAction) => {
-      return {
-        ...state,
-        data: [...state.data, action.payload] 
-      }
-       // state.data = action.payload;
+        //return 
+        //...state,
+        //data: [...state.data, action.payload] 
+      
+      state.data = action.payload;
       //  state.data.push(action.payload);
-     //   return state;
+       return state;
       }
     );
   },
