@@ -7,7 +7,7 @@ import { AnswerData } from "../../store/answer/AnswerReducer";
 
 function dispatchAnswerUpdate(
   dispatch: Dispatch<AnswerAction>,
-  answer: AnswerData
+  answer: AnswerData[]
 ) {
   // Dispatch update
   dispatch({
@@ -18,7 +18,7 @@ function dispatchAnswerUpdate(
 
 const mapDispatchToProps = (dispatch: Dispatch<AnswerAction>) => {
   return {
-    updateAnswer: (answer: AnswerData) => {
+    updateAnswer: (answer: AnswerData[]) => {
       dispatchAnswerUpdate(dispatch, answer);
     },
     dispatch,

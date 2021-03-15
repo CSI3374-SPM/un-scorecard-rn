@@ -1,25 +1,23 @@
 import React from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { Title, Text, Divider, Button } from "react-native-paper";
-import { AnswerProps, description, rating, ans } from "../question/Question";
-
-console.disableYellowBox = true;
+import { AnswerProps, description, rating } from "../question/Question";
 
 export default function Answer(props: AnswerProps) {
   return(
     <ScrollView>
-    {ans.map((items, key)=>(
+    {props.data.map((items, index)=>(
             <>
             <Title>ID</Title>
-            <Text key={key}>{key+1}</Text>
+            <Text key={`${index}-question-num`}>{index+1}</Text>
             
             <Title>Score</Title>
-            <Text key={key}>{`${items.score} (${
+            <Text key={`${index}-score`}>{`${items.score} (${
               description[rating(items.score)]
             })`}</Text>
     
             <Title>Justification</Title>
-            <Text key={key}>{`${
+            <Text key={`${index}-justification`}>{`${
               items.justification === undefined
                 ? "None provided"
                 : items.justification

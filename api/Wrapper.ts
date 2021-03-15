@@ -2,7 +2,6 @@ import Constants from "expo-constants";
 const { manifest } = Constants;
 import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
-import Question from "../components/question/Question";
 
 // const apiUrl = process.env.API_URL;
 const apiUrl =

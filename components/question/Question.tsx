@@ -3,9 +3,13 @@ import { Button, Text, TextInput, Divider} from "react-native-paper";
 import { RadioButton, Title } from "react-native-paper";
 import { AnswerData } from "../../store/answer/AnswerReducer";
 import {questions} from "../../api/Wrapper"
+import { useNavigation } from "@react-navigation/core";
+import { RootNavigationProp } from "../../types";
+import _ from "lodash";
 
 export type AnswerProps = {
-  data: AnswerData;
+  data: AnswerData[];
+  updateAnswer: (a: AnswerData[]) => void;
 };
 
 export const description: string[] = [
@@ -19,18 +23,16 @@ export const description: string[] = [
 
 export const rating = (n: number) => 5 - n;
 
-export const ans: Array<AnswerData> = [];
-
-export default function Question({navigation}:{navigation : any}, props: AnswerProps) {
+export default function Question(props: AnswerProps) {
+  const navigation = useNavigation<RootNavigationProp>();
   const [index, setIndex]: [number, (index: number) => void] = useState(0);
   const [checked, setChecked]: [number, (n: number) => void] = useState(-1);
   const [justification, setJustification]: [
     string,
     (j: string) => void
   ] = useState("");
-  
 
-if(index < questions.length-1){
+// if(index < questions.length-1){
     return (
       <> 
         <Text>{questions[index].question}</Text>
@@ -55,14 +57,17 @@ if(index < questions.length-1){
           mode="contained"
           onPress={() => {
             if(checked > -1) {
-            ans.push({
-              score: checked,
-              justification: justification !== "" ? justification : undefined, 
-            });
-            setChecked(-1);
-            setJustification("");
-            setIndex(index+1);
-            console.log(index);
+              console.log(props);
+              let ans = _.clone(props.data);
+              ans.push({
+                score: checked,
+                justification: justification !== "" ? justification : undefined, 
+              });
+              props.updateAnswer(ans);
+              setChecked(-1);
+              setJustification("");
+              setIndex(index+1);
+              console.log(index);
             } else {
               alert("Please select a score");
             }
@@ -73,16 +78,16 @@ if(index < questions.length-1){
       </>
     );
   }
-  else{
-    return(
-      <>
-        <Text>You finish the survery!</Text>
-        <Divider></Divider>
-        <Button mode="contained" onPress={() => navigation.navigate('Answer')}>
-          See Results
-        </Button>
-      </>
-    );
-  }
+  // else{
+  //   return(
+  //     <>
+  //       <Text>You finish the survery!</Text>
+  //       <Divider></Divider>
+  //       <Button mode="contained" onPress={() => navigation.navigate('Answer')}>
+  //         See Results
+  //       </Button>
+  //     </>
+  //   );
+  // }
   
-}
+// }
