@@ -6,8 +6,15 @@ import { DefaultTheme, DarkTheme } from "../constants/Colors";
 
 import NotFoundScreen from "../screens/NotFoundScreen";
 import { RootStackParamList } from "../types";
+import LandingPageNavigator from "./LandingPageNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
+import OrganizerScreen from "../components/organizer/OrganizerScreen";
+
+import mapDispatchToProps from "../components/generate_code/GenerateCodeScreenD2P";
+import { mapStateToProps } from "../components/generate_code/GenerateCodeScreenRedux";
+import { connect } from "react-redux";
+import { authenticationProps } from "../components/generate_code/GenerateCodeScreen";
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -27,15 +34,42 @@ export default function Navigation() {
 // Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator<RootStackParamList>();
 
-function RootNavigator() {
+const RootNavigator = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)((props: authenticationProps) => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
+      {props.data.id != "" ? (
+        props.data.isOrganizer ? (
+          <>
+            <Stack.Screen name="Organizer" component={OrganizerScreen} />
+            <Stack.Screen
+              name="NotFound"
+              component={NotFoundScreen}
+              options={{ title: "Oops!" }}
+            />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Root" component={BottomTabNavigator} />
+            <Stack.Screen
+              name="NotFound"
+              component={NotFoundScreen}
+              options={{ title: "Oops!" }}
+            />
+          </>
+        )
+      ) : (
+        <>
+          <Stack.Screen name="Landing" component={LandingPageNavigator} />
+          <Stack.Screen
+            name="NotFound"
+            component={NotFoundScreen}
+            options={{ title: "Oops!" }}
+          />
+        </>
+      )}
     </Stack.Navigator>
   );
-}
+});

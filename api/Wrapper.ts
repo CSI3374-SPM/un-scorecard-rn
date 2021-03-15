@@ -207,6 +207,7 @@ export const fetchSurveyResults = async (
   );
   if (!_.isNull(data)) {
     const rawResponses: any[] = data.Data;
+    if (data.status === "ERROR") return null;
 
     const results = rawResponses.map((rawResults) => {
       return Object.keys(rawResults)

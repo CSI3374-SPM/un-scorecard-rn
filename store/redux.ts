@@ -6,10 +6,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { answerReduxName } from "./answer/AnswerAction";
 import answerReducer from "./answer/AnswerReducer";
-
+import {authenticationReduxName} from "./authentication/authenticationAction";
+import authenticationReducer from "./authentication/authenticationReducer";
 const reducers = combineReducers({
   // ... reducers go here
   [answerReduxName]: answerReducer.reducer,
+  [authenticationReduxName]: authenticationReducer.reducer,
 });
 
 const persistConfig = {
