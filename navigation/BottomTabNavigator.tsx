@@ -35,6 +35,7 @@ export default function BottomTabNavigator() {
   );
 }
 
+
 // You can explore the built-in icon families and icons on the web at:
 // https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -49,7 +50,6 @@ function TabBarIcon(props: {
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
 function TabOneNavigator() {
-  console.log("Tab 1");
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
@@ -74,3 +74,4 @@ function TabTwoNavigator() {
     </TabTwoStack.Navigator>
   );
 }
+
