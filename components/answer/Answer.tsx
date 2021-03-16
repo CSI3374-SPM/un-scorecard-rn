@@ -1,4 +1,5 @@
 import React from "react";
+import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Title, Text, Divider, Button } from "react-native-paper";
 import { AnswerProps, description, rating } from "../question/Question";
@@ -7,23 +8,21 @@ export default function Answer(props: AnswerProps) {
   return (
     <ScrollView>
       {props.data.map((items, index) => (
-        <>
+        <View key={`answer-${index}`}>
           <Title>ID</Title>
-          <Text key={`${index}-question-num`}>{index + 1}</Text>
+          <Text>{index + 1}</Text>
 
           <Title>Score</Title>
-          <Text key={`${index}-score`}>{`${items.score} (${
-            description[rating(items.score)]
-          })`}</Text>
+          <Text>{`${items.score} (${description[rating(items.score)]})`}</Text>
 
           <Title>Justification</Title>
-          <Text key={`${index}-justification`}>{`${
+          <Text>{`${
             items.justification === undefined
               ? "None provided"
               : items.justification
           }`}</Text>
           <Divider></Divider>
-        </>
+        </View>
       ))}
       <Button
         mode="contained"
