@@ -4,6 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Title, Text, Divider, Button } from "react-native-paper";
 import FinishButton from "../log_out/FinishButton";
 import { AnswerProps, description, rating } from "../question/Question";
+import WebView from "react-native-webview";
 
 export default function Answer(props: AnswerProps) {
   return (
