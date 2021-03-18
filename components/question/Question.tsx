@@ -2,10 +2,6 @@ import React, { useState } from "react";
 import { Button, Text, TextInput } from "react-native-paper";
 import { RadioButton } from "react-native-paper";
 import { AnswerData } from "../../store/answer/AnswerReducer";
-<<<<<<< HEAD
-import { authenticationProps } from "../generate_code/GenerateCodeScreen";
-=======
->>>>>>> master
 
 export type AnswerProps = {
   data: AnswerData;
