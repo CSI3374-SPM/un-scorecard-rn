@@ -1,5 +1,6 @@
 import React from "react";
 import { Title, Text } from "react-native-paper";
+import FinishButton from "../log_out/FinishButton";
 import { AnswerProps, description, rating } from "../question/Question";
 
 export default function Answer(props: AnswerProps) {
@@ -16,6 +17,7 @@ export default function Answer(props: AnswerProps) {
           ? "None provided"
           : props.data.justification
       }`}</Text>
+      <FinishButton />
     </>
   );
 }

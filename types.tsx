@@ -27,10 +27,18 @@ export type LandingParamList = {
   Join: undefined;
 };
 
+export type OrganizerParamList = {
+  Organizer: undefined;
+  Email: undefined;
+};
+
 export type RootNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<BottomTabParamList, "TabOne">,
   CompositeNavigationProp<
     StackNavigationProp<RootStackParamList, "Root">,
-    StackNavigationProp<LandingParamList, "Generate">
+    CompositeNavigationProp<
+      StackNavigationProp<OrganizerParamList, "Organizer">,
+      StackNavigationProp<LandingParamList, "Generate">
+    >
   >
 >;
