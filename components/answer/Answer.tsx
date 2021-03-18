@@ -2,6 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Title, Text, Divider, Button } from "react-native-paper";
+import FinishButton from "../log_out/FinishButton";
 import { AnswerProps, description, rating } from "../question/Question";
 
 export default function Answer(props: AnswerProps) {
@@ -24,8 +25,7 @@ export default function Answer(props: AnswerProps) {
           <Divider></Divider>
         </View>
       ))}
-      <Button
-        mode="contained"
+      <FinishButton
         style={{
           marginTop: 20,
           height: 50,
@@ -33,9 +33,7 @@ export default function Answer(props: AnswerProps) {
           marginRight: 500,
           justifyContent: "center",
         }}
-      >
-        Done
-      </Button>
+      />
     </ScrollView>
   );
 }

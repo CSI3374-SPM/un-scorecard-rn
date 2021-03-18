@@ -15,7 +15,7 @@ const defaultTheme = {
   colors: {
     ...PaperDefaultTheme.colors,
     primary: "#3498db",
-    accent: "#f1c40f",
+    accent: "#db2777",
   },
 };
 
@@ -25,7 +25,7 @@ const darkTheme = {
   colors: {
     ...PaperDarkTheme.colors,
     primary: "#3498db",
-    accent: "#f1c40f",
+    accent: "#db2777",
   },
 };
 
