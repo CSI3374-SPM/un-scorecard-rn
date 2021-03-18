@@ -10,12 +10,12 @@ import LandingPageNavigator from "./LandingPageNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
 
-import mapDispatchToProps from "../components/generate_code/GenerateCodeScreenD2P";
-import { mapStateToProps } from "../components/generate_code/GenerateCodeScreenRedux";
 import { connect } from "react-redux";
-import { authenticationProps } from "../components/generate_code/GenerateCodeScreen";
-
 import OrganizerNavigator from "./OrganizerNavigator";
+import { mapStateToProps } from "../components/question/QuestionRedux";
+import mapDispatchToProps from "../components/question/QuestionD2P";
+import { SurveyProps } from "../store/survey/SurveyReducer";
+
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
 export default function Navigation() {
@@ -37,11 +37,11 @@ const Stack = createStackNavigator<RootStackParamList>();
 const RootNavigator = connect(
   mapStateToProps,
   mapDispatchToProps
-)((props: authenticationProps) => {
+)((props: SurveyProps) => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {props.data.id != "" ? (
-        props.data.isOrganizer ? (
+      {props.data.authentication.surveyId != "" ? (
+        props.data.authentication.isOrganizer ? (
           <>
             <Stack.Screen name="Organizer" component={OrganizerNavigator} />
             <Stack.Screen
