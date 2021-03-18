@@ -19,6 +19,7 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
           ),
+          
         }}
       />
       <BottomTab.Screen
@@ -26,13 +27,14 @@ export default function BottomTabNavigator() {
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <TabBarIcon name="ios-code" color={color}  />
           ),
         }}
       />
     </BottomTab.Navigator>
   );
 }
+
 
 // You can explore the built-in icon families and icons on the web at:
 // https://icons.expo.fyi/
@@ -72,3 +74,4 @@ function TabTwoNavigator() {
     </TabTwoStack.Navigator>
   );
 }
+

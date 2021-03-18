@@ -10,5 +10,6 @@ export type AnswerAction = UpdateAction;
 
 export interface UpdateAction {
   type: AnswerActionTypes.UPDATE_ACTION;
-  payload: AnswerData;
+  payload: AnswerData[];
 }
+

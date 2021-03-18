@@ -13,16 +13,14 @@ export interface AnswerData {
 }
 
 interface State {
-  data: AnswerData;
+  data: AnswerData[];
 }
 
 // Create the example state slice
 const answerSlice = createSlice({
   name: answerReduxName,
   initialState: {
-    data: {
-      score: 0,
-    },
+    data: [],
   },
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<State>) => {
