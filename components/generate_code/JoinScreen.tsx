@@ -1,19 +1,15 @@
 import React, { useState } from "react";
 import { Button, TextInput } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "../../types";
-import BottomTabNavigator from "../../navigation/BottomTabNavigator";
-import {fetchSurveyResults} from "../../api/Wrapper";
-import {authenticationProps} from "./GenerateCodeScreen";
-import {mapStateToProps} from "./GenerateCodeScreenRedux";
+import { fetchSurveyResults } from "../../api/Wrapper";
+import { authenticationProps } from "./GenerateCodeScreen";
+import { mapStateToProps } from "./GenerateCodeScreenRedux";
 import mapDispatchToProps from "./GenerateCodeScreenD2P";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import _ from "lodash";
 
 function JoinScreen(props: authenticationProps) {
   const [id, setID] = useState("");
-  const navigation = useNavigation<RootNavigationProp>();
   return (
     <View style={styles.container}>
       <TextInput
@@ -21,24 +17,31 @@ function JoinScreen(props: authenticationProps) {
         value={id}
         onChangeText={(id) => setID(id)}
       />
-      <Button mode="contained" onPress={async () => {await validateId(id, props); setID("")}}>
+      <Button
+        mode="contained"
+        onPress={async () => {
+          await validateId(id, props);
+          setID("");
+        }}
+      >
         Join
       </Button>
     </View>
   );
 }
 
-async function validateId(id: string, props: authenticationProps){
+async function validateId(id: string, props: authenticationProps) {
   let surveyResults = await fetchSurveyResults(id);
   console.log("Survey results ", surveyResults);
-  if (!_.isNull(surveyResults)){
-    props.updateAuthentication({isOrganizer: false, id: id});
-  }else{
-    console.log("invalid id")
+
+  if (!_.isNull(surveyResults)) {
+    props.updateAuthentication({ isOrganizer: false, id: id });
+  } else {
+    console.log("invalid id");
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(JoinScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(JoinScreen);
 
 const styles = StyleSheet.create({
   container: {

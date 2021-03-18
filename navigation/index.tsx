@@ -9,14 +9,12 @@ import { RootStackParamList } from "../types";
 import LandingPageNavigator from "./LandingPageNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
-import OrganizerScreen from "../components/organizer/OrganizerScreen";
 
 import mapDispatchToProps from "../components/generate_code/GenerateCodeScreenD2P";
 import { mapStateToProps } from "../components/generate_code/GenerateCodeScreenRedux";
 import { connect } from "react-redux";
 import { authenticationProps } from "../components/generate_code/GenerateCodeScreen";
 
-import JoinScreen from "../components/generate_code/JoinScreen";
 import OrganizerNavigator from "./OrganizerNavigator";
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
