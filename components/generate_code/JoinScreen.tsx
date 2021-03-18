@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import { Button, TextInput } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import { fetchSurveyResults } from "../../api/Wrapper";
-// import { authenticationProps } from "./GenerateCodeScreen";
-// import { mapStateToProps } from "./GenerateCodeScreenRedux";
-// import mapDispatchToProps from "./GenerateCodeScreenD2P";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { SurveyProps } from "../../store/survey/SurveyReducer";
@@ -12,7 +9,6 @@ import { mapStateToProps } from "../question/QuestionRedux";
 import mapDispatchToProps from "../question/QuestionD2P";
 
 function JoinScreen(props: SurveyProps) {
-  //authenticationProps) {
   const [id, setID] = useState("");
   return (
     <View style={styles.container}>
