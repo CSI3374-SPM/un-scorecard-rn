@@ -515,7 +515,7 @@ export const sendEmails = async (
 
 export type SurveyProgressResponse = ApiResponse & {
   currentProgress?: number;
-  surveyId: string;
+  surveyId?: string;
 };
 
 // Returns the current question number (beginning at 1, incrementing by 1)
