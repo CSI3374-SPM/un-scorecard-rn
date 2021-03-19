@@ -512,3 +512,65 @@ export const sendEmails = async (
     onFail("Failed to send emails");
   }
 };
+
+export type SurveyProgressResponse = ApiResponse & {
+  currentProgress?: number;
+  surveyId: string;
+};
+
+// Returns the current question number (beginning at 1, incrementing by 1)
+export const getSurveyProgress = async (
+  surveyId: string,
+  onFail: (e: any) => void = console.log
+): Promise<SurveyProgressResponse | null> => {
+  const data = await request(
+    {
+      method: "GET",
+      url: `/api/survey/${surveyId}/progress`,
+      headers: {
+        Accept: "application/json",
+      },
+    },
+    onFail
+  );
+  if (_.isNull(data) || data.status !== "OK") {
+    onFail("Failed to send emails");
+    return null;
+  }
+  return {
+    status: data.status,
+    currentProgress: data.currentProgress,
+    surveyId: data.survey_id,
+  };
+};
+
+// Set the current question number to the one provided
+export const updateSurveyProgress = async (
+  surveyId: string,
+  currentQuestion: number,
+  onFail: (e: any) => void = console.log
+): Promise<SurveyProgressResponse | null> => {
+  const data = await request(
+    {
+      method: "POST",
+      url: `/api/survey/${surveyId}/progress/update`,
+      data: {
+        currentQuestion,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    },
+    onFail
+  );
+  if (_.isNull(data) || data.status !== "OK") {
+    onFail("Failed to send emails");
+    return null;
+  }
+  return {
+    status: data.status,
+    currentProgress: data.currentProgress,
+    surveyId: data.survey_id,
+  };
+};
