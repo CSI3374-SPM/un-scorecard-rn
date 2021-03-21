@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Button, FAB, Subheading, TextInput, Text } from "react-native-paper";
+import { Button, FAB, Subheading, TextInput } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 
 import { sendEmails } from "../../api/Wrapper";
@@ -11,51 +11,13 @@ import { Keyboard } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
 import { TouchableWithoutFeedback } from "react-native";
 
-import { renderToString } from "react-dom/server";
-import WebView from "react-native-webview";
+import Constants from "expo-constants";
+const { manifest } = Constants;
 
-import { Bar } from "react-chartjs-2";
-
-// @ts-ignore
-import { Button as ButtonWeb } from "react-native-web";
-
-const data = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-    {
-      label: "My First dataset",
-      backgroundColor: "rgba(255,99,132,0.2)",
-      borderColor: "rgba(255,99,132,1)",
-      borderWidth: 1,
-      hoverBackgroundColor: "rgba(255,99,132,0.4)",
-      hoverBorderColor: "rgba(255,99,132,1)",
-      data: [65, 59, 80, 81, 56, 55, 40],
-    },
-  ],
-};
-
-const SimpleText = () => {
-  // return <WebView source={html`${}`} />;
-  const styles = { marginLeft: "auto", marginRight: "auto", color: "red" };
-  return (
-    <div>
-      <h1 style={styles}>this is some random text in the webview</h1>
-      <Bar
-        data={data}
-        width={1000}
-        height={505}
-        options={{
-          maintainAspectRatio: false,
-        }}
-      />
-      <button>random button</button>
-    </div>
-  );
-};
-
-const SimpleTextView = () => {
-  return <WebView source={{ html: renderToString(<SimpleText />) }} />;
-};
+const visualizationUrl =
+  typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
+    ? `http://${manifest.debuggerHost?.split(`:`).shift()?.concat(`:3000`)}`
+    : `https://unbox.ecs.baylor.edu:3000`;
 
 export default function EmailScreen() {
   const scrollViewRef = useRef<ScrollView>();
@@ -66,19 +28,6 @@ export default function EmailScreen() {
 
   return (
     <View style={styles.container}>
-      <Text>
-        {renderToString(
-          <Bar
-            data={data}
-            width={100}
-            height={50}
-            options={{
-              maintainAspectRatio: false,
-            }}
-          />
-        )}
-      </Text>
-      <SimpleTextView />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
@@ -215,5 +164,8 @@ const styles = StyleSheet.create({
   buttonGroup: {
     flexDirection: "row",
     justifyContent: "center",
+  },
+  webview: {
+    // margin: 100,
   },
 });

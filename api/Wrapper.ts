@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 
 // const apiUrl = process.env.API_URL;
-const apiUrl =
+export const apiUrl =
   typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
     ? `http://${manifest.debuggerHost?.split(`:`).shift()?.concat(`:5000`)}`
     : `https://unbox.ecs.baylor.edu:5000`;
