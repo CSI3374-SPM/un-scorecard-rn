@@ -455,7 +455,6 @@ export const addSurveyResponse = async (
 ) => {
   let convertedResponses = {};
   responses.map((r) => convertResponse(r, convertedResponses));
-  console.log("sending to " + responseId);
   const data = await request(
     {
       method: "POST",
