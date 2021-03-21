@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Text } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 
@@ -9,17 +9,34 @@ import { useNavigation } from "@react-navigation/core";
 import { RootNavigationProp } from "../../types";
 import mapDispatchToProps from "../question/QuestionD2P";
 import { mapStateToProps } from "../question/QuestionRedux";
-import { SurveyProps } from "../../store/survey/SurveyReducer";
+import { SurveyProps, SurveyResponse } from "../../store/survey/SurveyReducer";
+import SurveyRadarGraph from "../SurveyRadarGraph";
 
 function OrganizerScreen(props: SurveyProps) {
   const navigator = useNavigation<RootNavigationProp>();
   const [id, setID] = useState("");
-  const [results, setResults] = useState([]);
+  // @ts-ignore
+  const [results, setResults]: [
+    SurveyResponse[][] | null,
+    (r: SurveyResponse[][] | null) => void
+  ] = useState(null);
+
+  const requestResults = async () => {
+    let resp = await fetchSurveyResults("yikfd-yjxlv");
+    setResults(resp);
+  };
+
+  useEffect(() => {
+    requestResults();
+  }, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{props.data.authentication.surveyId}</Text>
-      <Text>{results}</Text>
+      <SurveyRadarGraph surveyData={results} />
+      <Button mode="contained" onPress={async () => await requestResults()}>
+        Get Results
+      </Button>
       <Button mode="contained" onPress={() => navigator.navigate("Email")}>
         Email Results
       </Button>
