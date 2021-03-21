@@ -3,38 +3,40 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 
-import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from "../types";
+import SurveyScreen from "../screens/SurveyScreen";
+import TabTwoScreen from "../screens/AnswersScreen";
+import {
+  BottomTabParamList,
+  SurveyParamList,
+  AnswersParamList,
+} from "../types";
 
 const BottomTab = createMaterialBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
   return (
-    <BottomTab.Navigator initialRouteName="TabOne">
+    <BottomTab.Navigator initialRouteName="Survey">
       <BottomTab.Screen
-        name="TabOne"
+        name="Survey"
         component={TabOneNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
           ),
-          
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Answers"
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color}  />
+            <TabBarIcon name="ios-code" color={color} />
           ),
         }}
       />
     </BottomTab.Navigator>
   );
 }
-
 
 // You can explore the built-in icon families and icons on the web at:
 // https://icons.expo.fyi/
@@ -47,31 +49,30 @@ function TabBarIcon(props: {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const TabOneStack = createStackNavigator<SurveyParamList>();
 
 function TabOneNavigator() {
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: "Input Screen" }}
+        name="Survey"
+        component={SurveyScreen}
+        options={{ headerTitle: "Take Survey" }}
       />
     </TabOneStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const TabTwoStack = createStackNavigator<AnswersParamList>();
 
 function TabTwoNavigator() {
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen
-        name="TabTwoScreen"
+        name="Answers"
         component={TabTwoScreen}
-        options={{ headerTitle: "Output Screen" }}
+        options={{ headerTitle: "Survey Answers" }}
       />
     </TabTwoStack.Navigator>
   );
 }
-

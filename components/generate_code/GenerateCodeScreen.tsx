@@ -3,16 +3,10 @@ import { Button, TextInput } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "../../types";
-import {createSurvey} from "../../api/Wrapper";
+import { createSurvey } from "../../api/Wrapper";
+import { SurveyProps } from "../../store/survey/SurveyReducer";
 
-import {authenticationData} from "../../store/authentication/authenticationReducer";
-
-export type authenticationProps = {
-    data: authenticationData;
-    updateAuthentication: (auth: authenticationData) => void;
-};
-
-export default function GenerateCodeScreen(props: authenticationProps) {
+export default function GenerateCodeScreen(props: SurveyProps) {
   const [city, setCity] = useState("");
   const [email, setEmail] = useState("");
 
@@ -28,22 +22,28 @@ export default function GenerateCodeScreen(props: authenticationProps) {
         value={email}
         onChangeText={(email) => setEmail(email)}
       />
-      <Button mode="contained" onPress={async () => await generateID(city, props)}>
+      <Button
+        mode="contained"
+        onPress={async () => await generateID(city, props)}
+      >
         Generate code
       </Button>
     </View>
   );
 }
 
-async function generateID(city: string, props: authenticationProps){
-    var surveyData = await createSurvey(city);
+async function generateID(city: string, props: SurveyProps) {
+  var surveyData = await createSurvey(city);
 
-    let id = surveyData?.id
-    if (id != null){
-        console.log("generated id "+ id);
-        props.updateAuthentication({isOrganizer: true, id: id});
-
-    }
+  let id = surveyData?.id;
+  if (id != null) {
+    console.log("generated survey id " + id);
+    props.updateAuthentication({
+      isOrganizer: true,
+      surveyId: id,
+      responseId: null,
+    });
+  }
 }
 
 const styles = StyleSheet.create({

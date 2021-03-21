@@ -1,29 +1,17 @@
 import React, { useState } from "react";
-import { Button, Text, TextInput, Divider } from "react-native-paper";
-import { RadioButton, Title } from "react-native-paper";
-import { AnswerData } from "../../store/answer/AnswerReducer";
-import { questions } from "../../api/Wrapper";
+import { Button, TextInput, Title, RadioButton } from "react-native-paper";
+import { addSurveyResponse, questions } from "../../api/Wrapper";
 import { useNavigation } from "@react-navigation/core";
 import { RootNavigationProp } from "../../types";
+import { ScrollView } from "react-native-gesture-handler";
+import { StyleSheet, View } from "react-native";
 import _ from "lodash";
-
-export type AnswerProps = {
-  data: AnswerData[];
-  updateAnswer: (a: AnswerData[]) => void;
-};
-
-export const description: string[] = [
-  "Terrible",
-  "Bad",
-  "Decent",
-  "Good",
-  "Fantastic",
-  "Best I've Ever Had",
-].reverse();
+import { SurveyProps } from "../../store/survey/SurveyReducer";
+import FinishButton from "../log_out/FinishButton";
 
 export const rating = (n: number) => 5 - n;
 
-export default function Question(props: AnswerProps) {
+export default function Question(props: SurveyProps) {
   const navigation = useNavigation<RootNavigationProp>();
   const [index, setIndex]: [number, (index: number) => void] = useState(0);
   const [checked, setChecked]: [number, (n: number) => void] = useState(-1);
@@ -32,62 +20,96 @@ export default function Question(props: AnswerProps) {
     (j: string) => void
   ] = useState("");
 
-  // if(index < questions.length-1){
-  return (
-    <>
-      <Text>{questions[index].question}</Text>
-      <RadioButton.Group
-        onValueChange={(n: string) => setChecked(rating(parseInt(n)))}
-        value={`${rating(checked)}`}
-      >
-        {description.map((text, ndx) => (
-          <RadioButton.Item
-            label={text}
-            value={`${ndx}`}
-            key={`${ndx}-${questions[index].question}`}
+  if (index < questions.length - 1) {
+    return (
+      <ScrollView>
+        <View style={styles.container}>
+          <Title style={styles.item}>{questions[index].question}</Title>
+          <RadioButton.Group
+            onValueChange={(n: string) => setChecked(rating(parseInt(n)))}
+            value={`${rating(checked)}`}
+          >
+            {questions[index].descriptions.map((text, ndx) => (
+              <RadioButton.Item
+                label={text}
+                value={`${ndx}`}
+                key={`${ndx}-${questions[index].question}-${text}`}
+              />
+            ))}
+          </RadioButton.Group>
+          <TextInput
+            style={styles.item}
+            multiline
+            label={questions[index].justification}
+            value={justification}
+            onChangeText={(text) => setJustification(text)}
           />
-        ))}
-      </RadioButton.Group>
-      <TextInput
-        label={questions[index].justification}
-        value={justification}
-        onChangeText={(text) => setJustification(text)}
-      />
-      <Button
-        mode="contained"
-        onPress={() => {
-          if (checked > -1) {
-            console.log(props);
-            let ans = _.clone(props.data);
-            ans.push({
-              score: checked,
-              justification: justification !== "" ? justification : undefined,
-            });
-            props.updateAnswer(ans);
-            setChecked(-1);
-            setJustification("");
-            setIndex(index + 1);
-            console.log(index);
-          } else {
-            alert("Please select a score");
-          }
-        }}
-      >
-        Save
-      </Button>
-    </>
-  );
+          <Button
+            style={styles.item}
+            mode="contained"
+            disabled={checked < 0}
+            onPress={async () => {
+              if (checked > -1) {
+                let newAnswer = {
+                  questionIndex: index,
+                  score: checked,
+                  justification:
+                    justification !== "" ? justification : undefined,
+                };
+                let ans = _.clone(props.data.responses);
+                ans.push(newAnswer);
+                props.updateAnswer(ans);
+                let newResponseId = await addSurveyResponse(
+                  props.data.authentication.surveyId,
+                  [newAnswer],
+                  props.data.authentication.responseId
+                );
+                if (!_.isNull(newResponseId)) {
+                  let auth = {
+                    ...props.data.authentication,
+                    responseId: newResponseId,
+                  };
+                  props.updateAuthentication(auth);
+                } else {
+                  console.log("Failed to submit response");
+                }
+
+                setChecked(-1);
+                setJustification("");
+                setIndex(index + 1);
+              } else {
+                alert("Please select a score");
+              }
+            }}
+          >
+            Send Response
+          </Button>
+        </View>
+      </ScrollView>
+    );
+  } else {
+    return (
+      <>
+        <Title>You finished the survery!</Title>
+        <FinishButton />
+        {/* <Button mode="contained" onPress={() => navigation.navigate("Answer")}>
+          See Results
+        </Button> */}
+      </>
+    );
+  }
 }
-// else{
-//   return(
-//     <>
-//       <Text>You finish the survery!</Text>
-//       <Divider></Divider>
-//       <Button mode="contained" onPress={() => navigation.navigate('Answer')}>
-//         See Results
-//       </Button>
-//     </>
-//   );
-// }
 
 // }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    flexGrow: 1,
+    padding: 12,
+  },
+  item: {
+    marginVertical: 8,
+  },
+});

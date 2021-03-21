@@ -4,14 +4,12 @@ import thunk from "redux-thunk";
 import { persistReducer } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { answerReduxName } from "./answer/AnswerAction";
-import answerReducer from "./answer/AnswerReducer";
-import {authenticationReduxName} from "./authentication/authenticationAction";
-import authenticationReducer from "./authentication/authenticationReducer";
+import { surveyReduxName } from "./survey/SurveyAction";
+import globalReducer from "./survey/SurveyReducer";
+
 const reducers = combineReducers({
   // ... reducers go here
-  [answerReduxName]: answerReducer.reducer,
-  [authenticationReduxName]: authenticationReducer.reducer,
+  [surveyReduxName]: globalReducer.reducer,
 });
 
 const persistConfig = {

@@ -10,16 +10,16 @@ export type RootStackParamList = {
 };
 
 export type BottomTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
+  Survey: undefined;
+  Answers: undefined;
 };
 
-export type TabOneParamList = {
-  TabOneScreen: undefined;
+export type SurveyParamList = {
+  Survey: undefined;
 };
 
-export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+export type AnswersParamList = {
+  Answers: undefined;
 };
 
 export type LandingParamList = {
@@ -33,7 +33,7 @@ export type OrganizerParamList = {
 };
 
 export type RootNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<BottomTabParamList, "TabOne">,
+  BottomTabNavigationProp<BottomTabParamList, "Survey">,
   CompositeNavigationProp<
     StackNavigationProp<RootStackParamList, "Root">,
     CompositeNavigationProp<

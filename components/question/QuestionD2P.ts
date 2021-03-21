@@ -1,25 +1,42 @@
 import { Dispatch } from "redux";
 import {
-  AnswerAction,
-  AnswerActionTypes,
-} from "../../store/answer/AnswerAction";
-import { AnswerData } from "../../store/answer/AnswerReducer";
+  SurveyAction,
+  SurveyActionTypes,
+} from "../../store/survey/SurveyAction";
+import {
+  AuthenticationData,
+  SurveyResponse,
+} from "../../store/survey/SurveyReducer";
 
 function dispatchAnswerUpdate(
-  dispatch: Dispatch<AnswerAction>,
-  answer: AnswerData[]
+  dispatch: Dispatch<SurveyAction>,
+  answer: SurveyResponse[]
 ) {
   // Dispatch update
   dispatch({
-    type: AnswerActionTypes.UPDATE_ACTION,
+    type: SurveyActionTypes.UPDATE_ANSWERS_ACTION,
     payload: answer,
   });
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<AnswerAction>) => {
+function dispatchAuthenticationUpdate(
+  dispatch: Dispatch<SurveyAction>,
+  authentication: AuthenticationData
+) {
+  // Dispatch update
+  dispatch({
+    type: SurveyActionTypes.UPDATE_AUTH_ACTION,
+    payload: authentication,
+  });
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<SurveyAction>) => {
   return {
-    updateAnswer: (answer: AnswerData[]) => {
+    updateAnswer: (answer: SurveyResponse[]) => {
       dispatchAnswerUpdate(dispatch, answer);
+    },
+    updateAuthentication: (authentication: AuthenticationData) => {
+      dispatchAuthenticationUpdate(dispatch, authentication);
     },
     dispatch,
   };
