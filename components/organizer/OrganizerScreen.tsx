@@ -11,6 +11,7 @@ import mapDispatchToProps from "../question/QuestionD2P";
 import { mapStateToProps } from "../question/QuestionRedux";
 import { SurveyProps, SurveyResponse } from "../../store/survey/SurveyReducer";
 import SurveyRadarGraph from "../SurveyRadarGraph";
+import _ from "lodash";
 
 function OrganizerScreen(props: SurveyProps) {
   const navigator = useNavigation<RootNavigationProp>();
@@ -22,17 +23,27 @@ function OrganizerScreen(props: SurveyProps) {
   ] = useState(null);
 
   const requestResults = async () => {
-    let resp = await fetchSurveyResults("yikfd-yjxlv");
+    let resp = await fetchSurveyResults(props.data.authentication.surveyId);
     setResults(resp);
   };
 
   useEffect(() => {
     requestResults();
-  }, []);
+  }, [props.data.authentication.surveyId]);
+
+  useEffect(() => {
+    const timer = setInterval(requestResults, 5000);
+    return () => clearInterval(timer);
+  }, [props.data.authentication.surveyId]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{props.data.authentication.surveyId}</Text>
+      <Text style={styles.title}>
+        Responders:
+        {_.isNull(results)
+          ? 0 // @ts-ignore
+          : results.length}
+      </Text>
       <SurveyRadarGraph surveyData={results} />
       <Button mode="contained" onPress={async () => await requestResults()}>
         Get Results

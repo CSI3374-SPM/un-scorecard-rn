@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import {
   VictoryArea,
@@ -61,6 +62,7 @@ const getMaxima = (data: Memo[]): Memo => {
 };
 
 const processData = (data: Memo[]): Point[][] => {
+  console.log("am I here?");
   const maxByGroup: Memo = getMaxima(data);
   const makeDataArray = (d: Memo) => {
     return Object.keys(d).map((key: string) => {
