@@ -45,9 +45,6 @@ function OrganizerScreen(props: SurveyProps) {
           : results.length}
       </Text>
       <SurveyRadarGraph surveyData={results} />
-      <Button mode="contained" onPress={async () => await requestResults()}>
-        Get Results
-      </Button>
       <Button mode="contained" onPress={() => navigator.navigate("Email")}>
         Email Results
       </Button>
