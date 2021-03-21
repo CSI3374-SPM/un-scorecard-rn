@@ -1,7 +1,9 @@
 import { connect } from "react-redux";
+import {
+  mapStateToProps,
+  mapDispatchToProps,
+} from "../../store/survey/SurveyReducer";
 
 import Answer from "./Answer";
-import mapDispatchToProps from "../question/QuestionD2P";
-import { mapStateToProps } from "../question/QuestionRedux";
 
 export default connect(mapStateToProps, mapDispatchToProps)(Answer);

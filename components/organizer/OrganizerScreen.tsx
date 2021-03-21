@@ -7,9 +7,12 @@ import { connect } from "react-redux";
 import FinishButton from "../log_out/FinishButton";
 import { useNavigation } from "@react-navigation/core";
 import { RootNavigationProp } from "../../types";
-import mapDispatchToProps from "../question/QuestionD2P";
-import { mapStateToProps } from "../question/QuestionRedux";
-import { SurveyProps, SurveyResponse } from "../../store/survey/SurveyReducer";
+import {
+  mapDispatchToProps,
+  mapStateToProps,
+  SurveyProps,
+  SurveyResponse,
+} from "../../store/survey/SurveyReducer";
 import SurveyRadarGraph from "../SurveyRadarGraph";
 import _ from "lodash";
 

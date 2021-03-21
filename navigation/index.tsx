@@ -12,9 +12,11 @@ import LinkingConfiguration from "./LinkingConfiguration";
 
 import { connect } from "react-redux";
 import OrganizerNavigator from "./OrganizerNavigator";
-import { mapStateToProps } from "../components/question/QuestionRedux";
-import mapDispatchToProps from "../components/question/QuestionD2P";
-import { SurveyProps } from "../store/survey/SurveyReducer";
+import {
+  mapDispatchToProps,
+  mapStateToProps,
+  SurveyProps,
+} from "../store/survey/SurveyReducer";
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started

@@ -4,9 +4,11 @@ import { StyleSheet, View } from "react-native";
 import { fetchSurveyResults } from "../../api/Wrapper";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { SurveyProps } from "../../store/survey/SurveyReducer";
-import { mapStateToProps } from "../question/QuestionRedux";
-import mapDispatchToProps from "../question/QuestionD2P";
+import {
+  mapDispatchToProps,
+  mapStateToProps,
+  SurveyProps,
+} from "../../store/survey/SurveyReducer";
 
 function JoinScreen(props: SurveyProps) {
   const [id, setID] = useState("");

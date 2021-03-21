@@ -4,6 +4,7 @@ import {
   SurveyAction,
   surveyReduxName,
 } from "./SurveyAction";
+import { Dispatch } from "redux";
 
 // The data field for the state
 export interface SurveyResponse {
@@ -72,5 +73,45 @@ const surveySlice = createSlice({
       );
   },
 });
+
+export function mapStateToProps(state: any, myProps: any) {
+  return {
+    data: state.survey.data,
+  };
+}
+
+function dispatchAnswerUpdate(
+  dispatch: Dispatch<SurveyAction>,
+  answer: SurveyResponse[]
+) {
+  // Dispatch update
+  dispatch({
+    type: SurveyActionTypes.UPDATE_ANSWERS_ACTION,
+    payload: answer,
+  });
+}
+
+function dispatchAuthenticationUpdate(
+  dispatch: Dispatch<SurveyAction>,
+  authentication: AuthenticationData
+) {
+  // Dispatch update
+  dispatch({
+    type: SurveyActionTypes.UPDATE_AUTH_ACTION,
+    payload: authentication,
+  });
+}
+
+export const mapDispatchToProps = (dispatch: Dispatch<SurveyAction>) => {
+  return {
+    updateAnswer: (answer: SurveyResponse[]) => {
+      dispatchAnswerUpdate(dispatch, answer);
+    },
+    updateAuthentication: (authentication: AuthenticationData) => {
+      dispatchAuthenticationUpdate(dispatch, authentication);
+    },
+    dispatch,
+  };
+};
 
 export default surveySlice;

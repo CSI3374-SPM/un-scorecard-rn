@@ -1,6 +1,8 @@
 import { connect } from "react-redux";
-import mapDispatchToProps from "../question/QuestionD2P";
-import { mapStateToProps } from "../question/QuestionRedux";
+import {
+  mapDispatchToProps,
+  mapStateToProps,
+} from "../../store/survey/SurveyReducer";
 
 import GenerateCodeScreen from "./GenerateCodeScreen";
 

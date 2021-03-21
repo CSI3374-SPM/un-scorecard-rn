@@ -2,9 +2,11 @@ import React from "react";
 import { Button } from "react-native-paper";
 
 import { connect } from "react-redux";
-import { SurveyProps } from "../../store/survey/SurveyReducer";
-import mapDispatchToProps from "../question/QuestionD2P";
-import { mapStateToProps } from "../question/QuestionRedux";
+import {
+  mapDispatchToProps,
+  mapStateToProps,
+  SurveyProps,
+} from "../../store/survey/SurveyReducer";
 
 function FinishButton(props: SurveyProps) {
   return (
