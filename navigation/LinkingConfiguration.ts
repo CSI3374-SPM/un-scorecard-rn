@@ -18,14 +18,14 @@ export default {
       },
       Root: {
         screens: {
-          TabOne: {
+          Survey: {
             screens: {
-              TabOneScreen: "one",
+              Survey: "one",
             },
           },
-          TabTwo: {
+          Answers: {
             screens: {
-              TabTwoScreen: "two",
+              Answers: "two",
             },
           },
         },

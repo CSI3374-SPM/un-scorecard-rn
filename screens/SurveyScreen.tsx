@@ -1,12 +1,10 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
 
-import EditScreenInfo from "../components/EditScreenInfo";
 import { View } from "react-native";
-import { Text, Button } from "react-native-paper";
 import Question from "../components/question/QuestionRedux";
 
-export default function TabOneScreen() {
+export default function SurveyScreen() {
   return (
     <View style={styles.container}>
       {/* <Text style={styles.title}>Tab One</Text>

@@ -1,17 +1,23 @@
 import React from "react";
 import { Button } from "react-native-paper";
 
-import { authenticationProps } from "../generate_code/GenerateCodeScreen";
 import { connect } from "react-redux";
-import { mapStateToProps } from "../generate_code/GenerateCodeScreenRedux";
-import mapDispatchToProps from "../generate_code/GenerateCodeScreenD2P";
+import {
+  mapDispatchToProps,
+  mapStateToProps,
+  SurveyProps,
+} from "../../store/survey/SurveyReducer";
 
-function FinishButton(props: authenticationProps) {
+function FinishButton(props: SurveyProps) {
   return (
     <Button
       mode="contained"
       onPress={() => {
-        props.updateAuthentication({ isOrganizer: false, id: "" });
+        props.updateAuthentication({
+          isOrganizer: false,
+          surveyId: "",
+          responseId: null,
+        });
       }}
     >
       Finish Survey

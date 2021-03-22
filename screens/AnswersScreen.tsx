@@ -1,9 +1,7 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
 
-import EditScreenInfo from "../components/EditScreenInfo";
 import { View } from "react-native";
-import { Text } from "react-native-paper";
 import Answer from "../components/answer/AnswerRedux";
 
 export default function TabTwoScreen() {

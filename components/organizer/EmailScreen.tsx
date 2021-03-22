@@ -11,7 +11,22 @@ import { Keyboard } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
 import { TouchableWithoutFeedback } from "react-native";
 
-export default function EmailScreen() {
+import {
+  mapDispatchToProps,
+  mapStateToProps,
+  SurveyProps,
+} from "../../store/survey/SurveyReducer";
+import { connect } from "react-redux";
+
+const visualizationUrl = process.env.GRAPH_URL;
+const emailMessage = (surveyId: string) => {
+  return `Here is the result of your Disaster Resilience Scorecard for Citires report.
+  
+  Radar Graph: ${visualizationUrl}/radar-graph/${surveyId}
+  `;
+};
+
+function EmailScreen(props: SurveyProps) {
   const scrollViewRef = useRef<ScrollView>();
   const [emails, setEmails]: [string[], (s: string[]) => void] = useState([""]);
   let defaultEditing = { index: -1, email: "" };
@@ -88,7 +103,7 @@ export default function EmailScreen() {
           onPress={async () => {
             sendEmails(
               emails.filter((email) => email !== ""),
-              "This is some pretty cool test data. I feel like I have to change it every time or my SMTP account gets locked!"
+              emailMessage(props.data.authentication.surveyId)
             );
             if (emails.filter((email) => email !== "").length > 0) {
               setMessage("Survey data was sent via email");
@@ -107,6 +122,8 @@ export default function EmailScreen() {
     </View>
   );
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(EmailScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -156,5 +173,8 @@ const styles = StyleSheet.create({
   buttonGroup: {
     flexDirection: "row",
     justifyContent: "center",
+  },
+  webview: {
+    // margin: 100,
   },
 });
