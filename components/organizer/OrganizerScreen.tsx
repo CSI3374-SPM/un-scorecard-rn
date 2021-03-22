@@ -66,9 +66,16 @@ async function pushNextQuestion(props: SurveyProps) {
   let surveyProgress = await getSurveyProgress(
     props.data.authentication.surveyId
   );
+
   if (surveyProgress != null) {
-    console.log("progress ", surveyProgress);
+    let currentQuestion = surveyProgress.currentQuestion;
+    if (currentQuestion)
+      updateSurveyProgress(
+        props.data.authentication.surveyId,
+        currentQuestion + 1
+      );
   }
+  console.log("updated question availability");
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrganizerScreen);

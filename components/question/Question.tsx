@@ -47,6 +47,8 @@ export default function Question(props: SurveyProps) {
     ) {
       if (index + 1 > surveyProgress.currentQuestion) {
         setLoading(true);
+      } else {
+        setLoading(false);
       }
     }
   };
