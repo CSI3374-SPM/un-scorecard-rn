@@ -21,25 +21,27 @@ const computeEssentialAverages = (surveyData: SurveyResponse[][] | null) => {
 
   essentialAvgs["Essential 1"] = questionAvgs[0] * multiplier;
   essentialAvgs["Essential 2"] =
-    ((questionAvgs[3] + questionAvgs[4] + questionAvgs[5]) / 3) * multiplier;
-  essentialAvgs["Essential 3"] = questionAvgs[6] * multiplier;
-  essentialAvgs["Essential 4"] = questionAvgs[7] * multiplier;
-  essentialAvgs["Essential 5"] = questionAvgs[8] * multiplier;
+    ((questionAvgs[1] + questionAvgs[2] + questionAvgs[3]) / 3) * multiplier;
+  essentialAvgs["Essential 3"] = questionAvgs[4] * multiplier;
+  essentialAvgs["Essential 4"] = questionAvgs[5] * multiplier;
+  essentialAvgs["Essential 5"] = questionAvgs[6] * multiplier;
   essentialAvgs["Essential 6"] =
-    ((questionAvgs[9] + questionAvgs[10] + questionAvgs[11]) / 3) * multiplier;
+    ((questionAvgs[7] + questionAvgs[8] + questionAvgs[9] + questionAvgs[10]) /
+      4) *
+    multiplier;
   essentialAvgs["Essential 7"] =
-    ((questionAvgs[12] + questionAvgs[13] + questionAvgs[14]) / 3) * multiplier;
+    ((questionAvgs[11] + questionAvgs[12] + questionAvgs[13]) / 3) * multiplier;
   essentialAvgs["Essential 8"] =
-    ((questionAvgs[15] + questionAvgs[16] + questionAvgs[17]) / 3) * multiplier;
+    ((questionAvgs[14] + questionAvgs[15] + questionAvgs[16]) / 3) * multiplier;
   essentialAvgs["Essential 9"] =
-    ((questionAvgs[18] +
+    ((questionAvgs[17] +
+      questionAvgs[18] +
       questionAvgs[19] +
-      questionAvgs[20] +
-      questionAvgs[21]) /
+      questionAvgs[20]) /
       4) *
     multiplier;
   essentialAvgs["Essential 10"] =
-    ((questionAvgs[1] + questionAvgs[2]) / 2) * multiplier;
+    ((questionAvgs[21] + questionAvgs[22]) / 2) * multiplier;
 
   Object.keys(essentialAvgs).forEach((key) => {
     if (isNaN(essentialAvgs[key])) {
