@@ -513,7 +513,7 @@ export const sendEmails = async (
 };
 
 export type SurveyProgressResponse = ApiResponse & {
-  currentProgress?: number;
+  currentQuestion?: number;
   surveyId?: string;
 };
 
@@ -538,7 +538,7 @@ export const getSurveyProgress = async (
   }
   return {
     status: data.status,
-    currentProgress: data.currentProgress,
+    currentQuestion: data.currentQuestion,
     surveyId: data.survey_id,
   };
 };
@@ -569,7 +569,7 @@ export const updateSurveyProgress = async (
   }
   return {
     status: data.status,
-    currentProgress: data.currentProgress,
+    currentQuestion: data.currentQuestion,
     surveyId: data.survey_id,
   };
 };

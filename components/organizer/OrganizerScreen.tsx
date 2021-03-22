@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Button, Text } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 
-import { fetchSurveyResults } from "../../api/Wrapper";
+import {
+  fetchSurveyResults,
+  getSurveyProgress,
+  updateSurveyProgress,
+} from "../../api/Wrapper";
 import { connect } from "react-redux";
 import FinishButton from "../log_out/FinishButton";
 import { useNavigation } from "@react-navigation/core";
@@ -18,7 +22,6 @@ import _ from "lodash";
 
 function OrganizerScreen(props: SurveyProps) {
   const navigator = useNavigation<RootNavigationProp>();
-  const [id, setID] = useState("");
   // @ts-ignore
   const [results, setResults]: [
     SurveyResponse[][] | null,
@@ -47,6 +50,9 @@ function OrganizerScreen(props: SurveyProps) {
           ? 0 // @ts-ignore
           : results.length}
       </Text>
+      <Button mode="contained" onPress={() => pushNextQuestion(props)}>
+        Next
+      </Button>
       <SurveyRadarGraph surveyData={results} />
       <Button mode="contained" onPress={() => navigator.navigate("Email")}>
         Email Results
@@ -54,6 +60,15 @@ function OrganizerScreen(props: SurveyProps) {
       <FinishButton />
     </View>
   );
+}
+
+async function pushNextQuestion(props: SurveyProps) {
+  let surveyProgress = await getSurveyProgress(
+    props.data.authentication.surveyId
+  );
+  if (surveyProgress != null) {
+    console.log("progress ", surveyProgress);
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrganizerScreen);
