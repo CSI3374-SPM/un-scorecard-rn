@@ -1,6 +1,17 @@
-import React, { useState } from "react";
-import { Button, TextInput, Title, RadioButton } from "react-native-paper";
-import { addSurveyResponse, questions } from "../../api/Wrapper";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  TextInput,
+  Title,
+  RadioButton,
+  ActivityIndicator,
+} from "react-native-paper";
+import { SurveyResponse } from "../../store/survey/SurveyReducer";
+import {
+  addSurveyResponse,
+  getSurveyProgress,
+  questions,
+} from "../../api/Wrapper";
 import { useNavigation } from "@react-navigation/core";
 import { RootNavigationProp } from "../../types";
 import { ScrollView } from "react-native-gesture-handler";
@@ -8,6 +19,10 @@ import { StyleSheet, View } from "react-native";
 import _ from "lodash";
 import { SurveyProps } from "../../store/survey/SurveyReducer";
 import FinishButton from "../log_out/FinishButton";
+//import { Simulate } from "react-dom/test-utils";
+//import progress = Simulate.progress;
+//import { Simulate } from "react-dom/test-utils";
+//import load = Simulate.load;
 
 export const rating = (n: number) => 5 - n;
 
@@ -20,7 +35,41 @@ export default function Question(props: SurveyProps) {
     (j: string) => void
   ] = useState("");
 
+  const [loading, setLoading] = useState(false);
+  const progress = async () => {
+    console.log("function ran, index: ", index);
+    let surveyProgress = await getSurveyProgress(
+      props.data.authentication.surveyId
+    );
+    if (
+      surveyProgress != null &&
+      typeof surveyProgress.currentQuestion != "undefined"
+    ) {
+      if (index + 1 > surveyProgress.currentQuestion) {
+        setLoading(true);
+      } else {
+        setLoading(false);
+      }
+    }
+  };
+  useEffect(() => {
+    progress();
+  }, [props.data.authentication.surveyId, index]);
+  useEffect(() => {
+    console.log("I did something");
+    const timer = setInterval(progress, 5000);
+    return () => clearInterval(timer);
+  }, [props.data.authentication.surveyId, index]);
   if (index < questions.length - 1) {
+    if (loading) {
+      return (
+        <View style={styles.waiting}>
+          <Title style={styles.item}>Waiting for next question</Title>
+          <ActivityIndicator size="large" />
+        </View>
+      );
+    }
+
     return (
       <ScrollView>
         <View style={styles.container}>
@@ -77,6 +126,7 @@ export default function Question(props: SurveyProps) {
                 setChecked(-1);
                 setJustification("");
                 setIndex(index + 1);
+                console.log("Changed index ", index);
               } else {
                 alert("Please select a score");
               }
@@ -90,7 +140,7 @@ export default function Question(props: SurveyProps) {
   } else {
     return (
       <>
-        <Title>You finished the survery!</Title>
+        <Title>You finished the survey!</Title>
         <FinishButton />
         {/* <Button mode="contained" onPress={() => navigation.navigate("Answer")}>
           See Results
@@ -111,5 +161,9 @@ const styles = StyleSheet.create({
   },
   item: {
     marginVertical: 8,
+  },
+  waiting: {
+    flexDirection: "column",
+    alignItems: "center",
   },
 });
