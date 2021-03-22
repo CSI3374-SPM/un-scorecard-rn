@@ -41,13 +41,11 @@ const computeEssentialAverages = (surveyData: SurveyResponse[][] | null) => {
   essentialAvgs["Essential 10"] =
     ((questionAvgs[1] + questionAvgs[2]) / 2) * multiplier;
 
-  if (
-    !_.isUndefined(
-      Object.keys(essentialAvgs).find((key) => isNaN(essentialAvgs[key]))
-    )
-  ) {
-    return [];
-  }
+  Object.keys(essentialAvgs).forEach((key) => {
+    if (isNaN(essentialAvgs[key])) {
+      essentialAvgs[key] = 0;
+    }
+  });
 
   return [essentialAvgs];
 };
