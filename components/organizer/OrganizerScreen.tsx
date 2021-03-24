@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Text } from "react-native-paper";
+import { Button, Text, List } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
-
 import {
   fetchSurveyResults,
   getSurveyProgress,
@@ -27,6 +26,8 @@ function OrganizerScreen(props: SurveyProps) {
     SurveyResponse[][] | null,
     (r: SurveyResponse[][] | null) => void
   ] = useState(null);
+  const [expanded, setExpanded] = React.useState(true);
+  const handlePress = () => setExpanded(!expanded);
 
   const requestResults = async () => {
     let resp = await fetchSurveyResults(props.data.authentication.surveyId);
@@ -54,6 +55,20 @@ function OrganizerScreen(props: SurveyProps) {
         Next
       </Button>
       <SurveyRadarGraph surveyData={results} />
+      
+      <List.Section title="Justification">
+      <List.Accordion
+        title="Justification"
+        left={props => <List.Icon {...props} icon="folder" />}>
+          {_.isNull(results)
+          ? "0" // @ts-ignore
+          : results.map((ID, index) => ID.map((res, index) => 
+            <List.Item title={res.justification}>
+            </List.Item>
+          ))}
+      </List.Accordion>
+      </List.Section>   
+
       <Button mode="contained" onPress={() => navigator.navigate("Email")}>
         Email Results
       </Button>
