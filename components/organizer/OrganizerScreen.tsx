@@ -18,6 +18,7 @@ import {
 } from "../../store/survey/SurveyReducer";
 import SurveyRadarGraph from "../SurveyRadarGraph";
 import _ from "lodash";
+import SurveyBarGraph from "../SurveyBarGraph";
 
 function OrganizerScreen(props: SurveyProps) {
   const navigator = useNavigation<RootNavigationProp>();
@@ -55,10 +56,15 @@ function OrganizerScreen(props: SurveyProps) {
         Next
       </Button>
       <SurveyRadarGraph surveyData={results} />
-      
-      <List.Section title="Justification">
+
+      <List.Section>
       <List.Accordion
-        title="Justification"
+        title="Responses for Question"
+        left={props => <List.Icon {...props} icon="folder" />}>
+          <SurveyBarGraph surveyData={results} />
+      </List.Accordion>
+      <List.Accordion
+        title="Justifications"
         left={props => <List.Icon {...props} icon="folder" />}>
           {_.isNull(results)
           ? "0" // @ts-ignore
@@ -67,7 +73,7 @@ function OrganizerScreen(props: SurveyProps) {
             </List.Item>
           ))}
       </List.Accordion>
-      </List.Section>   
+      </List.Section>
 
       <Button mode="contained" onPress={() => navigator.navigate("Email")}>
         Email Results
