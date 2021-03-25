@@ -7,7 +7,6 @@
 ### Developers:
 
 - [Jacob Curtis](https://github.com/nnazo)
-- [Owen Murphy](https://github.com/olmurphy)
 - [Jose Carlos Acosta](https://github.com/Josekeitor)
 - [Peiyang Chang](https://github.com/peiyang-chang)
 - [Leighton Glim](https://github.com/leightonglim)
@@ -26,6 +25,11 @@ This app is being developed in an effort to improve collaboration and discussion
 
 This app was bootstraped with [Expo](https://expo.io), using the React Navigation Template with [TypeScript](https://www.typescriptlang.org).
 
+- Start PostgreSQL with the user specified in the `config.py` file and run the `up.sql` file in your psql shell. These files are found in the API repository.
+- Run the [Python API](https://github.com/mwfendt/UN_Scorecard) on your local machine.
+- Run the [Visualization Web App](https://github.com/CSI3374-SPM/un-scorecard-visualization) on your local machine with `yarn install` and then `yarn dev`
+- Run `yarn install` to install the depencies required to run the scripts mentioned below.
+
 ### Available scripts:
 
 - `yarn start [--android | --ios | --web]`
@@ -43,4 +47,4 @@ This app was bootstraped with [Expo](https://expo.io), using the React Navigatio
 
 The following environment variables can be modified:
 
-- `API_URL` which indicates the URL of the backend that the mobile application sends requests to.
+- `GRAPH_URL` which indicates the URL of the web application that shows a web view of a survey's radar graph.
