@@ -18,6 +18,7 @@ function FinishButton(props: SurveyProps) {
           surveyId: "",
           responseId: null,
         });
+        props.updateAnswer([]);
       }}
     >
       Finish Survey

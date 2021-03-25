@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Text } from "react-native-paper";
+import { Button, Text, List } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
-
 import {
   fetchSurveyResults,
   getSurveyProgress,
@@ -18,7 +17,9 @@ import {
   SurveyResponse,
 } from "../../store/survey/SurveyReducer";
 import SurveyRadarGraph from "../SurveyRadarGraph";
+import { ScrollView } from "react-native-gesture-handler";
 import _ from "lodash";
+import SurveyBarGraph from "../SurveyBarGraph";
 
 function OrganizerScreen(props: SurveyProps) {
   const navigator = useNavigation<RootNavigationProp>();
@@ -27,14 +28,30 @@ function OrganizerScreen(props: SurveyProps) {
     SurveyResponse[][] | null,
     (r: SurveyResponse[][] | null) => void
   ] = useState(null);
+  const [expanded, setExpanded] = React.useState(true);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const handlePress = () => setExpanded(!expanded);
 
   const requestResults = async () => {
     let resp = await fetchSurveyResults(props.data.authentication.surveyId);
     setResults(resp);
   };
 
+  const requestCurrentQuestion = async () => {
+    let surveyProgress = await getSurveyProgress(
+      props.data.authentication.surveyId
+    );
+    if (!_.isNull(surveyProgress)) {
+      let currentQuestion = surveyProgress.currentQuestion;
+      if (currentQuestion) {
+        setCurrentQuestion(currentQuestion);
+      }
+    }
+  };
+
   useEffect(() => {
     requestResults();
+    requestCurrentQuestion();
   }, [props.data.authentication.surveyId]);
 
   useEffect(() => {
@@ -45,35 +62,79 @@ function OrganizerScreen(props: SurveyProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
+        Survey ID: {props.data.authentication.surveyId}
+      </Text>
+      <Text style={styles.title}>
         Responders:
         {_.isNull(results)
           ? 0 // @ts-ignore
           : results.length}
       </Text>
-      <Button mode="contained" onPress={() => pushNextQuestion(props)}>
+      <Button
+        mode="contained"
+        onPress={() => pushNextQuestion(props, setCurrentQuestion)}
+      >
         Next
       </Button>
-      <SurveyRadarGraph surveyData={results} />
-      <Button mode="contained" onPress={() => navigator.navigate("Email")}>
-        Email Results
-      </Button>
-      <FinishButton />
+      <ScrollView>
+        <SurveyRadarGraph surveyData={results} />
+        <List.Accordion
+          title={`Response Distribution: Question ${currentQuestion}`}
+          left={(props) => <List.Icon {...props} icon="folder" />}
+        >
+          <SurveyBarGraph
+            surveyData={results}
+            questionIndex={currentQuestion - 1}
+          />
+        </List.Accordion>
+        <List.Accordion
+          title={`Justifications: Question ${currentQuestion}`}
+          left={(props) => <List.Icon {...props} icon="folder" />}
+        >
+          {_.isNull(results)
+            ? "0" // @ts-ignore
+            : results.map((ID: SurveyResponse[], respIndex: number) =>
+                ID.filter(
+                  (res: SurveyResponse) =>
+                    res.questionIndex === currentQuestion - 1 &&
+                    !_.isUndefined(res.justification)
+                ).map((res: SurveyResponse, ansIndex: number) => {
+                  return (
+                    <List.Item
+                      title={res.justification}
+                      key={`justification-${respIndex}-${ansIndex}`}
+                    />
+                  );
+                })
+              )}
+        </List.Accordion>
+
+        <Button mode="contained" onPress={() => navigator.navigate("Email")}>
+          Email Results
+        </Button>
+        <FinishButton />
+      </ScrollView>
     </View>
   );
 }
 
-async function pushNextQuestion(props: SurveyProps) {
+async function pushNextQuestion(
+  props: SurveyProps,
+  setCurrentQuestion: (n: number) => void
+) {
   let surveyProgress = await getSurveyProgress(
     props.data.authentication.surveyId
   );
 
   if (surveyProgress != null) {
     let currentQuestion = surveyProgress.currentQuestion;
-    if (currentQuestion)
+    if (currentQuestion) {
       updateSurveyProgress(
         props.data.authentication.surveyId,
         currentQuestion + 1
       );
+      setCurrentQuestion(currentQuestion + 1);
+    }
   }
   console.log("updated question availability");
 }
