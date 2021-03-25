@@ -79,34 +79,35 @@ function OrganizerScreen(props: SurveyProps) {
       <ScrollView>
         <SurveyRadarGraph surveyData={results} />
         <List.Accordion
-          title="Responses for Question"
+          title={`Response Distribution: Question ${currentQuestion}`}
           left={(props) => <List.Icon {...props} icon="folder" />}
         >
-          <SurveyBarGraph surveyData={results} />
+          <SurveyBarGraph
+            surveyData={results}
+            questionIndex={currentQuestion - 1}
+          />
         </List.Accordion>
-        <List.Section title="Justification">
-          <List.Accordion
-            title={`Justifications: Question ${currentQuestion}`}
-            left={(props) => <List.Icon {...props} icon="folder" />}
-          >
-            {_.isNull(results)
-              ? "0" // @ts-ignore
-              : results.map((ID: SurveyResponse[], respIndex: number) =>
-                  ID.filter(
-                    (res: SurveyResponse) =>
-                      res.questionIndex === currentQuestion - 1 &&
-                      !_.isUndefined(res.justification)
-                  ).map((res: SurveyResponse, ansIndex: number) => {
-                    return (
-                      <List.Item
-                        title={res.justification}
-                        key={`justification-${respIndex}-${ansIndex}`}
-                      />
-                    );
-                  })
-                )}
-          </List.Accordion>
-        </List.Section>
+        <List.Accordion
+          title={`Justifications: Question ${currentQuestion}`}
+          left={(props) => <List.Icon {...props} icon="folder" />}
+        >
+          {_.isNull(results)
+            ? "0" // @ts-ignore
+            : results.map((ID: SurveyResponse[], respIndex: number) =>
+                ID.filter(
+                  (res: SurveyResponse) =>
+                    res.questionIndex === currentQuestion - 1 &&
+                    !_.isUndefined(res.justification)
+                ).map((res: SurveyResponse, ansIndex: number) => {
+                  return (
+                    <List.Item
+                      title={res.justification}
+                      key={`justification-${respIndex}-${ansIndex}`}
+                    />
+                  );
+                })
+              )}
+        </List.Accordion>
 
         <Button mode="contained" onPress={() => navigator.navigate("Email")}>
           Email Results
