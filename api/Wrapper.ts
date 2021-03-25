@@ -493,6 +493,10 @@ export const sendEmails = async (
   body: string,
   onFail: (e: any) => void = console.log
 ) => {
+  if (body.match("undefined")) {
+    onFail("The body contained an undefined URL: \n" + body);
+    return;
+  }
   const data = await request(
     {
       method: "POST",

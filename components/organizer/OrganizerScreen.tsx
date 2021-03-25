@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, Text, List } from "react-native-paper";
+import { Button, Text, List, Subheading } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import {
   fetchSurveyResults,
   getSurveyProgress,
   updateSurveyProgress,
+  questions,
 } from "../../api/Wrapper";
 import { connect } from "react-redux";
 import FinishButton from "../log_out/FinishButton";
@@ -65,12 +66,13 @@ function OrganizerScreen(props: SurveyProps) {
         Survey ID: {props.data.authentication.surveyId}
       </Text>
       <Text style={styles.title}>
-        Responders:
+        {"Responders: "}
         {_.isNull(results)
           ? 0 // @ts-ignore
           : results.length}
       </Text>
       <Button
+        style={styles.item}
         mode="contained"
         onPress={() => pushNextQuestion(props, setCurrentQuestion)}
       >
@@ -78,8 +80,15 @@ function OrganizerScreen(props: SurveyProps) {
       </Button>
       <ScrollView>
         <SurveyRadarGraph surveyData={results} />
+        <Subheading style={styles.item}>Current Question</Subheading>
+        <Text style={styles.item}>
+          {currentQuestion - 1 > -1 && currentQuestion - 1 < questions.length
+            ? questions[currentQuestion - 1].question
+            : "Could not find question"}
+        </Text>
         <List.Accordion
-          title={`Response Distribution: Question ${currentQuestion}`}
+          style={styles.item}
+          title={`Response Distribution`}
           left={(props) => <List.Icon {...props} icon="folder" />}
         >
           <SurveyBarGraph
@@ -88,7 +97,8 @@ function OrganizerScreen(props: SurveyProps) {
           />
         </List.Accordion>
         <List.Accordion
-          title={`Justifications: Question ${currentQuestion}`}
+          style={styles.item}
+          title={`Justifications`}
           left={(props) => <List.Icon {...props} icon="folder" />}
         >
           {_.isNull(results)
@@ -109,7 +119,11 @@ function OrganizerScreen(props: SurveyProps) {
               )}
         </List.Accordion>
 
-        <Button mode="contained" onPress={() => navigator.navigate("Email")}>
+        <Button
+          style={styles.email}
+          mode="contained"
+          onPress={() => navigator.navigate("Email")}
+        >
           Email Results
         </Button>
         <FinishButton />
@@ -149,10 +163,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    padding: 8,
   },
   separator: {
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  item: {
+    padding: 4,
+  },
+  email: {
+    marginBottom: 4,
   },
 });

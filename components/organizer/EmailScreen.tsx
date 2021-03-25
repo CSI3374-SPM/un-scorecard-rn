@@ -20,9 +20,10 @@ import { connect } from "react-redux";
 
 const visualizationUrl = process.env.GRAPH_URL;
 const emailMessage = (surveyId: string) => {
-  return `Here is the result of your Disaster Resilience Scorecard for Citires report.
+  return `
+Here is the result of your Disaster Resilience Scorecard for Cities report.
   
-  Radar Graph: ${visualizationUrl}/radar-graph/${surveyId}
+Radar Graph: ${visualizationUrl}/radar-graph/${surveyId}
   `;
 };
 
