@@ -119,7 +119,7 @@ export default function RadarGraph(props: Props) {
             axisValue={i + 1}
             label={key}
             tickFormat={(t) => Math.ceil(t * maxima[key])}
-            tickValues={[0.25, 0.5, 0.75]}
+            tickValues={[0.2, 0.4, 0.6, 0.8, 1]}
           />
         );
       })}
