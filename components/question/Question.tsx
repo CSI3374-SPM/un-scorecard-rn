@@ -10,6 +10,7 @@ import { SurveyResponse } from "../../store/survey/SurveyReducer";
 import {
   addSurveyResponse,
   getSurveyProgress,
+  getSurveyProgressStream,
   questions,
 } from "../../api/Wrapper";
 import { useNavigation } from "@react-navigation/core";
@@ -36,30 +37,58 @@ export default function Question(props: SurveyProps) {
   ] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const progress = async () => {
+  // @ts-ignore
+  const [socket, setSocket]: [
+    SocketIOClient.Socket | null,
+    (s: SocketIOClient.Socket | null) => void
+  ] = useState(null);
+
+  // const progress = async () => {
+  //   console.log("function ran, index: ", index);
+  //   let surveyProgress = await getSurveyProgress(
+  //     props.data.authentication.surveyId
+  //   );
+  //   if (
+  //     surveyProgress != null &&
+  //     typeof surveyProgress.currentQuestion != "undefined"
+  //   ) {
+  //     if (index + 1 > surveyProgress.currentQuestion) {
+  //       setLoading(true);
+  //     } else {
+  //       setLoading(false);
+  //     }
+  //   }
+  // };
+
+  const progress = (currentQuestion: number) => {
     console.log("function ran, index: ", index);
-    let surveyProgress = await getSurveyProgress(
-      props.data.authentication.surveyId
-    );
-    if (
-      surveyProgress != null &&
-      typeof surveyProgress.currentQuestion != "undefined"
-    ) {
-      if (index + 1 > surveyProgress.currentQuestion) {
-        setLoading(true);
-      } else {
-        setLoading(false);
-      }
+    if (index + 1 > currentQuestion) {
+      setLoading(true);
+    } else {
+      setLoading(false);
     }
   };
+
+  // useEffect(() => {
+  //   progress();
+  // }, [props.data.authentication.surveyId, index]);
+
+  // useEffect(() => {
+  //   console.log("I did something");
+  //   const timer = setInterval(progress, 5000);
+  //   return () => clearInterval(timer);
+  // }, [props.data.authentication.surveyId, index]);
+
   useEffect(() => {
-    progress();
-  }, [props.data.authentication.surveyId, index]);
-  useEffect(() => {
-    console.log("I did something");
-    const timer = setInterval(progress, 5000);
-    return () => clearInterval(timer);
-  }, [props.data.authentication.surveyId, index]);
+    setSocket(
+      getSurveyProgressStream(props.data.authentication.surveyId, progress)
+    );
+    return () => {
+      // @ts-ignore
+      if (!_.isNull(socket)) socket.close();
+    };
+  }, [props.data.authentication.surveyId]);
+
   if (index < questions.length - 1) {
     if (loading) {
       return (

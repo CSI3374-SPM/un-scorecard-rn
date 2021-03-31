@@ -3,12 +3,16 @@ const { manifest } = Constants;
 import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 import { SurveyResponse } from "../store/survey/SurveyReducer";
+import io from "socket.io-client";
 
 // const apiUrl = process.env.API_URL;
 export const apiUrl =
   typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
     ? `http://${manifest.debuggerHost?.split(`:`).shift()?.concat(`:5000`)}`
     : `https://unbox.ecs.baylor.edu:5000`;
+
+const wsApiUrl = "ws".concat(apiUrl.split("http")[1]);
+console.log(wsApiUrl);
 
 const api = axios.create({
   baseURL: apiUrl,
@@ -546,6 +550,43 @@ export const getSurveyProgress = async (
     currentQuestion: data.currentQuestion,
     surveyId: data.survey_id,
   };
+};
+
+const wsFailure = (socket: SocketIOClient.Socket) => {
+  console.log("WebSocket connection failed");
+  socket.close();
+};
+
+export const getSurveyProgressStream = (
+  surveyId: string,
+  callback: (currentProgress: number) => void,
+  onFail: (socket: SocketIOClient.Socket) => void = wsFailure
+) => {
+  console.log("try to connect..");
+  const socket = io(wsApiUrl);
+  socket.on("connect", () => {
+    console.log("connected");
+    socket.emit("su rvey_progress_subscribe", {
+      surveyId,
+    });
+  });
+
+  socket.on("survey_progress_updated", (rawData: any) => {
+    console.log("prog updated" + rawData);
+    if (_.isNull(rawData) || rawData.status !== "OK") {
+      onFail(socket);
+    }
+    let data: SurveyProgressResponse = {
+      status: rawData.status,
+      currentQuestion: rawData.currentQuestion,
+      surveyId: rawData.survey_id,
+    };
+    if (!_.isUndefined(data.currentQuestion)) {
+      callback(data.currentQuestion);
+    }
+  });
+
+  return socket;
 };
 
 // Set the current question number to the one provided
