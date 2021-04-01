@@ -11,9 +11,6 @@ export const apiUrl =
     ? `http://${manifest.debuggerHost?.split(`:`).shift()?.concat(`:5000`)}`
     : `https://unbox.ecs.baylor.edu:5000`;
 
-const wsApiUrl = "ws".concat(apiUrl.split("http")[1]);
-console.log(wsApiUrl);
-
 const api = axios.create({
   baseURL: apiUrl,
 });
@@ -563,16 +560,17 @@ export const getSurveyProgressStream = (
   onFail: (socket: SocketIOClient.Socket) => void = wsFailure
 ) => {
   console.log("try to connect..");
-  const socket = io(wsApiUrl);
+  const socket = io(apiUrl, { transports: ["websocket"] });
   socket.on("connect", () => {
     console.log("connected");
-    socket.emit("su rvey_progress_subscribe", {
+    socket.emit("survey_progress_subscribe", {
       surveyId,
     });
   });
 
   socket.on("survey_progress_updated", (rawData: any) => {
-    console.log("prog updated" + rawData);
+    console.log("prog updated");
+    console.log(rawData);
     if (_.isNull(rawData) || rawData.status !== "OK") {
       onFail(socket);
     }

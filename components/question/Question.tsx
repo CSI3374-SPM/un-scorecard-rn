@@ -30,6 +30,7 @@ export const rating = (n: number) => 5 - n;
 export default function Question(props: SurveyProps) {
   const navigation = useNavigation<RootNavigationProp>();
   const [index, setIndex]: [number, (index: number) => void] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(1);
   const [checked, setChecked]: [number, (n: number) => void] = useState(-1);
   const [justification, setJustification]: [
     string,
@@ -43,41 +44,15 @@ export default function Question(props: SurveyProps) {
     (s: SocketIOClient.Socket | null) => void
   ] = useState(null);
 
-  // const progress = async () => {
-  //   console.log("function ran, index: ", index);
-  //   let surveyProgress = await getSurveyProgress(
-  //     props.data.authentication.surveyId
-  //   );
-  //   if (
-  //     surveyProgress != null &&
-  //     typeof surveyProgress.currentQuestion != "undefined"
-  //   ) {
-  //     if (index + 1 > surveyProgress.currentQuestion) {
-  //       setLoading(true);
-  //     } else {
-  //       setLoading(false);
-  //     }
-  //   }
-  // };
-
-  const progress = (currentQuestion: number) => {
+  const progress = (newCurrentQuestion: number) => {
     console.log("function ran, index: ", index);
-    if (index + 1 > currentQuestion) {
+    setCurrentQuestion(newCurrentQuestion);
+    if (index + 1 > newCurrentQuestion) {
       setLoading(true);
     } else {
       setLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   progress();
-  // }, [props.data.authentication.surveyId, index]);
-
-  // useEffect(() => {
-  //   console.log("I did something");
-  //   const timer = setInterval(progress, 5000);
-  //   return () => clearInterval(timer);
-  // }, [props.data.authentication.surveyId, index]);
 
   useEffect(() => {
     setSocket(
@@ -89,7 +64,7 @@ export default function Question(props: SurveyProps) {
     };
   }, [props.data.authentication.surveyId]);
 
-  if (index < questions.length - 1) {
+  if (index < questions.length) {
     if (loading) {
       return (
         <View style={styles.waiting}>
@@ -155,6 +130,13 @@ export default function Question(props: SurveyProps) {
                 setChecked(-1);
                 setJustification("");
                 setIndex(index + 1);
+                console.log(index + 1);
+                console.log(currentQuestion);
+                if (index + 1 > currentQuestion - 1) {
+                  setLoading(true);
+                } else {
+                  setLoading(false);
+                }
                 console.log("Changed index ", index);
               } else {
                 alert("Please select a score");
