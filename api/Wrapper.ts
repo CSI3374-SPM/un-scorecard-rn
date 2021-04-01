@@ -441,6 +441,92 @@ export const fetchSurveyResults = async (
   return null;
 };
 
+const wsResultsFailure = (socket: SocketIOClient.Socket) => {
+  socket.off("survey_responses_updated");
+  wsFailure(socket);
+};
+
+export const fetchSurveyResultsStream = (
+  surveyId: string,
+  callback: (results: SurveyResponse[][] | null) => void,
+  onFail: (socket: SocketIOClient.Socket) => void = wsResultsFailure
+) => {
+  const socket = makeSocket();
+  socket.on("connect", () => {
+    console.log("connected");
+    socket.emit("survey_responses_subscribe", {
+      surveyId,
+    });
+  });
+
+  socket.on("survey_responses_updated", (rawData: any) => {
+    // console.log("results updated");
+    // console.log(rawData);
+    if (!_.isNull(rawData)) {
+      const rawResponses: any[] = rawData.Data;
+      if (rawData.status === "ERROR" || _.isUndefined(rawResponses)) {
+        socket.emit("survey_responses_unsubscribe", {
+          surveyId,
+        });
+        onFail(socket);
+      }
+
+      // @ts-ignore
+      const results = rawResponses.map((rawResults) => {
+        return Object.keys(rawResults)
+          .map((key) => {
+            // Find the question with the right key in the questions
+            const question = questions.find(
+              (question) => question.question === key
+            );
+            if (_.isUndefined(question)) {
+              return null;
+            }
+
+            // Get the question string (e.g. 'A.1.1') and find the
+            // corresponding justification key in the raw results
+            let qNum = question.question.split(" ")[0];
+            const justificationKey = Object.keys(rawResults).find(
+              (justification) =>
+                justification.startsWith("Option:") &&
+                justification.endsWith(qNum)
+            );
+            if (_.isUndefined(justificationKey)) {
+              return null;
+            }
+
+            // Get the justification and score
+            const justification: string = rawResults[justificationKey];
+            const score: number = parseInt(rawResults[key]);
+
+            const index = questions.indexOf(question);
+            const response: SurveyResponse = {
+              questionIndex: index,
+              score,
+              justification:
+                justification === "No response given"
+                  ? undefined
+                  : justification,
+            };
+            return response;
+          })
+          .filter(
+            (response): response is SurveyResponse => !_.isNull(response)
+          );
+      });
+
+      callback(results);
+    } else {
+      socket.emit("survey_responses_unsubscribe", {
+        surveyId,
+      });
+      onFail(socket);
+    }
+  });
+
+  return socket;
+};
+
 /**
  * Submit all the answers to a survey.
  *
@@ -549,18 +635,28 @@ export const getSurveyProgress = async (
   };
 };
 
+const makeSocket = () => {
+  return io(apiUrl, { transports: ["websocket"], timeout: 30000 });
+};
+
 const wsFailure = (socket: SocketIOClient.Socket) => {
   console.log("WebSocket connection failed");
+  socket.off("connect");
+  socket.off("disconnect");
   socket.close();
+};
+
+const wsProgressFailure = (socket: SocketIOClient.Socket) => {
+  socket.off("survy_progress_updated");
+  wsFailure(socket);
 };
 
 export const getSurveyProgressStream = (
   surveyId: string,
   callback: (currentProgress: number) => void,
-  onFail: (socket: SocketIOClient.Socket) => void = wsFailure
+  onFail: (socket: SocketIOClient.Socket) => void = wsProgressFailure
 ) => {
-  console.log("try to connect..");
-  const socket = io(apiUrl, { transports: ["websocket"] });
+  const socket = makeSocket();
   socket.on("connect", () => {
     console.log("connected");
     socket.emit("survey_progress_subscribe", {
@@ -569,9 +665,12 @@ export const getSurveyProgressStream = (
   });
 
   socket.on("survey_progress_updated", (rawData: any) => {
-    console.log("prog updated");
+    console.log("got prog update");
     console.log(rawData);
     if (_.isNull(rawData) || rawData.status !== "OK") {
+      socket.emit("survey_progress_unsubscribe", {
+        surveyId,
+      });
       onFail(socket);
     }
     let data: SurveyProgressResponse = {

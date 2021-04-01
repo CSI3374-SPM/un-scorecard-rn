@@ -11,6 +11,8 @@ import { DefaultTheme, DarkTheme } from "./constants/Colors";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
+// @ts-ignore
+import { LogBox } from "react-native";
 
 let initialState = {};
 let store = buildStore(initialState);
@@ -20,6 +22,9 @@ let persistor = persistStore(store);
 // instead of how the project template does things.
 
 export default function App() {
+  // Timer issues with Socket.io -- https://github.com/facebook/react-native/issues/12981
+  LogBox.ignoreLogs(["Setting a timer"]);
+
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 

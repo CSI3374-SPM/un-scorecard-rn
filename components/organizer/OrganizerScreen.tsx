@@ -6,6 +6,7 @@ import {
   getSurveyProgress,
   updateSurveyProgress,
   questions,
+  fetchSurveyResultsStream,
 } from "../../api/Wrapper";
 import { connect } from "react-redux";
 import FinishButton from "../log_out/FinishButton";
@@ -31,12 +32,12 @@ function OrganizerScreen(props: SurveyProps) {
   ] = useState(null);
   const [expanded, setExpanded] = React.useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  // @ts-ignore
+  const [socket, setSocket]: [
+    SocketIOClient.Socket | null,
+    (s: SocketIOClient.Socket | null) => void
+  ] = useState(null);
   const handlePress = () => setExpanded(!expanded);
-
-  const requestResults = async () => {
-    let resp = await fetchSurveyResults(props.data.authentication.surveyId);
-    setResults(resp);
-  };
 
   const requestCurrentQuestion = async () => {
     let surveyProgress = await getSurveyProgress(
@@ -51,13 +52,14 @@ function OrganizerScreen(props: SurveyProps) {
   };
 
   useEffect(() => {
-    requestResults();
+    setSocket(
+      fetchSurveyResultsStream(props.data.authentication.surveyId, setResults)
+    );
     requestCurrentQuestion();
-  }, [props.data.authentication.surveyId]);
-
-  useEffect(() => {
-    const timer = setInterval(requestResults, 5000);
-    return () => clearInterval(timer);
+    return () => {
+      // @ts-ignore
+      if (!_.isNull(socket)) socket.close();
+    };
   }, [props.data.authentication.surveyId]);
 
   return (
@@ -111,7 +113,13 @@ function OrganizerScreen(props: SurveyProps) {
                 ).map((res: SurveyResponse, ansIndex: number) => {
                   return (
                     <List.Item
-                      title={res.justification}
+                      title={
+                        <Text>
+                          {!_.isUndefined(res.justification)
+                            ? res.justification
+                            : "No justification given"}
+                        </Text>
+                      }
                       key={`justification-${respIndex}-${ansIndex}`}
                     />
                   );
