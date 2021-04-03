@@ -43,12 +43,15 @@ function EmailScreen(props: SurveyProps) {
     (s: SocketIOClient.Socket | null) => void
   ] = useState(null as SocketIOClient.Socket | null);
 
-  const addEmail = (newEmail: string) => {
-    console.log(emails);
-    let newEmails = _.clone(emails);
-    newEmails.push(newEmail);
-    setEmails(newEmails);
-  };
+  const addEmail = useCallback(
+    (newEmail: string) => {
+      console.log(emails);
+      let newEmails = _.clone(emails);
+      newEmails.push(newEmail);
+      setEmails(newEmails);
+    },
+    [emails]
+  );
 
   useEffect(() => {
     if (_.isNull(socket) && props.data.authentication.surveyId != "")
@@ -57,7 +60,9 @@ function EmailScreen(props: SurveyProps) {
       );
     else if (!_.isNull(socket)) {
       closeEmailsSocket(socket);
-      setSocket(null);
+      setSocket(
+        getSurveyEmailsStream(props.data.authentication.surveyId, addEmail)
+      );
     }
     return () => {
       if (!_.isNull(socket)) {
@@ -65,7 +70,7 @@ function EmailScreen(props: SurveyProps) {
         closeEmailsSocket(socket);
       }
     };
-  }, [props.data.authentication.surveyId]);
+  }, [props.data.authentication.surveyId, addEmail]);
 
   useEffect(() => {
     return () => {

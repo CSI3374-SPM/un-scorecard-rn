@@ -718,7 +718,7 @@ export const getSurveyEmailsStream = (
 };
 
 export const closeProgressSocket = (socket: SocketIOClient.Socket) => {
-  socket.off("survy_progress_updated");
+  socket.off("survey_progress_updated");
   closeSocket(socket);
 };
 
