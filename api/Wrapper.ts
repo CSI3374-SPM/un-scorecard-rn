@@ -441,15 +441,15 @@ export const fetchSurveyResults = async (
   return null;
 };
 
-const wsResultsFailure = (socket: SocketIOClient.Socket) => {
+export const closeResultsSocket = (socket: SocketIOClient.Socket) => {
   socket.off("survey_responses_updated");
-  wsFailure(socket);
+  closeSocket(socket);
 };
 
 export const fetchSurveyResultsStream = (
   surveyId: string,
   callback: (results: SurveyResponse[][] | null) => void,
-  onFail: (socket: SocketIOClient.Socket) => void = wsResultsFailure
+  onFail: (socket: SocketIOClient.Socket) => void = closeResultsSocket
 ) => {
   const socket = makeSocket();
   socket.on("connect", () => {
@@ -604,6 +604,37 @@ export const sendEmails = async (
   }
 };
 
+// Set the current question number to the one provided
+export const addSurveyEmail = async (
+  surveyId: string,
+  email: string,
+  onFail: (e: any) => void = console.log
+) => {
+  const data = await request(
+    {
+      method: "POST",
+      url: `/api/survey/${surveyId}/add/email`,
+      data: {
+        email,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    },
+    onFail
+  );
+  if (_.isNull(data) || data.status !== "OK") {
+    onFail("Failed to add email");
+    return null;
+  }
+  return {
+    status: data.status,
+    email: data.email,
+    surveyId: data.survey_id,
+  };
+};
+
 export type SurveyProgressResponse = ApiResponse & {
   currentQuestion?: number;
   surveyId?: string;
@@ -639,22 +670,62 @@ const makeSocket = () => {
   return io(apiUrl, { transports: ["websocket"], timeout: 30000 });
 };
 
-const wsFailure = (socket: SocketIOClient.Socket) => {
-  console.log("WebSocket connection failed");
+const closeSocket = (socket: SocketIOClient.Socket) => {
+  console.log("WebSocket connection closing");
   socket.off("connect");
   socket.off("disconnect");
   socket.close();
 };
 
-const wsProgressFailure = (socket: SocketIOClient.Socket) => {
+export const closeEmailsSocket = (socket: SocketIOClient.Socket) => {
+  socket.off("survy_emails_updated");
+  closeSocket(socket);
+};
+
+export const getSurveyEmailsStream = (
+  surveyId: string,
+  callback: (email: string) => void,
+  onFail: (socket: SocketIOClient.Socket) => void = closeEmailsSocket
+) => {
+  const socket = makeSocket();
+  socket.on("connect", () => {
+    console.log("connected");
+    socket.emit("survey_emails_subscribe", {
+      surveyId,
+    });
+  });
+
+  socket.on("survey_email_added", (rawData: any) => {
+    console.log("got email update");
+    console.log(rawData);
+    if (_.isNull(rawData) || rawData.status !== "OK") {
+      socket.emit("survey_emails_unsubscribe", {
+        surveyId,
+      });
+      onFail(socket);
+    }
+    let data = {
+      status: rawData.status,
+      email: rawData.email,
+      surveyId: rawData.survey_id,
+    };
+    if (!_.isUndefined(data.email)) {
+      callback(data.email);
+    }
+  });
+
+  return socket;
+};
+
+export const closeProgressSocket = (socket: SocketIOClient.Socket) => {
   socket.off("survy_progress_updated");
-  wsFailure(socket);
+  closeSocket(socket);
 };
 
 export const getSurveyProgressStream = (
   surveyId: string,
   callback: (currentProgress: number) => void,
-  onFail: (socket: SocketIOClient.Socket) => void = wsProgressFailure
+  onFail: (socket: SocketIOClient.Socket) => void = closeProgressSocket
 ) => {
   const socket = makeSocket();
   socket.on("connect", () => {

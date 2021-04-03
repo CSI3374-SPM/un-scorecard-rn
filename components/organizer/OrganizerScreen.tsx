@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Text, List, Subheading } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import {
@@ -7,6 +7,7 @@ import {
   updateSurveyProgress,
   questions,
   fetchSurveyResultsStream,
+  closeResultsSocket,
 } from "../../api/Wrapper";
 import { connect } from "react-redux";
 import FinishButton from "../log_out/FinishButton";
@@ -22,6 +23,7 @@ import SurveyRadarGraph from "../SurveyRadarGraph";
 import { ScrollView } from "react-native-gesture-handler";
 import _ from "lodash";
 import SurveyBarGraph from "../SurveyBarGraph";
+import { useFocusEffect } from "@react-navigation/native";
 
 function OrganizerScreen(props: SurveyProps) {
   const navigator = useNavigation<RootNavigationProp>();
@@ -32,11 +34,10 @@ function OrganizerScreen(props: SurveyProps) {
   ] = useState(null);
   const [expanded, setExpanded] = React.useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  // @ts-ignore
   const [socket, setSocket]: [
     SocketIOClient.Socket | null,
     (s: SocketIOClient.Socket | null) => void
-  ] = useState(null);
+  ] = useState(null as SocketIOClient.Socket | null);
   const handlePress = () => setExpanded(!expanded);
 
   const requestCurrentQuestion = async () => {
@@ -52,15 +53,31 @@ function OrganizerScreen(props: SurveyProps) {
   };
 
   useEffect(() => {
-    setSocket(
-      fetchSurveyResultsStream(props.data.authentication.surveyId, setResults)
-    );
-    requestCurrentQuestion();
+    if (_.isNull(socket) && props.data.authentication.surveyId != "") {
+      setSocket(
+        fetchSurveyResultsStream(props.data.authentication.surveyId, setResults)
+      );
+      requestCurrentQuestion();
+    } else if (!_.isNull(socket)) {
+      closeResultsSocket(socket);
+      setSocket(null);
+    }
     return () => {
-      // @ts-ignore
-      if (!_.isNull(socket)) socket.close();
+      if (!_.isNull(socket)) {
+        console.log("results a");
+        closeResultsSocket(socket);
+      }
     };
   }, [props.data.authentication.surveyId]);
+
+  useEffect(() => {
+    return () => {
+      if (!_.isNull(socket)) {
+        console.log("results b");
+        closeResultsSocket(socket);
+      }
+    };
+  }, []);
 
   return (
     <View style={styles.container}>

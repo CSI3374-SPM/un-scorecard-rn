@@ -1,8 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, FAB, Subheading, TextInput } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
-import { sendEmails } from "../../api/Wrapper";
+import {
+  getSurveyEmailsStream,
+  sendEmails,
+  closeEmailsSocket,
+} from "../../api/Wrapper";
 import FinishButton from "../log_out/FinishButton";
 import _ from "lodash";
 import { ScrollView } from "react-native-gesture-handler";
@@ -33,6 +38,43 @@ function EmailScreen(props: SurveyProps) {
   let defaultEditing = { index: -1, email: "" };
   const [editing, setEditing] = useState(defaultEditing);
   const [message, setMessage] = useState("");
+  const [socket, setSocket]: [
+    SocketIOClient.Socket | null,
+    (s: SocketIOClient.Socket | null) => void
+  ] = useState(null as SocketIOClient.Socket | null);
+
+  const addEmail = (newEmail: string) => {
+    console.log(emails);
+    let newEmails = _.clone(emails);
+    newEmails.push(newEmail);
+    setEmails(newEmails);
+  };
+
+  useEffect(() => {
+    if (_.isNull(socket) && props.data.authentication.surveyId != "")
+      setSocket(
+        getSurveyEmailsStream(props.data.authentication.surveyId, addEmail)
+      );
+    else if (!_.isNull(socket)) {
+      closeEmailsSocket(socket);
+      setSocket(null);
+    }
+    return () => {
+      if (!_.isNull(socket)) {
+        console.log("email a");
+        closeEmailsSocket(socket);
+      }
+    };
+  }, [props.data.authentication.surveyId]);
+
+  useEffect(() => {
+    return () => {
+      if (!_.isNull(socket)) {
+        console.log("email b");
+        closeEmailsSocket(socket);
+      }
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
