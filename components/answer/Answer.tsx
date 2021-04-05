@@ -1,13 +1,16 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, useColorScheme } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { Title, Text, Divider } from "react-native-paper";
+import { Title, Text, Divider, FAB } from "react-native-paper";
 import FinishButton from "../log_out/FinishButton";
 import { rating } from "../question/Question";
 import { questions } from "../../api/Wrapper";
 import { SurveyProps } from "../../store/survey/SurveyReducer";
+import { DarkTheme, DefaultTheme } from "../../constants/Colors";
 
 export default function Answer(props: SurveyProps) {
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -30,13 +33,11 @@ export default function Answer(props: SurveyProps) {
             <Divider />
           </View>
         ))}
-        <FinishButton
+        <FAB
+          icon=""
+          label="Exit Survey"
           style={{
-            marginTop: 20,
-            height: 50,
-            marginLeft: 500,
-            marginRight: 500,
-            justifyContent: "center",
+            backgroundColor: theme.colors.exit,
           }}
         />
       </View>

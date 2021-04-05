@@ -29,6 +29,7 @@ export default function OptionsScreen() {
             label="New Survey"
             style={{
               backgroundColor: theme.colors.confirm,
+              width: "55%",
             }}
             color={theme.colors.surface}
             onPress={() => navigation.navigate("Generate")}
@@ -38,7 +39,7 @@ export default function OptionsScreen() {
             icon="account-arrow-right"
             label="Moderate Survey"
             color={theme.colors.surface}
-            style={{ backgroundColor: theme.colors.primary }}
+            style={{ backgroundColor: theme.colors.primary, width: "55%" }}
             onPress={() => navigation.navigate("ModerateExisting")}
           >
             Join
@@ -62,7 +63,10 @@ export default function OptionsScreen() {
             color={theme.colors.surface}
             icon="account-arrow-right"
             label="Take Survey"
-            style={{ backgroundColor: theme.colors.primary }}
+            style={{
+              backgroundColor: theme.colors.primary,
+              width: "55%",
+            }}
             onPress={() => navigation.navigate("Join")}
           />
         </View>
@@ -85,7 +89,6 @@ const styles = StyleSheet.create({
   userArea: {
     height: "48%",
     width: "100%",
-    marginTop: "2%",
   },
   userButtons: {
     height: "90%",

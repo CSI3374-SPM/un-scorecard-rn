@@ -36,6 +36,7 @@ export default function Question(props: SurveyProps) {
   ] = useState("");
 
   const [loading, setLoading] = useState(false);
+
   const progress = async () => {
     console.log("function ran, index: ", index);
     let surveyProgress = await getSurveyProgress(
@@ -98,7 +99,7 @@ export default function Question(props: SurveyProps) {
                 onChangeText={(text) => setJustification(text)}
               />
               <Button
-                style={styles.item}
+                style={styles.button}
                 mode="contained"
                 disabled={checked < 0}
                 onPress={async () => {
@@ -136,7 +137,7 @@ export default function Question(props: SurveyProps) {
                   }
                 }}
               >
-                Send Response
+                Submit Answer
               </Button>
             </View>
           </TouchableWithoutFeedback>
@@ -167,6 +168,11 @@ const styles = StyleSheet.create({
   },
   item: {
     marginVertical: 8,
+  },
+  button: {
+    borderRadius: 50,
+    height: 50,
+    justifyContent: "center",
   },
   waiting: {
     flexDirection: "column",

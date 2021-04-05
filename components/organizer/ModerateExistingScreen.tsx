@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Button, TextInput } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
+import { FAB, TextInput } from "react-native-paper";
+import { StyleSheet, useColorScheme, View } from "react-native";
 import { fetchSurveyResults } from "../../api/Wrapper";
 import { connect } from "react-redux";
 import _ from "lodash";
@@ -9,9 +9,13 @@ import {
   mapStateToProps,
   SurveyProps,
 } from "../../store/survey/SurveyReducer";
+import { DarkTheme, DefaultTheme } from "../../constants/Colors";
 
 function ModerateExistingScreen(props: SurveyProps) {
   const [id, setID] = useState("");
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -19,15 +23,19 @@ function ModerateExistingScreen(props: SurveyProps) {
         value={id}
         onChangeText={(id) => setID(id)}
       />
-      <Button
-        mode="contained"
+      <FAB
+        icon=""
+        label="Go to survey"
+        style={{
+          backgroundColor: theme.colors.primary,
+          width: "55%",
+          alignSelf: "center",
+        }}
         onPress={async () => {
           await validateId(id, props);
           setID("");
         }}
-      >
-        Join
-      </Button>
+      />
     </View>
   );
 }
