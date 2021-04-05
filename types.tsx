@@ -25,6 +25,7 @@ export type AnswersParamList = {
 export type LandingParamList = {
   Generate: undefined;
   Join: undefined;
+  ModerateExisting: undefined;
 };
 
 export type OrganizerParamList = {

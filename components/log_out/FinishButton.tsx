@@ -12,6 +12,7 @@ function FinishButton(props: SurveyProps) {
   return (
     <Button
       mode="contained"
+      color="red"
       onPress={() => {
         props.updateAuthentication({
           isOrganizer: false,
@@ -21,7 +22,7 @@ function FinishButton(props: SurveyProps) {
         props.updateAnswer([]);
       }}
     >
-      Finish Survey
+      Exit Survey
     </Button>
   );
 }

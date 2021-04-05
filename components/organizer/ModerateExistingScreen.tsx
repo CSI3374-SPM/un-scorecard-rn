@@ -10,9 +10,8 @@ import {
   SurveyProps,
 } from "../../store/survey/SurveyReducer";
 
-function JoinScreen(props: SurveyProps) {
+function ModerateExistingScreen(props: SurveyProps) {
   const [id, setID] = useState("");
-
   return (
     <View style={styles.container}>
       <TextInput
@@ -39,7 +38,7 @@ async function validateId(id: string, props: SurveyProps) {
 
   if (!_.isNull(surveyResults)) {
     props.updateAuthentication({
-      isOrganizer: false,
+      isOrganizer: true,
       surveyId: id,
       responseId: null,
     });
@@ -48,7 +47,10 @@ async function validateId(id: string, props: SurveyProps) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(JoinScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ModerateExistingScreen);
 
 const styles = StyleSheet.create({
   container: {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Text, List, Subheading } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
+import { Text, List, Subheading, FAB } from "react-native-paper";
+import { StyleSheet, useColorScheme, View } from "react-native";
 import {
   fetchSurveyResults,
   getSurveyProgress,
@@ -21,6 +21,8 @@ import SurveyRadarGraph from "../SurveyRadarGraph";
 import { ScrollView } from "react-native-gesture-handler";
 import _ from "lodash";
 import SurveyBarGraph from "../SurveyBarGraph";
+import { DefaultTheme } from "../../constants/Colors";
+import { DarkTheme } from "../../constants/Colors";
 
 function OrganizerScreen(props: SurveyProps) {
   const navigator = useNavigation<RootNavigationProp>();
@@ -49,6 +51,20 @@ function OrganizerScreen(props: SurveyProps) {
       }
     }
   };
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
+
+  useEffect(() => {
+    navigator.setOptions({
+      title:
+        props.data.authentication.surveyId +
+        "   -   " +
+        (_.isNull(results)
+          ? 0 // @ts-ignore
+          : results.length) +
+        " Responses",
+    });
+  });
 
   useEffect(() => {
     requestResults();
@@ -62,22 +78,6 @@ function OrganizerScreen(props: SurveyProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        Survey ID: {props.data.authentication.surveyId}
-      </Text>
-      <Text style={styles.title}>
-        {"Responders: "}
-        {_.isNull(results)
-          ? 0 // @ts-ignore
-          : results.length}
-      </Text>
-      <Button
-        style={styles.item}
-        mode="contained"
-        onPress={() => pushNextQuestion(props, setCurrentQuestion)}
-      >
-        Next
-      </Button>
       <ScrollView>
         <SurveyRadarGraph surveyData={results} />
         <Subheading style={styles.item}>Current Question</Subheading>
@@ -86,16 +86,12 @@ function OrganizerScreen(props: SurveyProps) {
             ? questions[currentQuestion - 1].question
             : "Could not find question"}
         </Text>
-        <List.Accordion
-          style={styles.item}
-          title={`Response Distribution`}
-          left={(props) => <List.Icon {...props} icon="folder" />}
-        >
-          <SurveyBarGraph
-            surveyData={results}
-            questionIndex={currentQuestion - 1}
-          />
-        </List.Accordion>
+
+        <SurveyBarGraph
+          surveyData={results}
+          questionIndex={currentQuestion - 1}
+        />
+
         <List.Accordion
           style={styles.item}
           title={`Justifications`}
@@ -118,16 +114,56 @@ function OrganizerScreen(props: SurveyProps) {
                 })
               )}
         </List.Accordion>
-
-        <Button
-          style={styles.email}
-          mode="contained"
-          onPress={() => navigator.navigate("Email")}
-        >
-          Email Results
-        </Button>
-        <FinishButton />
+        <View style={styles.separator} />
       </ScrollView>
+
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          backgroundColor: theme.colors.surface,
+          justifyContent: "space-between",
+          width: "70%",
+          borderRadius: 50,
+          position: "absolute",
+          padding: 5,
+          bottom: 30,
+          alignSelf: "center",
+          shadowColor: "grey",
+          shadowOffset: {
+            width: 0,
+            height: 5,
+          },
+          shadowOpacity: 0.1,
+          shadowRadius: 2,
+        }}
+      >
+        <FAB
+          style={{ backgroundColor: theme.colors.exit }}
+          icon="close"
+          onPress={() => {
+            props.updateAuthentication({
+              isOrganizer: false,
+              surveyId: "",
+              responseId: null,
+            });
+            props.updateAnswer([]);
+          }}
+        />
+        <FAB
+          style={{ backgroundColor: theme.colors.primary }}
+          icon="email"
+          children={null}
+          onPress={() => navigator.navigate("Email")}
+        />
+        <FAB
+          style={{ backgroundColor: theme.colors.confirm }}
+          icon="arrow-right"
+          color="white"
+          onPress={() => pushNextQuestion(props, setCurrentQuestion)}
+        />
+      </View>
     </View>
   );
 }
@@ -158,7 +194,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(OrganizerScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
+    margin: "auto",
   },
   title: {
     fontSize: 20,
@@ -166,7 +203,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   separator: {
-    marginVertical: 30,
+    marginVertical: 55,
     height: 1,
     width: "80%",
   },
@@ -174,6 +211,16 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   email: {
-    marginBottom: 4,
+    alignItems: "center",
+    justifyContent: "center",
   },
+  exit: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  next: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonContainer: {},
 });
