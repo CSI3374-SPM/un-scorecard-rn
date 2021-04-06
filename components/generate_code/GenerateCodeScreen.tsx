@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { Button, TextInput } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "../../types";
+import { FAB, TextInput } from "react-native-paper";
+import { StyleSheet, useColorScheme, View } from "react-native";
 import { createSurvey } from "../../api/Wrapper";
 import { SurveyProps } from "../../store/survey/SurveyReducer";
+import { DarkTheme, DefaultTheme } from "../../constants/Colors";
 
 export default function GenerateCodeScreen(props: SurveyProps) {
   const [city, setCity] = useState("");
-  const [email, setEmail] = useState("");
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
 
   return (
     <View style={styles.container}>
@@ -17,17 +17,18 @@ export default function GenerateCodeScreen(props: SurveyProps) {
         value={city}
         onChangeText={(city) => setCity(city)}
       />
-      <TextInput
-        label="Email"
-        value={email}
-        onChangeText={(email) => setEmail(email)}
-      />
-      <Button
-        mode="contained"
+
+      <FAB
+        icon=""
+        label="Create Survey"
+        style={{
+          backgroundColor: theme.colors.confirm,
+          width: "55%",
+          alignSelf: "center",
+        }}
+        color={theme.colors.surface}
         onPress={async () => await generateID(city, props)}
-      >
-        Generate code
-      </Button>
+      />
     </View>
   );
 }

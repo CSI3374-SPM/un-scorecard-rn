@@ -11,7 +11,7 @@ import {
 } from "../../store/survey/SurveyReducer";
 import { DarkTheme, DefaultTheme } from "../../constants/Colors";
 
-function JoinScreen(props: SurveyProps) {
+function ModerateExistingScreen(props: SurveyProps) {
   const [id, setID] = useState("");
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
@@ -46,7 +46,7 @@ async function validateId(id: string, props: SurveyProps) {
 
   if (!_.isNull(surveyResults)) {
     props.updateAuthentication({
-      isOrganizer: false,
+      isOrganizer: true,
       surveyId: id,
       responseId: null,
     });
@@ -55,7 +55,10 @@ async function validateId(id: string, props: SurveyProps) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(JoinScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ModerateExistingScreen);
 
 const styles = StyleSheet.create({
   container: {

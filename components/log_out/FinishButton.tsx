@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "react-native-paper";
+import { Button, FAB } from "react-native-paper";
 
 import { connect } from "react-redux";
 import {
@@ -7,11 +7,18 @@ import {
   mapStateToProps,
   SurveyProps,
 } from "../../store/survey/SurveyReducer";
+import { DarkTheme, DefaultTheme } from "../../constants/Colors";
+import { useColorScheme } from "react-native";
 
 function FinishButton(props: SurveyProps) {
+  const theme = useColorScheme() === "dark" ? DarkTheme : DefaultTheme;
   return (
-    <Button
-      mode="contained"
+    <FAB
+      icon=""
+      label="Exit Survey"
+      style={{
+        backgroundColor: theme.colors.exit,
+      }}
       onPress={() => {
         props.updateAuthentication({
           isOrganizer: false,
@@ -20,9 +27,7 @@ function FinishButton(props: SurveyProps) {
         });
         props.updateAnswer([]);
       }}
-    >
-      Finish Survey
-    </Button>
+    />
   );
 }
 

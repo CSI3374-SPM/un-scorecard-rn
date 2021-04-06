@@ -14,6 +14,7 @@ export default {
         screens: {
           Generate: "generate",
           Join: "join",
+          ModerateExisting: "modExisting",
         },
       },
       Root: {
