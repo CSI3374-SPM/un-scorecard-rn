@@ -22,6 +22,8 @@ import {
   SurveyProps,
 } from "../../store/survey/SurveyReducer";
 import { connect } from "react-redux";
+import useColorScheme from "../../hooks/useColorScheme";
+import { DarkTheme, DefaultTheme } from "../../constants/Colors";
 
 const visualizationUrl = process.env.GRAPH_URL;
 const emailMessage = (surveyId: string) => {
@@ -42,6 +44,7 @@ function EmailScreen(props: SurveyProps) {
     SocketIOClient.Socket | null,
     (s: SocketIOClient.Socket | null) => void
   ] = useState(null as SocketIOClient.Socket | null);
+  const theme = useColorScheme() === "dark" ? DarkTheme : DefaultTheme;
 
   const addEmail = useCallback(
     (newEmail: string) => {
@@ -85,7 +88,10 @@ function EmailScreen(props: SurveyProps) {
     <View style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
+        style={{
+          flex: 1,
+          flexGrow: 1,
+        }}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.container}>
@@ -145,9 +151,13 @@ function EmailScreen(props: SurveyProps) {
       </KeyboardAvoidingView>
       <Subheading>{message}</Subheading>
       <View style={styles.buttonGroup}>
-        <Button
-          style={styles.item}
-          mode="contained"
+        <FAB
+          style={{ ...styles.item, backgroundColor: theme.colors.primary }}
+          icon=""
+          label="Send Emails"
+          // style={{
+          //   backgroundColor: theme.colors.exit,
+          // }}
           onPress={async () => {
             sendEmails(
               emails.filter((email) => email !== ""),
@@ -160,9 +170,7 @@ function EmailScreen(props: SurveyProps) {
             }
             setEmails([""]);
           }}
-        >
-          Send Emails
-        </Button>
+        />
         <View style={styles.item}>
           <FinishButton />
         </View>

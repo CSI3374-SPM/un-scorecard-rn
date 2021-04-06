@@ -8,7 +8,6 @@ import {
   FAB,
   Text,
 } from "react-native-paper";
-import { SurveyResponse } from "../../store/survey/SurveyReducer";
 import {
   addSurveyEmail,
   addSurveyResponse,
@@ -16,10 +15,16 @@ import {
   questions,
   closeProgressSocket,
 } from "../../api/Wrapper";
-import { useNavigation } from "@react-navigation/core";
-import { RootNavigationProp } from "../../types";
+
 import { ScrollView } from "react-native-gesture-handler";
-import { StyleSheet, View } from "react-native";
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import _ from "lodash";
 import { SurveyProps } from "../../store/survey/SurveyReducer";
 import FinishButton from "../log_out/FinishButton";
@@ -32,7 +37,6 @@ import { useFocusEffect } from "@react-navigation/native";
 export const rating = (n: number) => 5 - n;
 
 export default function Question(props: SurveyProps) {
-  const navigation = useNavigation<RootNavigationProp>();
   const [index, setIndex]: [number, (index: number) => void] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [checked, setChecked]: [number, (n: number) => void] = useState(-1);
@@ -95,82 +99,90 @@ export default function Question(props: SurveyProps) {
     }
 
     return (
-      <ScrollView>
-        <View style={styles.container}>
-          <Title style={styles.item}>{questions[index].question}</Title>
-          <RadioButton.Group
-            onValueChange={(n: string) => setChecked(rating(parseInt(n)))}
-            value={`${rating(checked)}`}
-          >
-            {questions[index].descriptions.map((text, ndx) => (
-              <RadioButton.Item
-                label={text}
-                value={`${ndx}`}
-                key={`${ndx}-${questions[index].question}-${text}`}
-              />
-            ))}
-          </RadioButton.Group>
-          <TextInput
-            style={styles.item}
-            multiline
-            label={questions[index].justification}
-            value={justification}
-            onChangeText={(text) => setJustification(text)}
-          />
-          <Button
-            style={styles.item}
-            mode="contained"
-            disabled={checked < 0}
-            onPress={async () => {
-              if (checked > -1) {
-                let newAnswer = {
-                  questionIndex: index,
-                  score: checked,
-                  justification:
-                    justification !== "" ? justification : undefined,
-                };
-                let ans = _.clone(props.data.responses);
-                ans.push(newAnswer);
-                props.updateAnswer(ans);
-                let newResponseId = await addSurveyResponse(
-                  props.data.authentication.surveyId,
-                  [newAnswer],
-                  props.data.authentication.responseId
-                );
-                if (!_.isNull(newResponseId)) {
-                  let auth = {
-                    ...props.data.authentication,
-                    responseId: newResponseId,
-                  };
-                  props.updateAuthentication(auth);
-                } else {
-                  console.log("Failed to submit response");
-                }
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.container}>
+            <ScrollView>
+              <Title style={styles.item}>{questions[index].question}</Title>
+              <RadioButton.Group
+                onValueChange={(n: string) => setChecked(rating(parseInt(n)))}
+                value={`${rating(checked)}`}
+              >
+                {questions[index].descriptions.map((text, ndx) => (
+                  <RadioButton.Item
+                    label={text}
+                    value={`${ndx}`}
+                    key={`${ndx}-${questions[index].question}-${text}`}
+                  />
+                ))}
+              </RadioButton.Group>
+            </ScrollView>
+            <TextInput
+              style={styles.item}
+              multiline
+              label={questions[index].justification}
+              value={justification}
+              onChangeText={(text) => setJustification(text)}
+            />
 
-                setChecked(-1);
-                setJustification("");
-                setIndex(index + 1);
-                console.log(index + 1);
-                console.log(currentQuestion);
-                if (index + 1 > currentQuestion - 1) {
-                  setLoading(true);
+            <Button
+              style={styles.button}
+              mode="contained"
+              disabled={checked < 0}
+              onPress={async () => {
+                if (checked > -1) {
+                  let newAnswer = {
+                    questionIndex: index,
+                    score: checked,
+                    justification:
+                      justification !== "" ? justification : undefined,
+                  };
+                  let ans = _.clone(props.data.responses);
+                  ans.push(newAnswer);
+                  props.updateAnswer(ans);
+                  let newResponseId = await addSurveyResponse(
+                    props.data.authentication.surveyId,
+                    [newAnswer],
+                    props.data.authentication.responseId
+                  );
+                  if (!_.isNull(newResponseId)) {
+                    let auth = {
+                      ...props.data.authentication,
+                      responseId: newResponseId,
+                    };
+                    props.updateAuthentication(auth);
+                  } else {
+                    console.log("Failed to submit response");
+                  }
+
+                  setChecked(-1);
+                  setJustification("");
+                  setIndex(index + 1);
+                  console.log(index + 1);
+                  console.log(currentQuestion);
+                  if (index + 1 > currentQuestion - 1) {
+                    setLoading(true);
+                  } else {
+                    setLoading(false);
+                  }
+                  console.log("Changed index ", index);
                 } else {
-                  setLoading(false);
+                  alert("Please select a score");
                 }
-                console.log("Changed index ", index);
-              } else {
-                alert("Please select a score");
-              }
-            }}
-          >
-            Send Response
-          </Button>
-        </View>
-      </ScrollView>
+              }}
+            >
+              Submit Answer
+            </Button>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
   } else {
     return (
-      <View style={styles.container}>
+      <View style={{ ...styles.container, justifyContent: "center" }}>
         <Title>You finished the survey!</Title>
         <Text>Send your email to the survey organizer</Text>
         <View style={styles.emailContainer}>
@@ -211,6 +223,11 @@ const styles = StyleSheet.create({
   },
   item: {
     marginVertical: 8,
+  },
+  button: {
+    borderRadius: 50,
+    height: 50,
+    justifyContent: "center",
   },
   waiting: {
     flexDirection: "column",

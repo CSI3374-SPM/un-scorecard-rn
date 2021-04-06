@@ -15,7 +15,11 @@ const defaultTheme = {
   colors: {
     ...PaperDefaultTheme.colors,
     primary: "#3498db",
+    surface: "#FFF",
+    confirm: "#66BB6A",
+    exit: "#db3027",
     accent: "#db2777",
+    darkText: "#000",
   },
 };
 
@@ -25,7 +29,11 @@ const darkTheme = {
   colors: {
     ...PaperDarkTheme.colors,
     primary: "#3498db",
+    surface: "#212121",
+    confirm: "#66BB6A",
+    exit: "#b71c1c",
     accent: "#db2777",
+    darkText: "#FFF",
   },
 };
 
