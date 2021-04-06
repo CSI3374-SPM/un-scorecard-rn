@@ -71,13 +71,13 @@ export default function Question(props: SurveyProps) {
     }
 
     return (
-      <ScrollView>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.container}
-        >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.container}>
+            <ScrollView>
               <Title style={styles.item}>{questions[index].question}</Title>
               <RadioButton.Group
                 onValueChange={(n: string) => setChecked(rating(parseInt(n)))}
@@ -91,68 +91,69 @@ export default function Question(props: SurveyProps) {
                   />
                 ))}
               </RadioButton.Group>
-              <TextInput
-                style={styles.item}
-                multiline
-                label={questions[index].justification}
-                value={justification}
-                onChangeText={(text) => setJustification(text)}
-              />
-              <Button
-                style={styles.button}
-                mode="contained"
-                disabled={checked < 0}
-                onPress={async () => {
-                  if (checked > -1) {
-                    let newAnswer = {
-                      questionIndex: index,
-                      score: checked,
-                      justification:
-                        justification !== "" ? justification : undefined,
-                    };
-                    let ans = _.clone(props.data.responses);
-                    ans.push(newAnswer);
-                    props.updateAnswer(ans);
-                    let newResponseId = await addSurveyResponse(
-                      props.data.authentication.surveyId,
-                      [newAnswer],
-                      props.data.authentication.responseId
-                    );
-                    if (!_.isNull(newResponseId)) {
-                      let auth = {
-                        ...props.data.authentication,
-                        responseId: newResponseId,
-                      };
-                      props.updateAuthentication(auth);
-                    } else {
-                      console.log("Failed to submit response");
-                    }
+            </ScrollView>
+            <TextInput
+              style={styles.item}
+              multiline
+              label={questions[index].justification}
+              value={justification}
+              onChangeText={(text) => setJustification(text)}
+            />
 
-                    setChecked(-1);
-                    setJustification("");
-                    setIndex(index + 1);
-                    console.log("Changed index ", index);
+            <Button
+              style={styles.button}
+              mode="contained"
+              disabled={checked < 0}
+              onPress={async () => {
+                if (checked > -1) {
+                  let newAnswer = {
+                    questionIndex: index,
+                    score: checked,
+                    justification:
+                      justification !== "" ? justification : undefined,
+                  };
+                  let ans = _.clone(props.data.responses);
+                  ans.push(newAnswer);
+                  props.updateAnswer(ans);
+                  let newResponseId = await addSurveyResponse(
+                    props.data.authentication.surveyId,
+                    [newAnswer],
+                    props.data.authentication.responseId
+                  );
+                  if (!_.isNull(newResponseId)) {
+                    let auth = {
+                      ...props.data.authentication,
+                      responseId: newResponseId,
+                    };
+                    props.updateAuthentication(auth);
                   } else {
-                    alert("Please select a score");
+                    console.log("Failed to submit response");
                   }
-                }}
-              >
-                Submit Answer
-              </Button>
-            </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </ScrollView>
+
+                  setChecked(-1);
+                  setJustification("");
+                  setIndex(index + 1);
+                  console.log("Changed index ", index);
+                } else {
+                  alert("Please select a score");
+                }
+              }}
+            >
+              Submit Answer
+            </Button>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
   } else {
     return (
-      <>
+      <View style={{ ...styles.container, justifyContent: "center" }}>
         <Title>You finished the survey!</Title>
         <FinishButton />
         {/* <Button mode="contained" onPress={() => navigation.navigate("Answer")}>
           See Results
         </Button> */}
-      </>
+      </View>
     );
   }
 }

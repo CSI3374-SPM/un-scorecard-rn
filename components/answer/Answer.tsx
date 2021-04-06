@@ -33,13 +33,7 @@ export default function Answer(props: SurveyProps) {
             <Divider />
           </View>
         ))}
-        <FAB
-          icon=""
-          label="Exit Survey"
-          style={{
-            backgroundColor: theme.colors.exit,
-          }}
-        />
+        <FinishButton />
       </View>
     </ScrollView>
   );
