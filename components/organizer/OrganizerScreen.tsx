@@ -89,7 +89,10 @@ function OrganizerScreen(props: SurveyProps) {
           <Subheading style={styles.title}>Current Question</Subheading>
           <Subheading style={styles.title}>
             {" "}
-            {answers}/{results?.length}
+            {answers}/
+            {_.isNull(results)
+              ? 0 // @ts-ignore
+              : results.length}
             {" answers "}
           </Subheading>
         </View>
