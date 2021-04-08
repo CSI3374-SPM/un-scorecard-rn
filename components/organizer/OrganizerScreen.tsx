@@ -39,6 +39,7 @@ function OrganizerScreen(props: SurveyProps) {
     SocketIOClient.Socket | null,
     (s: SocketIOClient.Socket | null) => void
   ] = useState(null as SocketIOClient.Socket | null);
+  const [answers, setAnswers] = useState(0);
   const handlePress = () => setExpanded(!expanded);
 
   const requestCurrentQuestion = async () => {
@@ -94,11 +95,30 @@ function OrganizerScreen(props: SurveyProps) {
     };
   }, []);
 
+  useEffect(() => {
+    if (_.isNull(results)) {
+      setAnswers(0);
+    } else {
+      setAnswers(currentResponses(results, currentQuestion - 1, 0));
+      console.log("result ansers: ", answers);
+    }
+  }, [results, currentQuestion - 1]);
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <SurveyRadarGraph surveyData={results} />
-        <Subheading style={styles.item}>Current Question</Subheading>
+        <View style={styles.currentQuestionTitle}>
+          <Subheading style={styles.title}>Current Question</Subheading>
+          <Subheading style={styles.title}>
+            {" "}
+            {answers}/
+            {_.isNull(results)
+              ? 0 // @ts-ignore
+              : results.length}
+            {" answers "}
+          </Subheading>
+        </View>
         <Text style={styles.item}>
           {currentQuestion - 1 > -1 && currentQuestion - 1 < questions.length
             ? questions[currentQuestion - 1].question
@@ -192,6 +212,29 @@ function OrganizerScreen(props: SurveyProps) {
   );
 }
 
+const currentResponses = (
+  data: SurveyResponse[][],
+  ndx: number,
+  answers: number
+) => {
+  if (_.isNull(data)) return 0;
+  let scoreTotals = [0, 0, 0, 0, 0, 0];
+  data.forEach((responder) => {
+    const response = responder.find(
+      (question) => question.questionIndex === ndx
+    );
+    if (!_.isUndefined(response)) {
+      if (response.score >= 0 && response.score <= 5) {
+        scoreTotals[response.score]++;
+      }
+    }
+  });
+  for (var i = 0; i < scoreTotals.length; i++) {
+    answers += scoreTotals[i];
+  }
+  return answers;
+};
+
 async function pushNextQuestion(
   props: SurveyProps,
   setCurrentQuestion: (n: number) => void
@@ -216,6 +259,11 @@ async function pushNextQuestion(
 export default connect(mapStateToProps, mapDispatchToProps)(OrganizerScreen);
 
 const styles = StyleSheet.create({
+  currentQuestionTitle: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   container: {
     flex: 1,
     justifyContent: "space-between",

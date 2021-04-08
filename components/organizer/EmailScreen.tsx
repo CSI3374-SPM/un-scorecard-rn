@@ -1,3 +1,5 @@
+import React, { useRef, useState } from "react";
+import { FAB, Subheading, TextInput } from "react-native-paper";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, FAB, Subheading, TextInput } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
@@ -143,6 +145,7 @@ function EmailScreen(props: SurveyProps) {
             <FAB
               onPress={() => setEmails(emails.concat([""]))}
               small
+              color="white"
               icon="plus"
               style={styles.fabAdd}
             />
@@ -206,11 +209,13 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     marginRight: 8,
     alignSelf: "flex-end",
+    backgroundColor: "#66BB6A",
   },
   fabMinus: {
     padding: 8,
     marginHorizontal: 8,
     alignSelf: "center",
+    backgroundColor: "#db3027",
   },
   email: {
     justifyContent: "center",
