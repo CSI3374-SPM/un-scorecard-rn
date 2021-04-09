@@ -3,6 +3,7 @@ const { manifest } = Constants;
 import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 import { SurveyResponse } from "../store/survey/SurveyReducer";
+import io from "socket.io-client";
 
 // const apiUrl = process.env.API_URL;
 export const apiUrl =
@@ -440,6 +441,92 @@ export const fetchSurveyResults = async (
   return null;
 };
 
+export const closeResultsSocket = (socket: SocketIOClient.Socket) => {
+  socket.off("survey_responses_updated");
+  closeSocket(socket);
+};
+
+export const fetchSurveyResultsStream = (
+  surveyId: string,
+  callback: (results: SurveyResponse[][] | null) => void,
+  onFail: (socket: SocketIOClient.Socket) => void = closeResultsSocket
+) => {
+  const socket = makeSocket();
+  socket.on("connect", () => {
+    console.log("connected");
+    socket.emit("survey_responses_subscribe", {
+      surveyId,
+    });
+  });
+
+  socket.on("survey_responses_updated", (rawData: any) => {
+    // console.log("results updated");
+    // console.log(rawData);
+    if (!_.isNull(rawData)) {
+      const rawResponses: any[] = rawData.Data;
+      if (rawData.status === "ERROR" || _.isUndefined(rawResponses)) {
+        socket.emit("survey_responses_unsubscribe", {
+          surveyId,
+        });
+        onFail(socket);
+      }
+
+      // @ts-ignore
+      const results = rawResponses.map((rawResults) => {
+        return Object.keys(rawResults)
+          .map((key) => {
+            // Find the question with the right key in the questions
+            const question = questions.find(
+              (question) => question.question === key
+            );
+            if (_.isUndefined(question)) {
+              return null;
+            }
+
+            // Get the question string (e.g. 'A.1.1') and find the
+            // corresponding justification key in the raw results
+            let qNum = question.question.split(" ")[0];
+            const justificationKey = Object.keys(rawResults).find(
+              (justification) =>
+                justification.startsWith("Option:") &&
+                justification.endsWith(qNum)
+            );
+            if (_.isUndefined(justificationKey)) {
+              return null;
+            }
+
+            // Get the justification and score
+            const justification: string = rawResults[justificationKey];
+            const score: number = parseInt(rawResults[key]);
+
+            const index = questions.indexOf(question);
+            const response: SurveyResponse = {
+              questionIndex: index,
+              score,
+              justification:
+                justification === "No response given"
+                  ? undefined
+                  : justification,
+            };
+            return response;
+          })
+          .filter(
+            (response): response is SurveyResponse => !_.isNull(response)
+          );
+      });
+
+      callback(results);
+    } else {
+      socket.emit("survey_responses_unsubscribe", {
+        surveyId,
+      });
+      onFail(socket);
+    }
+  });
+
+  return socket;
+};
+
 /**
  * Submit all the answers to a survey.
  *
@@ -517,6 +604,37 @@ export const sendEmails = async (
   }
 };
 
+// Set the current question number to the one provided
+export const addSurveyEmail = async (
+  surveyId: string,
+  email: string,
+  onFail: (e: any) => void = console.log
+) => {
+  const data = await request(
+    {
+      method: "POST",
+      url: `/api/survey/${surveyId}/add/email`,
+      data: {
+        email,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    },
+    onFail
+  );
+  if (_.isNull(data) || data.status !== "OK") {
+    onFail("Failed to add email");
+    return null;
+  }
+  return {
+    status: data.status,
+    email: data.email,
+    surveyId: data.survey_id,
+  };
+};
+
 export type SurveyProgressResponse = ApiResponse & {
   currentQuestion?: number;
   surveyId?: string;
@@ -546,6 +664,97 @@ export const getSurveyProgress = async (
     currentQuestion: data.currentQuestion,
     surveyId: data.survey_id,
   };
+};
+
+const makeSocket = () => {
+  return io(apiUrl, { transports: ["websocket"], timeout: 30000 });
+};
+
+const closeSocket = (socket: SocketIOClient.Socket) => {
+  console.log("WebSocket connection closing");
+  socket.off("connect");
+  socket.off("disconnect");
+  socket.close();
+};
+
+export const closeEmailsSocket = (socket: SocketIOClient.Socket) => {
+  socket.off("survy_emails_updated");
+  closeSocket(socket);
+};
+
+export const getSurveyEmailsStream = (
+  surveyId: string,
+  callback: (email: string) => void,
+  onFail: (socket: SocketIOClient.Socket) => void = closeEmailsSocket
+) => {
+  const socket = makeSocket();
+  socket.on("connect", () => {
+    console.log("connected");
+    socket.emit("survey_emails_subscribe", {
+      surveyId,
+    });
+  });
+
+  socket.on("survey_email_added", (rawData: any) => {
+    console.log("got email update");
+    console.log(rawData);
+    if (_.isNull(rawData) || rawData.status !== "OK") {
+      socket.emit("survey_emails_unsubscribe", {
+        surveyId,
+      });
+      onFail(socket);
+    }
+    let data = {
+      status: rawData.status,
+      email: rawData.email,
+      surveyId: rawData.survey_id,
+    };
+    if (!_.isUndefined(data.email)) {
+      callback(data.email);
+    }
+  });
+
+  return socket;
+};
+
+export const closeProgressSocket = (socket: SocketIOClient.Socket) => {
+  socket.off("survey_progress_updated");
+  closeSocket(socket);
+};
+
+export const getSurveyProgressStream = (
+  surveyId: string,
+  callback: (currentProgress: number) => void,
+  onFail: (socket: SocketIOClient.Socket) => void = closeProgressSocket
+) => {
+  const socket = makeSocket();
+  socket.on("connect", () => {
+    console.log("connected");
+    socket.emit("survey_progress_subscribe", {
+      surveyId,
+    });
+  });
+
+  socket.on("survey_progress_updated", (rawData: any) => {
+    console.log("got prog update");
+    console.log(rawData);
+    if (_.isNull(rawData) || rawData.status !== "OK") {
+      socket.emit("survey_progress_unsubscribe", {
+        surveyId,
+      });
+      onFail(socket);
+    }
+    let data: SurveyProgressResponse = {
+      status: rawData.status,
+      currentQuestion: rawData.currentQuestion,
+      surveyId: rawData.survey_id,
+    };
+    if (!_.isUndefined(data.currentQuestion)) {
+      callback(data.currentQuestion);
+    }
+  });
+
+  return socket;
 };
 
 // Set the current question number to the one provided
