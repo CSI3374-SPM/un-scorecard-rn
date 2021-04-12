@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import {
   Button,
   TextInput,
   Title,
   RadioButton,
   ActivityIndicator,
+  FAB,
+  Text,
 } from "react-native-paper";
 import {
+  addSurveyEmail,
   addSurveyResponse,
-  getSurveyProgress,
+  getSurveyProgressStream,
   questions,
+  closeProgressSocket,
 } from "../../api/Wrapper";
 
 import { ScrollView } from "react-native-gesture-handler";
@@ -24,43 +28,67 @@ import {
 import _ from "lodash";
 import { SurveyProps } from "../../store/survey/SurveyReducer";
 import FinishButton from "../log_out/FinishButton";
+import { useFocusEffect } from "@react-navigation/native";
+//import { Simulate } from "react-dom/test-utils";
+//import progress = Simulate.progress;
+//import { Simulate } from "react-dom/test-utils";
+//import load = Simulate.load;
 
 export const rating = (n: number) => 5 - n;
 
 export default function Question(props: SurveyProps) {
   const [index, setIndex]: [number, (index: number) => void] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(1);
   const [checked, setChecked]: [number, (n: number) => void] = useState(-1);
   const [justification, setJustification]: [
     string,
     (j: string) => void
   ] = useState("");
+  const [email, setEmail] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [socket, setSocket]: [
+    SocketIOClient.Socket | null,
+    (s: SocketIOClient.Socket | null) => void
+  ] = useState(null as SocketIOClient.Socket | null);
 
-  const progress = async () => {
+  const progress = (newCurrentQuestion: number) => {
     console.log("function ran, index: ", index);
-    let surveyProgress = await getSurveyProgress(
-      props.data.authentication.surveyId
-    );
-    if (
-      surveyProgress != null &&
-      typeof surveyProgress.currentQuestion != "undefined"
-    ) {
-      if (index + 1 > surveyProgress.currentQuestion) {
-        setLoading(true);
-      } else {
-        setLoading(false);
-      }
+    setCurrentQuestion(newCurrentQuestion);
+    if (index + 1 > newCurrentQuestion) {
+      setLoading(true);
+    } else {
+      setLoading(false);
     }
   };
+
   useEffect(() => {
-    progress();
-  }, [props.data.authentication.surveyId, index]);
+    if (props.data.authentication.surveyId != "")
+      setSocket(
+        getSurveyProgressStream(props.data.authentication.surveyId, progress)
+      );
+    else if (!_.isNull(socket)) {
+      closeProgressSocket(socket);
+      setSocket(null);
+    }
+    return () => {
+      if (!_.isNull(socket)) {
+        console.log("progress a");
+        closeProgressSocket(socket);
+      }
+    };
+  }, [props.data.authentication.surveyId]);
+
   useEffect(() => {
-    const timer = setInterval(progress, 5000);
-    return () => clearInterval(timer);
-  }, [props.data.authentication.surveyId, index]);
-  if (index < questions.length - 1) {
+    return () => {
+      if (!_.isNull(socket)) {
+        console.log("progress b");
+        closeProgressSocket(socket);
+      }
+    };
+  }, []);
+
+  if (index < questions.length) {
     if (loading) {
       return (
         <View style={styles.waiting}>
@@ -133,6 +161,13 @@ export default function Question(props: SurveyProps) {
                   setChecked(-1);
                   setJustification("");
                   setIndex(index + 1);
+                  console.log(index + 1);
+                  console.log(currentQuestion);
+                  if (index + 1 > currentQuestion - 1) {
+                    setLoading(true);
+                  } else {
+                    setLoading(false);
+                  }
                   console.log("Changed index ", index);
                 } else {
                   alert("Please select a score");
@@ -149,6 +184,25 @@ export default function Question(props: SurveyProps) {
     return (
       <View style={{ ...styles.container, justifyContent: "center" }}>
         <Title>You finished the survey!</Title>
+        <Text>Send your email to the survey organizer</Text>
+        <View style={styles.emailContainer}>
+          <TextInput
+            mode="flat"
+            label="Enter email"
+            value={email}
+            onChangeText={setEmail}
+            style={styles.emailInput}
+          />
+          <FAB
+            onPress={async () => {
+              await addSurveyEmail(props.data.authentication.surveyId, email);
+              setEmail("");
+            }}
+            small
+            icon="mail"
+            style={styles.fabMinus}
+          />
+        </View>
         <FinishButton />
         {/* <Button mode="contained" onPress={() => navigation.navigate("Answer")}>
           See Results
@@ -178,5 +232,22 @@ const styles = StyleSheet.create({
   waiting: {
     flexDirection: "column",
     alignItems: "center",
+  },
+  emailContainer: {
+    flex: 1,
+    flexDirection: "row",
+    maxHeight: 64,
+    justifyContent: "center",
+    alignContent: "stretch",
+    marginBottom: 8,
+  },
+  emailInput: {
+    alignSelf: "stretch",
+    width: "80%",
+  },
+  fabMinus: {
+    padding: 8,
+    marginHorizontal: 8,
+    alignSelf: "center",
   },
 });

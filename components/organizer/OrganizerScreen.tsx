@@ -6,6 +6,8 @@ import {
   getSurveyProgress,
   updateSurveyProgress,
   questions,
+  fetchSurveyResultsStream,
+  closeResultsSocket,
 } from "../../api/Wrapper";
 import { connect } from "react-redux";
 import FinishButton from "../log_out/FinishButton";
@@ -34,13 +36,18 @@ function OrganizerScreen(props: SurveyProps) {
   const [expanded, setExpanded] = React.useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(0);
-  const handlePress = () => setExpanded(!expanded);
 
   const requestResults = async () => {
     let resp = await fetchSurveyResults(props.data.authentication.surveyId);
     setResults(resp);
     console.log("results ", resp);
   };
+
+  const [socket, setSocket]: [
+    SocketIOClient.Socket | null,
+    (s: SocketIOClient.Socket | null) => void
+  ] = useState(null as SocketIOClient.Socket | null);
+  const handlePress = () => setExpanded(!expanded);
 
   const requestCurrentQuestion = async () => {
     let surveyProgress = await getSurveyProgress(
@@ -63,14 +70,31 @@ function OrganizerScreen(props: SurveyProps) {
   });
 
   useEffect(() => {
-    requestResults();
-    requestCurrentQuestion();
+    if (_.isNull(socket) && props.data.authentication.surveyId != "") {
+      setSocket(
+        fetchSurveyResultsStream(props.data.authentication.surveyId, setResults)
+      );
+      requestCurrentQuestion();
+    } else if (!_.isNull(socket)) {
+      closeResultsSocket(socket);
+      setSocket(null);
+    }
+    return () => {
+      if (!_.isNull(socket)) {
+        console.log("results a");
+        closeResultsSocket(socket);
+      }
+    };
   }, [props.data.authentication.surveyId]);
 
   useEffect(() => {
-    const timer = setInterval(requestResults, 5000);
-    return () => clearInterval(timer);
-  }, [props.data.authentication.surveyId]);
+    return () => {
+      if (!_.isNull(socket)) {
+        console.log("results b");
+        closeResultsSocket(socket);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (_.isNull(results)) {
@@ -122,7 +146,13 @@ function OrganizerScreen(props: SurveyProps) {
                 ).map((res: SurveyResponse, ansIndex: number) => {
                   return (
                     <List.Item
-                      title={res.justification}
+                      title={
+                        <Text>
+                          {!_.isUndefined(res.justification)
+                            ? res.justification
+                            : "No justification given"}
+                        </Text>
+                      }
                       key={`justification-${respIndex}-${ansIndex}`}
                     />
                   );
@@ -216,7 +246,7 @@ async function pushNextQuestion(
 
   if (surveyProgress != null) {
     let currentQuestion = surveyProgress.currentQuestion;
-    if (currentQuestion) {
+    if (currentQuestion && currentQuestion + 1 <= questions.length) {
       updateSurveyProgress(
         props.data.authentication.surveyId,
         currentQuestion + 1

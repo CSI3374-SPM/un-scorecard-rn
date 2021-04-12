@@ -21,7 +21,7 @@ export default function Answer(props: SurveyProps) {
 
             <Title>Score</Title>
             <Text>{`${items.score} (${
-              questions[index].descriptions[rating(items.score)]
+              questions[index]?.descriptions[rating(items.score)]
             })`}</Text>
 
             <Title>Justification</Title>

@@ -42,7 +42,7 @@ function JoinScreen(props: SurveyProps) {
 
 async function validateId(id: string, props: SurveyProps) {
   let surveyResults = await fetchSurveyResults(id);
-  console.log("Survey results ", surveyResults);
+  console.log("Survey results ", !_.isNull(surveyResults));
 
   if (!_.isNull(surveyResults)) {
     props.updateAuthentication({
