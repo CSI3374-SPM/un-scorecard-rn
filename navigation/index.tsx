@@ -18,14 +18,13 @@ import {
   SurveyProps,
 } from "../store/survey/SurveyReducer";
 import SplashScreen from "../screens/SplashScreen";
-import AnimatedSplash from "react-native-animated-splash";
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
 export default function Navigation() {
   const colorScheme = useColorScheme();
   const [timePassed, setTimePassed] = React.useState(false);
-  setTimeout(() => {setTimePassed(true)}, 2500);
+  setTimeout(() => {setTimePassed(true)}, 3000);
   if(!timePassed) {
     return(
     <SplashScreen />
