@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FAB, TextInput } from "react-native-paper";
-import { StyleSheet, useColorScheme, View } from "react-native";
+import { Alert, StyleSheet, useColorScheme, View } from "react-native";
 import { fetchSurveyResults } from "../../api/Wrapper";
 import { connect } from "react-redux";
 import _ from "lodash";
@@ -52,6 +52,7 @@ async function validateId(id: string, props: SurveyProps) {
     });
   } else {
     console.log("invalid id");
+    Alert.alert("Invalid ID","Please Enter a Valid Session ID");
   }
 }
 
