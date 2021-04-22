@@ -40,7 +40,7 @@ export default function SurveyBarGraph(props: Props) {
   useEffect(() => {
     setData(computeResponseSums(props.surveyData, props.questionIndex));
   }, [props.surveyData, props.questionIndex]);
-  console.log("resp: " + data);
+  //console.log("resp: " + data);
   return !_.isNull(props.surveyData) && data.length > 0 ? (
     <BarGraph data={data} />
   ) : (
