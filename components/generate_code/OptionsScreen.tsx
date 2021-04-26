@@ -4,7 +4,6 @@ import { StyleSheet, useColorScheme, View, Image,  } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "../../types";
 import { DarkTheme, DefaultTheme } from "../../constants/Colors";
-//import { Tooltip, Text } from 'react-native-elements';
 import { Tooltip, Text } from "react-native-elements";
 import { size } from "lodash";
 
@@ -94,7 +93,7 @@ export default function OptionsScreen() {
         </View>
       </View>
       <View>
-        <Button style={{paddingBottom:30}} onPress={()=> navigation.navigate("QuickStart")}>Quick Start Guide</Button>
+        <Button style={{paddingBottom:40}} onPress={()=> navigation.navigate("QuickStart")}>Quick Start Guide</Button>
       </View>
     </View>
   );

@@ -1,8 +1,15 @@
+import { useNavigation } from "@react-navigation/native";
 import * as React from "react";
-import { StyleSheet, ImageBackground, View } from "react-native";
-import {ActivityIndicator} from "react-native-paper";
+import { StyleSheet, ImageBackground, View, useColorScheme } from "react-native";
+import theme from "react-native-elements/dist/config/theme";
+import {ActivityIndicator, DarkTheme, DefaultTheme, FAB} from "react-native-paper";
+import navigation from "../navigation";
+import { RootNavigationProp } from "../types";
 
 export default function SplashScreen() {
+//  const navigation = useNavigation<RootNavigationProp>();
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
   return(
   <View style={styles.container}>
     <ImageBackground source={require('../assets/images/splash.png')} style={styles.image}>
