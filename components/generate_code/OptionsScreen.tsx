@@ -77,7 +77,7 @@ export default function OptionsScreen() {
         </Title>
         <Tooltip backgroundColor={"#d2d5d9"} height={150} width={300} popover={<View><Text>Users are able to take a survey.</Text><Text></Text><Text></Text><Text>"Take Survey" requires a session code that is given to the moderator.</Text></View>} >
           <Image source={require('../../assets/images/info.png')} style={{width:20, height:20, justifyContent: "center"}} />
-</Tooltip>
+      </Tooltip>
 </View>
         <View style={styles.userButtons}>
           <FAB
@@ -93,7 +93,7 @@ export default function OptionsScreen() {
         </View>
       </View>
       <View>
-        <Button style={{paddingBottom:40}} onPress={()=> navigation.navigate("QuickStart")}>Quick Start Guide</Button>
+        <Button style={{paddingBottom:40}} onPress={()=> navigation.navigate("QuickStart")}><Text style={{fontSize:17,color:"#3498db"}}>Quick Start Guide</Text></Button>
       </View>
     </View>
   );
