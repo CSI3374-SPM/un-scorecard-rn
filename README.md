@@ -35,7 +35,6 @@ This app was bootstraped with [Expo](https://expo.io), using the React Navigatio
     * Introduction
     * Setup
     * Table of Contents
-    * Updating to New Releases
     * Available Scripts
         * `yarn start [--android | --ios | --web]`
         * `yarn android`
@@ -44,22 +43,15 @@ This app was bootstraped with [Expo](https://expo.io), using the React Navigatio
         * `yarn eject`
         * `yarn jest`
         * `yarn jest:watch`
-    * Customizing App Display Name and Icon
     * Writing and Running Tests
     * Environment
-    * Adding Flow
     * Sharing and Deployment
         * Publishing to Expo's React Native Community
-        * Building and Expo "standalone" app
-        * Ejecting from Create React Native App
-            * Should I use ExpoKit?
     * Troubleshooting
         * Networking
         * iOS Simulator won't open
         * QR Code does not scan
     * Continued Support
-
-### Updating to New Releases:
 
 ### Available scripts:
 
