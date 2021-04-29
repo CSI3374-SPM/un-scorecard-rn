@@ -15,6 +15,7 @@ export default {
           Generate: "generate",
           Join: "join",
           ModerateExisting: "modExisting",
+          QuickStart: "introduction"
         },
       },
       Root: {
