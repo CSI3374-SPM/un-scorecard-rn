@@ -120,7 +120,7 @@ function OrganizerScreen(props: SurveyProps) {
                 : results.length}
               {" answers "}
             </Subheading>
-            <Subheading style={styles.indicatorContainer}>
+            <View style={styles.indicatorContainer}>
               {answers ==
               // @ts-ignore
               results?.length ? (
@@ -134,7 +134,7 @@ function OrganizerScreen(props: SurveyProps) {
                   source={require("../../assets/images/red-circle.png")}
                 />
               )}
-            </Subheading>
+            </View>
           </View>
         </View>
         <Text style={styles.item}>
@@ -314,13 +314,12 @@ const styles = StyleSheet.create({
     flex: 1,
     width: undefined,
     height: undefined,
-    // aspectRatio: 1,
-    resizeMode: "contain",
+    aspectRatio: 1,
+    resizeMode: "center",
   },
   indicatorContainer: {
     height: 22,
     width: 22,
-    marginTop: "5%",
   },
   item: {
     padding: 4,
