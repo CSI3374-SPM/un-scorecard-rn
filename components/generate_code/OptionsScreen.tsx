@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, FAB, Title } from "react-native-paper";
-import { StyleSheet, useColorScheme, View, Image,  } from "react-native";
+import { StyleSheet, useColorScheme, View, Image, LogBox } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "../../types";
 import { DarkTheme, DefaultTheme } from "../../constants/Colors";
@@ -13,7 +13,7 @@ export default function OptionsScreen() {
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
   const [toolTipVisible, setToolTipVisible] = useState(true);
-
+  LogBox.ignoreAllLogs(true);
   return (
     <View style={styles.container}>
       <View style={styles.organizerArea}>
@@ -28,7 +28,7 @@ export default function OptionsScreen() {
         >
           Moderator
         </Title>
-        <Tooltip backgroundColor={"#d2d5d9"} height={250} width={300} 
+        <Tooltip backgroundColor={"#d2d5d9"} height={250} width={300} toggleOnPress={true} withOverlay={false}
                   popover={<View><Text>Moderators are able to control surveys for users and view data as they are completed.</Text>
                                 <Text></Text><Text></Text>
                                 <Text>"New Survey" generates a new session code for a survey that can be distributed to users requested to take the survey.</Text>
@@ -75,7 +75,7 @@ export default function OptionsScreen() {
         >
           User
         </Title>
-        <Tooltip backgroundColor={"#d2d5d9"} height={150} width={300} popover={<View><Text>Users are able to take a survey.</Text><Text></Text><Text></Text><Text>"Take Survey" requires a session code that is given to the moderator.</Text></View>} >
+        <Tooltip backgroundColor={"#d2d5d9"} height={150} width={300} popover={<View><Text>Users are able to take a survey.</Text><Text></Text><Text></Text><Text>"Take Survey" requires a session code that is given to the moderator.</Text></View>}>
           <Image source={require('../../assets/images/info.png')} style={{width:20, height:20, justifyContent: "center"}} />
       </Tooltip>
 </View>
