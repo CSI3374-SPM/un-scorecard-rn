@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: undefined,
     height: undefined,
-    aspectRatio: 1,
+    // aspectRatio: 1,
     resizeMode: "contain",
   },
   indicatorContainer: {
