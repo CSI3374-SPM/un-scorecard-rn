@@ -2103,6 +2103,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-native-elements@^0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@types/react-native-elements/-/react-native-elements-0.18.0.tgz#81cf92d75a5d9ed73599761da37bd2b05b107a91"
+  integrity sha512-Tt0aq6HlN31Wexica9MwTwxnt46fLyx6yzMFJWPx2hqACrvBZfFTlwCoWMRa6ArR/kX3XJbAe6vKEBuZ08Zvtw==
+  dependencies:
+    react-native-elements "*"
+
 "@types/react-native-vector-icons@^6.4.6":
   version "6.4.6"
   resolved "https://registry.yarnpkg.com/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.6.tgz#848e3b14572def56212cafbf5cb1254b445bfb41"
@@ -7359,7 +7366,7 @@ react-is@^17.0.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.1.tgz"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
-react-native-elements@^3.4.0:
+react-native-elements@*, react-native-elements@^3.4.0:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-3.4.1.tgz#74ea15a9369b05abf4f7421f0ce236ca01fedfe1"
   integrity sha512-SPotW75psW1qyZgtiWuiKSTASdd4yNYvf6/vgO6nyl2kEgZG5nP5wtFxL/GsUVxwHh7yc8xnJ3J9pkApa7p9lQ==

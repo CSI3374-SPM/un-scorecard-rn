@@ -88,7 +88,8 @@ export default function Question(props: SurveyProps) {
     };
   }, []);
 
-  if (index < questions.length) {
+  if (index < 6) {
+    //questions.length) {
     if (loading) {
       return (
         <View style={styles.waiting}>
