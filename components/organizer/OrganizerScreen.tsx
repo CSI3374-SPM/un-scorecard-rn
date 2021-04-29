@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Text, List, Subheading, FAB } from "react-native-paper";
-import { StyleSheet, useColorScheme, View } from "react-native";
+import { Image, StyleSheet, useColorScheme, View } from "react-native";
 import {
   fetchSurveyResults,
   getSurveyProgress,
@@ -111,14 +111,31 @@ function OrganizerScreen(props: SurveyProps) {
         <SurveyRadarGraph surveyData={results} />
         <View style={styles.currentQuestionTitle}>
           <Subheading style={styles.title}>Current Question</Subheading>
-          <Subheading style={styles.title}>
-            {" "}
-            {answers}/
-            {_.isNull(results)
-              ? 0 // @ts-ignore
-              : results.length}
-            {" answers "}
-          </Subheading>
+          <View style={styles.titleRight}>
+            <Subheading style={styles.title}>
+              {" "}
+              {answers}/
+              {_.isNull(results)
+                ? 0 // @ts-ignore
+                : results.length}
+              {" answers "}
+            </Subheading>
+            <Subheading style={styles.indicatorContainer}>
+              {answers ==
+              // @ts-ignore
+              results?.length ? (
+                <Image
+                  style={styles.indicator}
+                  source={require("../../assets/images/green-circle.png")}
+                />
+              ) : (
+                <Image
+                  style={styles.indicator}
+                  source={require("../../assets/images/red-circle.png")}
+                />
+              )}
+            </Subheading>
+          </View>
         </View>
         <Text style={styles.item}>
           {currentQuestion - 1 > -1 && currentQuestion - 1 < questions.length
@@ -199,7 +216,7 @@ function OrganizerScreen(props: SurveyProps) {
       >
         <FAB
           style={{ backgroundColor: theme.colors.exit }}
-          icon="close"
+          icon="exit-to-app"
           onPress={() => {
             props.updateAuthentication({
               isOrganizer: false,
@@ -293,6 +310,18 @@ const styles = StyleSheet.create({
     height: 1,
     width: "80%",
   },
+  indicator: {
+    flex: 1,
+    width: undefined,
+    height: undefined,
+    aspectRatio: 1,
+    resizeMode: "contain",
+  },
+  indicatorContainer: {
+    height: 22,
+    width: 22,
+    marginTop: "5%",
+  },
   item: {
     padding: 4,
   },
@@ -311,5 +340,11 @@ const styles = StyleSheet.create({
   buttonContainer: {},
   noJustification: {
     marginLeft: 16,
+  },
+  titleRight: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginRight: 16,
   },
 });
