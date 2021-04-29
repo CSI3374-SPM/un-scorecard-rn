@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import { Button, FAB, Title } from "react-native-paper";
-import { StyleSheet, useColorScheme, View, Image, LogBox } from "react-native";
+import { StyleSheet, useColorScheme, View, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "../../types";
 import { DarkTheme, DefaultTheme } from "../../constants/Colors";
 import { Tooltip, Text } from "react-native-elements";
-import { size } from "lodash";
 
 
 export default function OptionsScreen() {
   const navigation = useNavigation<RootNavigationProp>();
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
-  const [toolTipVisible, setToolTipVisible] = useState(true);
-  LogBox.ignoreAllLogs(true);
   return (
     <View style={styles.container}>
       <View style={styles.organizerArea}>
@@ -35,8 +32,7 @@ export default function OptionsScreen() {
                                 <Text></Text><Text></Text>
                                 <Text>"Moderate Survey" allows a moderator to control and view an existing survey with a previously generated session code.</Text>
                           </View>}>
-          <Image source={require('../../assets/images/info.png')} style={{width:20, height:20}} >
-            </Image>
+          <Image source={require('../../assets/images/info.png')} style={{width:20, height:20}} />
        </Tooltip>
        </View>
         <View style={styles.organizerButtons}>
