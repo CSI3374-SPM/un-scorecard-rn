@@ -35,11 +35,18 @@ function OrganizerScreen(props: SurveyProps) {
   ] = useState(null);
   const [expanded, setExpanded] = React.useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState(0);
+
+  const requestResults = async () => {
+    let resp = await fetchSurveyResults(props.data.authentication.surveyId);
+    setResults(resp);
+    console.log("results ", resp);
+  };
+
   const [socket, setSocket]: [
     SocketIOClient.Socket | null,
     (s: SocketIOClient.Socket | null) => void
   ] = useState(null as SocketIOClient.Socket | null);
-  const [answers, setAnswers] = useState(0);
   const handlePress = () => setExpanded(!expanded);
 
   const requestCurrentQuestion = async () => {
@@ -58,13 +65,7 @@ function OrganizerScreen(props: SurveyProps) {
 
   useEffect(() => {
     navigator.setOptions({
-      title:
-        props.data.authentication.surveyId +
-        "   -   " +
-        (_.isNull(results)
-          ? 0 // @ts-ignore
-          : results.length) +
-        " Responses",
+      title: props.data.authentication.surveyId,
     });
   });
 

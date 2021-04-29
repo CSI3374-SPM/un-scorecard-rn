@@ -1,6 +1,8 @@
-import { FAB, Subheading, TextInput } from "react-native-paper";
+
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Button, FAB, Subheading, TextInput } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 import {
   getSurveyEmailsStream,
