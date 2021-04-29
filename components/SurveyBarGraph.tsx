@@ -42,7 +42,11 @@ export default function SurveyBarGraph(props: Props) {
   }, [props.surveyData, props.questionIndex]);
   //console.log("resp: " + data);
   return !_.isNull(props.surveyData) && data.length > 0 ? (
-    <BarGraph data={data} />
+    <BarGraph
+      data={data}
+      xLabel="Score values"
+      yLabel="Number of responders for score"
+    />
   ) : (
     <></>
   );

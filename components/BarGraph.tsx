@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Text } from "react-native";
 import { VictoryBar } from "victory-native";
 import { VictoryChart, VictoryTheme } from "victory-native";
 
@@ -7,6 +8,8 @@ import { VictoryChart, VictoryTheme } from "victory-native";
 
 type Props = {
   data: number[];
+  xLabel: string;
+  yLabel: string;
 };
 
 export default function BarGraph(props: Props) {
@@ -33,15 +36,59 @@ export default function BarGraph(props: Props) {
   }, [props.data]);
 
   return (
-    <VictoryChart theme={VictoryTheme.material}>
-      <VictoryBar
-        barWidth={(i) => 25}
-        alignment="start"
-        data={data.map((y, i) => {
-          return { x: i.toString(), y };
-        })}
-        domain={[0, max]}
-      />
-    </VictoryChart>
+    <View style={{ flex: 1, flexDirection: "column" }}>
+      <View
+        style={{
+          flex: 2,
+          flexDirection: "row",
+          marginHorizontal: 0,
+          position: "relative",
+        }}
+      >
+        <View style={{ alignSelf: "center", minWidth: 12, margin: -94 }}>
+          <Text
+            style={{
+              alignSelf: "flex-start",
+              transform: [{ rotate: "270deg" }],
+              marginLeft: 8,
+              marginRight: -8,
+            }}
+          >
+            {props.yLabel}
+          </Text>
+        </View>
+        <View>
+          <VictoryChart theme={VictoryTheme.material}>
+            <VictoryBar
+              barWidth={(i) => 25}
+              alignment="start"
+              data={data.map((y, i) => {
+                return { x: i.toString(), y };
+              })}
+              domain={[0, max]}
+            />
+          </VictoryChart>
+        </View>
+      </View>
+      <View style={{ alignSelf: "center" }}>
+        <Text>{props.xLabel}</Text>
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "space-evenly",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: "80%",
+  },
+});
