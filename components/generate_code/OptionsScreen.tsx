@@ -1,28 +1,66 @@
-import React from "react";
-import { FAB, Title } from "react-native-paper";
-import { StyleSheet, useColorScheme, View } from "react-native";
+import React, { useState } from "react";
+import { Button, FAB, Title } from "react-native-paper";
+import { StyleSheet, useColorScheme, View, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "../../types";
 import { DarkTheme, DefaultTheme } from "../../constants/Colors";
+// @ts-ignore
+import { Tooltip, Text } from "react-native-elements";
 
 export default function OptionsScreen() {
   const navigation = useNavigation<RootNavigationProp>();
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
-
   return (
     <View style={styles.container}>
       <View style={styles.organizerArea}>
-        <Title
-          style={{
-            fontSize: 30,
-            fontWeight: "bold",
-            color: theme.colors.darkText,
-            marginLeft: 16,
-          }}
-        >
-          Moderator
-        </Title>
+        <View style={{ flexDirection: "row" }}>
+          <Title
+            style={{
+              fontSize: 30,
+              fontWeight: "bold",
+              color: theme.colors.darkText,
+              marginLeft: 16,
+            }}
+          >
+            Moderator
+          </Title>
+          {
+            // @ts-ignore
+            <Tooltip
+              backgroundColor={"#d2d5d9"}
+              height={250}
+              width={300}
+              toggleOnPress={true}
+              withOverlay={false}
+              popover={
+                <View>
+                  <Text>
+                    Moderators are able to control surveys for users and view
+                    data as they are completed.
+                  </Text>
+                  <Text></Text>
+                  <Text></Text>
+                  <Text>
+                    "New Survey" generates a new session code for a survey that
+                    can be distributed to users requested to take the survey.
+                  </Text>
+                  <Text></Text>
+                  <Text></Text>
+                  <Text>
+                    "Moderate Survey" allows a moderator to control and view an
+                    existing survey with a previously generated session code.
+                  </Text>
+                </View>
+              }
+            >
+              <Image
+                source={require("../../assets/images/info.png")}
+                style={{ width: 20, height: 20 }}
+              />
+            </Tooltip>
+          }
+        </View>
         <View style={styles.organizerButtons}>
           <FAB
             icon="plus"
@@ -48,16 +86,42 @@ export default function OptionsScreen() {
       </View>
 
       <View style={styles.userArea}>
-        <Title
-          style={{
-            fontSize: 30,
-            fontWeight: "bold",
-            color: theme.colors.darkText,
-            marginLeft: 16,
-          }}
-        >
-          User
-        </Title>
+        <View style={{ flexDirection: "row" }}>
+          <Title
+            style={{
+              fontSize: 30,
+              fontWeight: "bold",
+              color: theme.colors.darkText,
+              marginLeft: 16,
+            }}
+          >
+            User
+          </Title>
+          {
+            // @ts-ignore
+            <Tooltip
+              backgroundColor={"#d2d5d9"}
+              height={150}
+              width={300}
+              popover={
+                <View>
+                  <Text>Users are able to take a survey.</Text>
+                  <Text></Text>
+                  <Text></Text>
+                  <Text>
+                    "Take Survey" requires a session code that is given to the
+                    moderator.
+                  </Text>
+                </View>
+              }
+            >
+              <Image
+                source={require("../../assets/images/info.png")}
+                style={{ width: 20, height: 20, justifyContent: "center" }}
+              />
+            </Tooltip>
+          }
+        </View>
         <View style={styles.userButtons}>
           <FAB
             color={theme.colors.surface}
@@ -71,6 +135,18 @@ export default function OptionsScreen() {
           />
         </View>
       </View>
+
+      <View style={styles.quickStartArea}>
+        <Button
+          style={{ marginBottom: 40 }}
+          // @ts-ignore
+          onPress={() => navigation.navigate("QuickStart")}
+        >
+          <Text style={{ fontSize: 17, color: "#3498db" }}>
+            Quick Start Guide
+          </Text>
+        </Button>
+      </View>
     </View>
   );
 }
@@ -82,12 +158,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   organizerArea: {
-    height: "48%",
+    height: "50%",
     marginTop: "4%",
     width: "100%",
   },
   userArea: {
-    height: "48%",
+    height: "30%",
+    width: "100%",
+  },
+  quickStartArea: {
+    height: "20%",
     width: "100%",
   },
   userButtons: {
@@ -112,5 +192,11 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  image: {
+    height: 15,
+    width: 15,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

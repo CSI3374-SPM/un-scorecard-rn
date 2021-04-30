@@ -9,7 +9,7 @@ import io from "socket.io-client";
 export const apiUrl =
   typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
     ? `http://${manifest.debuggerHost?.split(`:`).shift()?.concat(`:5000`)}`
-    : `https://unbox.ecs.baylor.edu:5000`;
+    : `http://unboxdev.ecs.baylor.edu:5000`;
 
 const api = axios.create({
   baseURL: apiUrl,

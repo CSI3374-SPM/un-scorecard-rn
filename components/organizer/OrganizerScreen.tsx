@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Text, List, Subheading, FAB } from "react-native-paper";
-import { StyleSheet, useColorScheme, View } from "react-native";
+import { Image, StyleSheet, useColorScheme, View } from "react-native";
 import {
   fetchSurveyResults,
   getSurveyProgress,
@@ -111,14 +111,31 @@ function OrganizerScreen(props: SurveyProps) {
         <SurveyRadarGraph surveyData={results} />
         <View style={styles.currentQuestionTitle}>
           <Subheading style={styles.title}>Current Question</Subheading>
-          <Subheading style={styles.title}>
-            {" "}
-            {answers}/
-            {_.isNull(results)
-              ? 0 // @ts-ignore
-              : results.length}
-            {" answers "}
-          </Subheading>
+          <View style={styles.titleRight}>
+            <Subheading style={styles.title}>
+              {" "}
+              {answers}/
+              {_.isNull(results)
+                ? 0 // @ts-ignore
+                : results.length}
+              {" answers "}
+            </Subheading>
+            <View style={styles.indicatorContainer}>
+              {answers ==
+              // @ts-ignore
+              results?.length ? (
+                <Image
+                  style={styles.indicator}
+                  source={require("../../assets/images/green-circle.png")}
+                />
+              ) : (
+                <Image
+                  style={styles.indicator}
+                  source={require("../../assets/images/red-circle.png")}
+                />
+              )}
+            </View>
+          </View>
         </View>
         <Text style={styles.item}>
           {currentQuestion - 1 > -1 && currentQuestion - 1 < questions.length
@@ -143,20 +160,33 @@ function OrganizerScreen(props: SurveyProps) {
                   (res: SurveyResponse) =>
                     res.questionIndex === currentQuestion - 1 &&
                     !_.isUndefined(res.justification)
-                ).map((res: SurveyResponse, ansIndex: number) => {
-                  return (
-                    <List.Item
-                      title={
-                        <Text>
-                          {!_.isUndefined(res.justification)
-                            ? res.justification
-                            : "No justification given"}
-                        </Text>
-                      }
-                      key={`justification-${respIndex}-${ansIndex}`}
-                    />
-                  );
-                })
+                ).map((res: SurveyResponse, ansIndex: number) =>
+                  [0, 1, 2, 3, 4, 5].map((score: number) => {
+                    return (
+                      <>
+                        <List.Subheader>
+                          <Subheading style={styles.title}>{score}</Subheading>
+                        </List.Subheader>
+                        {res.score == score ? (
+                          <List.Item
+                            title={
+                              <Text>
+                                {!_.isUndefined(res.justification)
+                                  ? res.score + " - " + res.justification
+                                  : "No justification given"}
+                              </Text>
+                            }
+                            key={`justification-${respIndex}-${ansIndex}`}
+                          />
+                        ) : (
+                          <Text style={styles.noJustification}>
+                            No justifications
+                          </Text>
+                        )}
+                      </>
+                    );
+                  })
+                )
               )}
         </List.Accordion>
         <View style={styles.separator} />
@@ -186,7 +216,7 @@ function OrganizerScreen(props: SurveyProps) {
       >
         <FAB
           style={{ backgroundColor: theme.colors.exit }}
-          icon="close"
+          icon="exit-to-app"
           onPress={() => {
             props.updateAuthentication({
               isOrganizer: false,
@@ -280,6 +310,17 @@ const styles = StyleSheet.create({
     height: 1,
     width: "80%",
   },
+  indicator: {
+    flex: 1,
+    width: undefined,
+    height: undefined,
+    aspectRatio: 1,
+    resizeMode: "center",
+  },
+  indicatorContainer: {
+    height: 22,
+    width: 22,
+  },
   item: {
     padding: 4,
   },
@@ -296,4 +337,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   buttonContainer: {},
+  noJustification: {
+    marginLeft: 16,
+  },
+  titleRight: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginRight: 16,
+  },
 });
