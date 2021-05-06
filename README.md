@@ -83,6 +83,9 @@ The following environment variables can be modified:
 
 - `GRAPH_URL` which indicates the URL of the web application that shows a web view of a survey's radar graph.
 
+### Communicating with the API
+Make sure to update the API url string inside of `api/Wrapper.ts`. This could also be moved to an environment variable, but hasn't as of yet.
+
 ### Sharing and Deployment
 ##### Publishing to Expo's React Native Community:
 Expo allows for hosting of React native applications. It is published by using Expo's publish command line prompt:
