@@ -4,7 +4,7 @@ export type Question = {
   descriptions: string[];
 };
 
-const makeQuestion = (q: string, j: string, d: string[]): Question => {
+export const makeQuestion = (q: string, j: string, d: string[]): Question => {
   return {
     question: q,
     justification: j,
@@ -15,16 +15,18 @@ const makeQuestion = (q: string, j: string, d: string[]): Question => {
 export type Survey = {
   questions: Question[];
   language: string;
+  surveyType: string;
 };
 
-const makeSurvey = (q: Question[], l: string): Survey => {
-  return{
+export const makeSurvey = (q: Question[], l: string, s: string): Survey => {
+  return {
     questions: q,
     language: l,
+    surveyType: s,
   };
 };
 
-export const questions = [
+export const questionsE = [
   makeQuestion(
     "A1.1 To what extent does/do the governance mechanism(s) for disaster risk management integrate the full breadth of public health considerations?",
     "Option: please provide justification for answer A1.1",
@@ -303,4 +305,4 @@ export const questions = [
   ),
 ];
 
-export const whoSurvey = makeSurvey(questions, "English");
+export const whoSurveyE = makeSurvey(questionsE, "English", "WHO");
