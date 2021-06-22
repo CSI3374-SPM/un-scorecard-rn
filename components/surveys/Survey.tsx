@@ -26,7 +26,7 @@ export const makeSurvey = (q: Question[], l: string, s: string): Survey => {
   };
 };
 
-export const questionsE = [
+export const englishQuestions = [
   makeQuestion(
     "A1.1 To what extent does/do the governance mechanism(s) for disaster risk management integrate the full breadth of public health considerations?",
     "Option: please provide justification for answer A1.1",
@@ -305,4 +305,4 @@ export const questionsE = [
   ),
 ];
 
-export const whoSurveyE = makeSurvey(questionsE, "English", "WHO");
+export const whoSurveyE = makeSurvey(englishQuestions, "English", "WHO");
