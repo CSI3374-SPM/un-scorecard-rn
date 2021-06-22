@@ -62,6 +62,7 @@ function OrganizerScreen(props: SurveyProps) {
   };
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
+  let populatedScores: number[] = [];
 
   useEffect(() => {
     navigator.setOptions({
@@ -160,33 +161,30 @@ function OrganizerScreen(props: SurveyProps) {
                   (res: SurveyResponse) =>
                     res.questionIndex === currentQuestion - 1 &&
                     !_.isUndefined(res.justification)
-                ).map((res: SurveyResponse, ansIndex: number) =>
-                  [0, 1, 2, 3, 4, 5].map((score: number) => {
-                    return (
-                      <>
-                        <List.Subheader>
-                          <Subheading style={styles.title}>{score}</Subheading>
-                        </List.Subheader>
-                        {res.score == score ? (
-                          <List.Item
-                            title={
-                              <Text>
-                                {!_.isUndefined(res.justification)
-                                  ? res.score + " - " + res.justification
-                                  : "No justification given"}
-                              </Text>
-                            }
-                            key={`justification-${respIndex}-${ansIndex}`}
-                          />
-                        ) : (
-                          <Text style={styles.noJustification}>
-                            No justifications
+                ).map((res: SurveyResponse, ansIndex: number) => {
+                  populatedScores.push(res.score);
+                  //{score in populatedScores ? ():()}
+                  return (
+                    <>
+                      {res.score in populatedScores}
+                      <List.Subheader>
+                        <Subheading style={styles.title}>
+                          {res.score}
+                        </Subheading>
+                      </List.Subheader>
+                      <List.Item
+                        title={
+                          <Text>
+                            {!_.isUndefined(res.justification)
+                              ? res.justification
+                              : "No justification given"}
                           </Text>
-                        )}
-                      </>
-                    );
-                  })
-                )
+                        }
+                        key={`justification-${respIndex}-${ansIndex}`}
+                      />
+                    </>
+                  );
+                })
               )}
         </List.Accordion>
         <View style={styles.separator} />
