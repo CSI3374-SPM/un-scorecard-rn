@@ -164,6 +164,7 @@ function OrganizerScreen(props: SurveyProps) {
                 ).map((res: SurveyResponse, ansIndex: number) => {
                   populatedScores.push(res.score);
                   //{score in populatedScores ? ():()}
+                  // @ts-ignore
                   return (
                     <>
                       {res.score in populatedScores}

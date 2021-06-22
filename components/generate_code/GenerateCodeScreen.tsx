@@ -11,19 +11,20 @@ export default function GenerateCodeScreen(props: SurveyProps) {
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
   const [open, setOpen] = useState(false);
-  const [language, setLanguage] = useState(null);
+  const [language, setLanguage] = useState("");
   const [items, setItems] = useState([
     { label: "English", value: "eng" },
     { label: "Japanese", value: "ja" },
   ]);
 
   const [openSurvey, setOpenSurvey] = useState(false);
-  const [survey, setSurvey] = useState(null);
+  const [survey, setSurvey] = useState("");
   const [surveyItems, setSurveyItems] = useState([
     { label: "WHO", value: "who" },
     { label: "USAID", value: "usaid" },
   ]);
 
+  // @ts-ignore
   return (
     <View style={styles.container}>
       <TextInput
