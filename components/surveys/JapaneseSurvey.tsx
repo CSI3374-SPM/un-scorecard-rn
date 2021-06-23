@@ -1,4 +1,5 @@
 import {makeQuestion, makeSurvey} from "./Survey";
+//import list/map from wrapper
 
 export const questionsJ = [
   makeQuestion(

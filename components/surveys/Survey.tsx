@@ -1,3 +1,6 @@
+//import list/map from wrapper
+//add survey to list/map
+
 export type Question = {
   question: string;
   justification: string;
