@@ -4,9 +4,8 @@ import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 import { SurveyResponse } from "../store/survey/SurveyReducer";
 import io from "socket.io-client";
-import {Question, whoSurveyE} from "../components/surveys/Survey"; //Possibly can remove these two lines is map/list is passed to other files.
-import {whoSurveyJ} from "../components/surveys/JapaneseSurvey"; //May need to still pass in Question and Survey
-
+import {Question, Survey} from "../components/surveys/Survey"; //Possibly can remove these two lines is map/list is passed to other files.
+import { surveys } from "../components/surveys/SurveyCollection";
 // const apiUrl = process.env.API_URL;
 export const apiUrl = `http://unboxdev.ecs.baylor.edu:5000`;
 
@@ -17,7 +16,7 @@ const api = axios.create({
 //Add map or array list to store surveys
 //export list/map that is accessed from each survey
 
-const survey = whoSurveyJ; //Figure out way to make not constant
+const survey = surveys[0]; //Figure out way to make not constant
 
 export const questions = survey.questions; //Figure out way to make not constant. May not need to change.
 
