@@ -33,9 +33,11 @@ function OrganizerScreen(props: SurveyProps) {
     SurveyResponse[][] | null,
     (r: SurveyResponse[][] | null) => void
   ] = useState(null);
+
   const [expanded, setExpanded] = React.useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(0);
+  const [language, setLanguage] = useState("eng");
 
   const requestResults = async () => {
     let resp = await fetchSurveyResults(props.data.authentication.surveyId);
@@ -49,6 +51,9 @@ function OrganizerScreen(props: SurveyProps) {
   ] = useState(null as SocketIOClient.Socket | null);
   const handlePress = () => setExpanded(!expanded);
 
+  useEffect(() => {
+    setLanguage();
+  });
   const requestCurrentQuestion = async () => {
     let surveyProgress = await getSurveyProgress(
       props.data.authentication.surveyId
@@ -62,6 +67,7 @@ function OrganizerScreen(props: SurveyProps) {
   };
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
+  let populatedScores: number[] = [];
 
   useEffect(() => {
     navigator.setOptions({
@@ -160,33 +166,31 @@ function OrganizerScreen(props: SurveyProps) {
                   (res: SurveyResponse) =>
                     res.questionIndex === currentQuestion - 1 &&
                     !_.isUndefined(res.justification)
-                ).map((res: SurveyResponse, ansIndex: number) =>
-                  [0, 1, 2, 3, 4, 5].map((score: number) => {
-                    return (
-                      <>
-                        <List.Subheader>
-                          <Subheading style={styles.title}>{score}</Subheading>
-                        </List.Subheader>
-                        {res.score == score ? (
-                          <List.Item
-                            title={
-                              <Text>
-                                {!_.isUndefined(res.justification)
-                                  ? res.score + " - " + res.justification
-                                  : "No justification given"}
-                              </Text>
-                            }
-                            key={`justification-${respIndex}-${ansIndex}`}
-                          />
-                        ) : (
-                          <Text style={styles.noJustification}>
-                            No justifications
+                ).map((res: SurveyResponse, ansIndex: number) => {
+                  populatedScores.push(res.score);
+                  //{score in populatedScores ? ():()}
+                  // @ts-ignore
+                  return (
+                    <>
+                      {res.score in populatedScores}
+                      <List.Subheader>
+                        <Subheading style={styles.title}>
+                          {res.score}
+                        </Subheading>
+                      </List.Subheader>
+                      <List.Item
+                        title={
+                          <Text>
+                            {!_.isUndefined(res.justification)
+                              ? res.justification
+                              : "No justification given"}
                           </Text>
-                        )}
-                      </>
-                    );
-                  })
-                )
+                        }
+                        key={`justification-${respIndex}-${ansIndex}`}
+                      />
+                    </>
+                  );
+                })
               )}
         </List.Accordion>
         <View style={styles.separator} />

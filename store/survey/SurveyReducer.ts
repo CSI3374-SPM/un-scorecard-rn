@@ -14,6 +14,13 @@ export interface SurveyResponse {
   justification?: string;
 }
 
+export interface LanguageData {
+  // Language for rendering the survey
+  surveyLanguage: string;
+  // Language for rendering the UI
+  UILanguage: string;
+  surveyType: string;
+}
 // The data field for the state
 export interface AuthenticationData {
   // isOrganizer boolean value
@@ -102,6 +109,13 @@ function dispatchAuthenticationUpdate(
   });
 }
 
+function dispatchLanguageUpdate(
+  dispatch: Dispatch<SurveyAction>,
+  language: LanguageData
+) {
+  dispatch({ type: SurveyActionTypes.UPDATE_LANG_ACTION, payload: language });
+}
+
 export const mapDispatchToProps = (dispatch: Dispatch<SurveyAction>) => {
   return {
     updateAnswer: (answer: SurveyResponse[]) => {
@@ -109,6 +123,9 @@ export const mapDispatchToProps = (dispatch: Dispatch<SurveyAction>) => {
     },
     updateAuthentication: (authentication: AuthenticationData) => {
       dispatchAuthenticationUpdate(dispatch, authentication);
+    },
+    updateLanguage: (language: LanguageData) => {
+      dispatchLanguageUpdate(dispatch, language);
     },
     dispatch,
   };
