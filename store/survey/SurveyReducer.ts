@@ -37,14 +37,12 @@ interface State {
 export interface SurveyData {
   responses: SurveyResponse[];
   authentication: AuthenticationData;
-  language: LanguageData;
 }
 
 export interface SurveyProps {
   data: SurveyData;
   updateAnswer: (answer: SurveyResponse[]) => void;
   updateAuthentication: (authentication: AuthenticationData) => void;
-  updateLanguage: (language: LanguageData) => void;
 }
 
 // Create the example state slice
@@ -57,11 +55,6 @@ const surveySlice = createSlice({
         isOrganizer: false,
         surveyId: "",
         responseId: null,
-      },
-      languages: {
-        surveyLanguage: "eng",
-        UILanguage: "eng",
-        surveyType: "who",
       },
     },
   },
@@ -82,14 +75,6 @@ const surveySlice = createSlice({
         (state: State, action: SurveyAction) => {
           // @ts-ignore
           state.data.authentication = action.payload;
-          return state;
-        }
-      )
-      .addCase(
-        SurveyActionTypes.UPDATE_LANG_ACTION,
-        (state: State, action: SurveyAction) => {
-          // @ts-ignore
-          state.data.language = action.payload;
           return state;
         }
       );
