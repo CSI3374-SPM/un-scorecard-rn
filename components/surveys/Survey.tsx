@@ -1,6 +1,6 @@
 //import list/map from wrapper
 //add survey to list/map
-
+// Create a new SurveyHandler that contains all surveys
 export type Question = {
   question: string;
   justification: string;
@@ -17,19 +17,77 @@ export const makeQuestion = (q: string, j: string, d: string[]): Question => {
 
 export type Survey = {
   questions: Question[];
-  language: string;
-  surveyType: string;
 };
 
-export const makeSurvey = (q: Question[], l: string, s: string): Survey => {
+export const generateWHOSurvey = (surveyLanguage: string): Survey => {
+  console.log("Survey language in Survey component: ", surveyLanguage);
+
+  if (surveyLanguage == "eng") {
+    return makeSurvey(demoQuestions);
+  } else if (surveyLanguage == "ja") {
+    console.log("Entered japanese making statement");
+    return makeSurvey(questionsJ);
+  }
+  return makeSurvey(englishQuestions);
+};
+
+const makeSurvey = (q: Question[]): Survey => {
   return {
     questions: q,
-    language: l,
-    surveyType: s,
   };
 };
 
-export const englishQuestions = [
+const demoQuestions = [
+  makeQuestion(
+    "A1.1 To what extent does/do the governance mechanism(s) for disaster risk management integrate the full breadth of public health considerations?",
+    "Option: please provide justification for answer A1.1",
+    [
+      "5 - The full spectrum of public health functions routinely provide input to the city's disaster resilience governance mechanism/meetings, and routinely contribute to all major disaster resilience programs and documents. (Participation may be through a nominated focal point combining input from many disciplines). ",
+      "4 - Representatives of most public health functions usually attend major city disaster resilience meetings and contribute to major programs, but they may not be involved in all relevant activity. ",
+      "3 - Public health functions have their own disaster resilience fora and mechanisms but, while including the full spectrum of functions, these are not thoroughly coordinated with other actors such as city governments, logistics operators or community groups. The focus may be narrowly on immediate event response, rather than broader resilience issues such as longer run impacts.",
+      "2 - Some public health disciplines are involved in some city disaster resilience activities, but there is not complete engagement.",
+      "1 - Only rudimentary engagement of public health disciplines in city disaster resilience activities exists. ",
+      "0 - There is no public health function in the region, or if there is, it is not engaged in disaster resilience at all.",
+    ]
+  ),
+  makeQuestion(
+    "A2.1 To what extent are emergencies and disasters including disease outbreaks are included in disaster risk planning? ",
+    "Option: please provide justification for answer A2.1",
+    [
+      '5 - Emergencies and disasters including disease outbreaks are fully included by the city either as a risk scenario in their own right, or as a component of a "composite" scenario. The likely impact on staff availability and on health facilities is modelled and planned for, both alone, and in combination with other risks where an epidemic or pandemic may hinder ability to respond. ',
+      "4 - Emergencies and disasters including disease outbreaks are addressed as above, but they tend to be considered in isolation from other risks, and thus the interaction with other risks may not be fully addressed. ",
+      "3 - Emergencies and disasters including outbreaks are considered along with their likely impacts, but these impacts are not fully modelled. ",
+      "2 - Emergencies and disasters including outbreaks may be considered, but at a high level only.",
+      "1 - Risk of outbreaks may be noted as an issue, but without active consideration of the impacts or required responses. ",
+      "0 - No consideration of pandemics at all. ",
+    ]
+  ),
+  makeQuestion(
+    "A2.2 To what extent are public health impacts included in the city's scenario planning for other disaster risks? ",
+    "Option: please provide justification for answer A2.2",
+    [
+      "5 - A comprehensive set of disaster health issues is fully included in its disaster planning scenarios. The likely impact on staff availability, health facilities, water and sanitation, treatment and care is planned for and modelled, including immediate impact and for long-term physical and psychological health issues. ",
+      "4 - Disaster health issues are fully addressed as above, but they tend to be considered in isolation from other impacts, and thus the effect that they may have on disaster recovery is not fully assessed. ",
+      "3 - A number of disaster health issues are addressed, perhaps in detail, but there is not full coverage. Longer term issues physical and mental health issues are likely to be omitted. ",
+      "2 - Some immediate post-disaster health issues are considered and planned for, but in an outline treatment only. ",
+      "1 - Disaster health issues may be acknowledged, but without real planning for these. ",
+      "0 - No consideration of post-disaster health issues at all. ",
+    ]
+  ),
+  makeQuestion(
+    "A2.3 To what extent are pre-existing chronic health issues included in scenarios where disasters are likely to exacerbate these, or where they are likely to impede recovery? ",
+    "Option: please provide justification for answer A2.3",
+    [
+      "5 - Chronic health conditions are comprehensively reviewed and included in scenario definition and planning; OR no stresses are thought to apply. ",
+      "4 - Broadly, chronic health conditions are identified and included in scenario definition and planning. ",
+      "3 - Most applicable chronic health conditions are included in scenario definition or planning, with some gaps. ",
+      "2 - Chronic health conditions are known but not included in scenario definition and planning. ",
+      "1 - Major gaps exist in identification and inclusion of chronic health stresses.",
+      "0 - No attempt to identify or consider chronic health conditions.",
+    ]
+  ),
+];
+const englishQuestions = [
   makeQuestion(
     "A1.1 To what extent does/do the governance mechanism(s) for disaster risk management integrate the full breadth of public health considerations?",
     "Option: please provide justification for answer A1.1",
@@ -308,4 +366,29 @@ export const englishQuestions = [
   ),
 ];
 
-export const whoSurveyE = makeSurvey(englishQuestions, "English", "WHO");
+const questionsJ = [
+  makeQuestion(
+    "A1.1 災害リスク管理のためのガバナンスメカニズムは、公衆衛生上の考慮事項をどの程度まで統合しているか？",
+    "Placeholder Justification.",
+    [
+      "5 –公衆衛生のあらゆる機能（右参照）が、市の災害対策ガバナンスメカニズムおよびミーティングに日常的に情報を提供し、すべての主要な災害対策プログラムや文書に日常的に貢献している (参加は、多くの分野からの情報を組み合わせて指名された中心人物を通じて行われることもある)",
+      "4 –ほとんどの公衆衛生機能の代表者は、通常、主要都市の災害レジリエンス会議に出席し、主要なプログラムに貢献しているが、関連するすべての活動に関与しているわけではない。",
+      "3 –公衆衛生の機能は、独自の災害回復のためのフォーラムやメカニズムを持っているが、あらゆる機能が含まれているにもかかわらず、市政府、物流業者、コミュニティグループなどの他の当事者との調整が十分に行われていない。また、長期的な影響など、より広範なレジリエンスの問題ではなく、緊急事態への対応に焦点が絞られている場合もある。",
+      "2 –一部の公衆衛生分野は、都市の防災活動に関与しているが、完全に関与しているわけではない。 ",
+      "1 –都市の防災活動に公衆衛生分野が関与するのは初歩的なことに過ぎない。",
+      "0 –この地域には公衆衛生の機能がないか、あっても災害レジリエンスにはまったく関与していない。",
+    ]
+  ),
+  makeQuestion(
+    "A2.1 疾病の発生を含む緊急事態や災害は、災害リスク計画にどの程度含まれているか？",
+    "Placeholder Justification",
+    [
+      "5 –疾病の発生を含む緊急事態や災害は、それ自体がリスクシナリオとして、あるいは「複合」シナリオの構成要素として、市に完全に組み込まれている。スタッフの確保や医療施設への影響は、単独でも、流行病やパンデミックが対応の妨げになる可能性のある他のリスクと組み合わせても、モデル化され、計画されている。",
+      "4 –疾病の発生を含む緊急事態や災害については、上記のように対応しているが、他のリスクと切り離して考える傾向があり、他のリスクとの相互作用が十分に考慮されていない可能性がある。",
+      "3 –疾病の発生を含む緊急事態や災害は、想定される影響とともに考慮されているが、これらの影響は完全にはモデル化されていない。",
+      "2 –疾病の発生を含む緊急事態や災害も考慮されるが、高いレベルにとどまる。",
+      "1 –疾病の発生のリスクが問題として指摘されても、その影響や必要な対応策が積極的に検討されないことがある。",
+      "0 –パンデミックを全く考慮していない",
+    ]
+  ),
+];

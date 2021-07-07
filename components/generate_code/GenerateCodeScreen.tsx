@@ -13,8 +13,8 @@ export default function GenerateCodeScreen(props: SurveyProps) {
   const [open, setOpen] = useState(false);
   const [language, setLanguage] = useState("");
   const [items, setItems] = useState([
-    { label: "English", value: "eng" },
-    { label: "Japanese", value: "ja" },
+    { label: "🇺🇸 - English", value: "eng" },
+    { label: "🇯🇵 - 日本語", value: "ja" },
   ]);
 
   const [openSurvey, setOpenSurvey] = useState(false);
@@ -40,7 +40,7 @@ export default function GenerateCodeScreen(props: SurveyProps) {
         setOpen={setOpen}
         setValue={setLanguage}
         setItems={setItems}
-        placeholder="Select the survey's language"
+        placeholder="Survey language"
       />
 
       <DropDownPicker
@@ -50,7 +50,7 @@ export default function GenerateCodeScreen(props: SurveyProps) {
         setOpen={setOpenSurvey}
         setValue={setSurvey}
         setItems={setSurveyItems}
-        placeholder="Select the survey type"
+        placeholder="Survey Type"
       />
 
       <FAB
@@ -74,11 +74,12 @@ async function generateID(
   selectedLanguage: string,
   selectedSurvey: string
 ) {
-  var surveyData = await createSurvey(city);
+  var surveyData = await createSurvey(selectedLanguage, selectedSurvey, city);
 
   let id = surveyData?.id;
   if (id != null) {
     console.log("generated survey id " + id);
+    // setSurvey(selectedLanguage);
     console.log(
       "selected language " + selectedLanguage + " selected suvey: ",
       selectedSurvey

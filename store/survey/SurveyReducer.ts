@@ -14,6 +14,13 @@ export interface SurveyResponse {
   justification?: string;
 }
 
+export interface LanguageData {
+  // Language for rendering the survey
+  surveyLanguage: string;
+  // Language for rendering the UI
+  UILanguage: string;
+  surveyType: string;
+}
 // The data field for the state
 export interface AuthenticationData {
   // isOrganizer boolean value
@@ -30,12 +37,14 @@ interface State {
 export interface SurveyData {
   responses: SurveyResponse[];
   authentication: AuthenticationData;
+  language: LanguageData;
 }
 
 export interface SurveyProps {
   data: SurveyData;
   updateAnswer: (answer: SurveyResponse[]) => void;
   updateAuthentication: (authentication: AuthenticationData) => void;
+  updateLanguage: (language: LanguageData) => void;
 }
 
 // Create the example state slice
@@ -48,6 +57,11 @@ const surveySlice = createSlice({
         isOrganizer: false,
         surveyId: "",
         responseId: null,
+      },
+      languages: {
+        surveyLanguage: "eng",
+        UILanguage: "eng",
+        surveyType: "who",
       },
     },
   },
@@ -68,6 +82,14 @@ const surveySlice = createSlice({
         (state: State, action: SurveyAction) => {
           // @ts-ignore
           state.data.authentication = action.payload;
+          return state;
+        }
+      )
+      .addCase(
+        SurveyActionTypes.UPDATE_LANG_ACTION,
+        (state: State, action: SurveyAction) => {
+          // @ts-ignore
+          state.data.language = action.payload;
           return state;
         }
       );
@@ -102,6 +124,13 @@ function dispatchAuthenticationUpdate(
   });
 }
 
+function dispatchLanguageUpdate(
+  dispatch: Dispatch<SurveyAction>,
+  language: LanguageData
+) {
+  dispatch({ type: SurveyActionTypes.UPDATE_LANG_ACTION, payload: language });
+}
+
 export const mapDispatchToProps = (dispatch: Dispatch<SurveyAction>) => {
   return {
     updateAnswer: (answer: SurveyResponse[]) => {
@@ -109,6 +138,9 @@ export const mapDispatchToProps = (dispatch: Dispatch<SurveyAction>) => {
     },
     updateAuthentication: (authentication: AuthenticationData) => {
       dispatchAuthenticationUpdate(dispatch, authentication);
+    },
+    updateLanguage: (language: LanguageData) => {
+      dispatchLanguageUpdate(dispatch, language);
     },
     dispatch,
   };
