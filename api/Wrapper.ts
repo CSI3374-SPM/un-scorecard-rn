@@ -90,7 +90,7 @@ export const createSurvey = async (
     " city: ",
     cityName
   );
-  setUpSurvey(surveyLanguage);
+  //setUpSurvey(surveyLanguage);
   console.log("set survey language to: ", surveyLanguage);
   const data: CreateSurveyResponse = await request(
     {
