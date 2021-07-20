@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FAB, TextInput } from "react-native-paper";
 import { StyleSheet, useColorScheme, View } from "react-native";
-import { createSurvey } from "../../api/Wrapper";
+import { createSurveyV2 } from "../../api/WrapperV2";
 import { SurveyProps } from "../../store/survey/SurveyReducer";
 import { DarkTheme, DefaultTheme } from "../../constants/Colors";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -74,7 +74,8 @@ async function generateID(
   selectedLanguage: string,
   selectedSurvey: string
 ) {
-  var surveyData = await createSurvey(selectedLanguage, selectedSurvey, city);
+  var surveyData = await createSurveyV2(selectedLanguage, selectedSurvey, city);
+  console.log("survey data: ", surveyData);
 
   let id = surveyData?.id;
   if (id != null) {
