@@ -37,7 +37,6 @@ function OrganizerScreen(props: SurveyProps) {
   const [expanded, setExpanded] = React.useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(0);
-  const [language, setLanguage] = useState("eng");
 
   const requestResults = async () => {
     let resp = await fetchSurveyResults(props.data.authentication.surveyId);
@@ -51,9 +50,6 @@ function OrganizerScreen(props: SurveyProps) {
   ] = useState(null as SocketIOClient.Socket | null);
   const handlePress = () => setExpanded(!expanded);
 
-  useEffect(() => {
-    setLanguage();
-  });
   const requestCurrentQuestion = async () => {
     let surveyProgress = await getSurveyProgress(
       props.data.authentication.surveyId
@@ -220,7 +216,7 @@ function OrganizerScreen(props: SurveyProps) {
       >
         <FAB
           style={{ backgroundColor: theme.colors.exit }}
-          icon="exit-to-app"
+          icon="close"
           onPress={() => {
             props.updateAuthentication({
               isOrganizer: false,
