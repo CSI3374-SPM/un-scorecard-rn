@@ -1,4 +1,4 @@
-import {makeQuestion, makeSurvey} from "./Survey";
+import { makeQuestion, makeSurvey } from "./Survey";
 //import list/map from wrapper
 
 export const questionsJ = [
@@ -28,4 +28,4 @@ export const questionsJ = [
   ),
 ];
 
-export const whoSurveyJ = makeSurvey(questionsJ, "Japanese", "WHO");
+export const whoSurveyJ = makeSurvey(questionsJ);

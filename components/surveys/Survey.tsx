@@ -31,7 +31,7 @@ export const generateWHOSurvey = (surveyLanguage: string): Survey => {
   return makeSurvey(englishQuestions);
 };
 
-const makeSurvey = (q: Question[]): Survey => {
+export const makeSurvey = (q: Question[]): Survey => {
   return {
     questions: q,
   };

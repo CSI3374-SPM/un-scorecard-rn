@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FAB, TextInput } from "react-native-paper";
+import { FAB, TextInput, Title } from "react-native-paper";
 import { CheckBox, StyleSheet, useColorScheme, View } from "react-native";
 import { fetchSurveyResults } from "../../api/Wrapper";
 import { connect } from "react-redux";
@@ -19,7 +19,7 @@ function UserCategories(props: SurveyProps) {
 
   return (
     <View style={styles.container}>
-      <Text>Please select what best describes you</Text>
+      <Title>Please select what best describes you</Title>
       <Checkbox
         status={checked ? "checked" : "unchecked"}
         onPress={() => setChecked(!checked)}
