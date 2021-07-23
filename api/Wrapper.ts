@@ -7,7 +7,9 @@ import surveySlice, {
   SurveyResponse,
 } from "../store/survey/SurveyReducer";
 import io from "socket.io-client";
+import { whoSurveyE } from "../components/surveys/Survey";
 import { usdaSurvey } from "../components/surveys/USDASurvey";
+import { newSurvey } from "../components/surveys/SurveyGenerator";
 import { useEffect, useState } from "react"; //May need to still pass in Question and Survey
 
 // const apiUrl = process.env.API_URL;
@@ -22,10 +24,11 @@ const api = axios.create({
 function setUpSurvey(surveyLanguage: string) {
   const [language, setLanguage] = useState("eng");
   setLanguage(surveyLanguage);
-  //let survey = newSurvey(language, "who");
+  let survey = newSurvey(language, "who");
 }
 
 const survey = usdaSurvey;
+//const survey = whoSurveyE;
 
 // @ts-ignore
 export const questions = survey.questions;
