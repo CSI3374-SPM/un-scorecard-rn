@@ -7,7 +7,7 @@ import surveySlice, {
   SurveyResponse,
 } from "../store/survey/SurveyReducer";
 import io from "socket.io-client";
-import { whoSurveyE } from "../components/surveys/Survey";
+//import { whoSurveyE } from "../components/surveys/Survey";
 import { usdaSurvey } from "../components/surveys/USDASurvey";
 import { newSurvey } from "../components/surveys/SurveyGenerator";
 import { useEffect, useState } from "react"; //May need to still pass in Question and Survey
@@ -27,8 +27,9 @@ function setUpSurvey(surveyLanguage: string) {
   let survey = newSurvey(language, "who");
 }
 
-const survey = usdaSurvey;
+//const survey = usdaSurvey;
 //const survey = whoSurveyE;
+const survey = newSurvey("eng", "usda");
 
 // @ts-ignore
 export const questions = survey.questions;

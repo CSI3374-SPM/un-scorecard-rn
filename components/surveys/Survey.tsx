@@ -17,10 +17,10 @@ export const makeQuestion = (q: string, j: string, d: string[]): Question => {
 
 export type Survey = {
   questions: Question[];
-  language: string;
-  surveyType: string;
+  //language: string;
+  //surveyType: string;
 };
-
+/*
 export const makeSurvey = (q: Question[], l: string, s: string): Survey => {
   return {
     questions: q,
@@ -28,6 +28,76 @@ export const makeSurvey = (q: Question[], l: string, s: string): Survey => {
     surveyType: s,
   };
 };
+*/
+
+export const makeSurvey = (q: Question[]): Survey => {
+  return {
+    questions: q,
+  };
+};
+
+export const generateWHOSurvey = (surveyLanguage: string): Survey => {
+  console.log("Survey language in Survey component: ", surveyLanguage);
+
+  if (surveyLanguage == "eng") {
+    return makeSurvey(demoQuestions);
+  } else if (surveyLanguage == "ja") {
+    console.log("Entered japanese making statement");
+    return makeSurvey(englishQuestions);
+  }
+  return makeSurvey(englishQuestions);
+};
+
+const demoQuestions = [
+  makeQuestion(
+    "A1.1 To what extent does/do the governance mechanism(s) for disaster risk management integrate the full breadth of public health considerations?",
+    "Option: please provide justification for answer A1.1",
+    [
+      "5 - The full spectrum of public health functions routinely provide input to the city's disaster resilience governance mechanism/meetings, and routinely contribute to all major disaster resilience programs and documents. (Participation may be through a nominated focal point combining input from many disciplines). ",
+      "4 - Representatives of most public health functions usually attend major city disaster resilience meetings and contribute to major programs, but they may not be involved in all relevant activity. ",
+      "3 - Public health functions have their own disaster resilience fora and mechanisms but, while including the full spectrum of functions, these are not thoroughly coordinated with other actors such as city governments, logistics operators or community groups. The focus may be narrowly on immediate event response, rather than broader resilience issues such as longer run impacts.",
+      "2 - Some public health disciplines are involved in some city disaster resilience activities, but there is not complete engagement.",
+      "1 - Only rudimentary engagement of public health disciplines in city disaster resilience activities exists. ",
+      "0 - There is no public health function in the region, or if there is, it is not engaged in disaster resilience at all.",
+    ]
+  ),
+  makeQuestion(
+    "A2.1 To what extent are emergencies and disasters including disease outbreaks are included in disaster risk planning? ",
+    "Option: please provide justification for answer A2.1",
+    [
+      '5 - Emergencies and disasters including disease outbreaks are fully included by the city either as a risk scenario in their own right, or as a component of a "composite" scenario. The likely impact on staff availability and on health facilities is modelled and planned for, both alone, and in combination with other risks where an epidemic or pandemic may hinder ability to respond. ',
+      "4 - Emergencies and disasters including disease outbreaks are addressed as above, but they tend to be considered in isolation from other risks, and thus the interaction with other risks may not be fully addressed. ",
+      "3 - Emergencies and disasters including outbreaks are considered along with their likely impacts, but these impacts are not fully modelled. ",
+      "2 - Emergencies and disasters including outbreaks may be considered, but at a high level only.",
+      "1 - Risk of outbreaks may be noted as an issue, but without active consideration of the impacts or required responses. ",
+      "0 - No consideration of pandemics at all. ",
+    ]
+  ),
+  makeQuestion(
+    "A2.2 To what extent are public health impacts included in the city's scenario planning for other disaster risks? ",
+    "Option: please provide justification for answer A2.2",
+    [
+      "5 - A comprehensive set of disaster health issues is fully included in its disaster planning scenarios. The likely impact on staff availability, health facilities, water and sanitation, treatment and care is planned for and modelled, including immediate impact and for long-term physical and psychological health issues. ",
+      "4 - Disaster health issues are fully addressed as above, but they tend to be considered in isolation from other impacts, and thus the effect that they may have on disaster recovery is not fully assessed. ",
+      "3 - A number of disaster health issues are addressed, perhaps in detail, but there is not full coverage. Longer term issues physical and mental health issues are likely to be omitted. ",
+      "2 - Some immediate post-disaster health issues are considered and planned for, but in an outline treatment only. ",
+      "1 - Disaster health issues may be acknowledged, but without real planning for these. ",
+      "0 - No consideration of post-disaster health issues at all. ",
+    ]
+  ),
+  makeQuestion(
+    "A2.3 To what extent are pre-existing chronic health issues included in scenarios where disasters are likely to exacerbate these, or where they are likely to impede recovery? ",
+    "Option: please provide justification for answer A2.3",
+    [
+      "5 - Chronic health conditions are comprehensively reviewed and included in scenario definition and planning; OR no stresses are thought to apply. ",
+      "4 - Broadly, chronic health conditions are identified and included in scenario definition and planning. ",
+      "3 - Most applicable chronic health conditions are included in scenario definition or planning, with some gaps. ",
+      "2 - Chronic health conditions are known but not included in scenario definition and planning. ",
+      "1 - Major gaps exist in identification and inclusion of chronic health stresses.",
+      "0 - No attempt to identify or consider chronic health conditions.",
+    ]
+  ),
+];
 
 export const englishQuestions = [
   makeQuestion(
@@ -308,4 +378,4 @@ export const englishQuestions = [
   ),
 ];
 
-export const whoSurveyE = makeSurvey(englishQuestions, "English", "WHO");
+//export const whoSurveyE = makeSurvey(englishQuestions, "English", "WHO");

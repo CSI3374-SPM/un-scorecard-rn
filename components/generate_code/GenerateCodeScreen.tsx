@@ -14,14 +14,14 @@ export default function GenerateCodeScreen(props: SurveyProps) {
   const [language, setLanguage] = useState("");
   const [items, setItems] = useState([
     { label: "🇺🇸 - English", value: "eng" },
-    { label: "🇯🇵 - 日本語", value: "ja" },
+    //{ label: "🇯🇵 - 日本語", value: "ja" },
   ]);
 
   const [openSurvey, setOpenSurvey] = useState(false);
   const [survey, setSurvey] = useState("");
   const [surveyItems, setSurveyItems] = useState([
-    { label: "WHO", value: "who" },
-    { label: "USAID", value: "usaid" },
+    //{ label: "WHO", value: "who" },
+    { label: "USDA", value: "usda" },
   ]);
 
   // @ts-ignore
