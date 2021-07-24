@@ -255,4 +255,9 @@ const usdaQuestions = [
   ),
 ];
 
-export const usdaSurvey = makeSurvey(usdaQuestions, "English", "WHO"); //In order to get code to temporarily work. Fix this later.
+export const generateUSDASurvey = (): Survey => {
+  return makeSurvey(usdaQuestions);
+};
+
+//export const usdaSurvey = makeSurvey(usdaQuestions, "English", "WHO"); //In order to get code to temporarily work. Fix this later.
+export const usdaSurvey = makeSurvey(usdaQuestions);
