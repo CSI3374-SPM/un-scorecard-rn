@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FAB, TextInput } from "react-native-paper";
 import { StyleSheet, useColorScheme, View } from "react-native";
-import { fetchSurveyResults } from "../../api/Wrapper";
+import { getQuestions } from "../../api/WrapperV2";
 import { connect } from "react-redux";
 import _ from "lodash";
 import {
@@ -42,10 +42,10 @@ function JoinScreen(props: SurveyProps) {
 }
 
 async function validateId(id: string, props: SurveyProps) {
-  let surveyResults = await fetchSurveyResults(id);
+  let questions = await getQuestions(id);
 
-  if (!_.isNull(surveyResults)) {
-    return <UserCategories />;
+  if (!_.isNull(questions)) {
+    console.log(questions);
     /*
     props.updateAuthentication({
       isOrganizer: false,

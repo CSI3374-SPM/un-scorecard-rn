@@ -2,7 +2,12 @@ import Constants from "expo-constants";
 const { manifest } = Constants;
 import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
-
+import Question from "../components/question/QuestionRedux";
+export type Question = {
+  number: number;
+  text: string;
+  category: string;
+};
 // const apiUrl = process.env.API_URL;
 export const apiUrl =
   typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
@@ -72,6 +77,41 @@ export const createSurveyV2 = async (
   );
   if (!_.isNull(data)) {
     return data;
+  }
+  return null;
+};
+
+export const getQuestions = async (
+  surveyID: string,
+  onFail: (e: any) => void = console.log
+) => {
+  const data = await request(
+    {
+      method: "GET",
+      url: "/api/get/questions",
+      params: {
+        survey_id: surveyID,
+      },
+    },
+    onFail
+  );
+
+  if (!_.isNull(data)) {
+    console.log("Data from fetch survey: ", data);
+    const questions = data.map((questionData: any[]) => {
+      const question: Question = {
+        number: questionData[0],
+        text: questionData[1],
+        category: questionData[2],
+      };
+      return question;
+    });
+    console.log("question 1 number: ", questions[0].number);
+    console.log("question 1 text: ", questions[0].text);
+    console.log("question 1 category: ", questions[0].category);
+    console.log("question 2 number: ", questions[1].number);
+    console.log("question 2 text: ", questions[1].text);
+    console.log("question 2 category: ", questions[1].category);
   }
   return null;
 };
