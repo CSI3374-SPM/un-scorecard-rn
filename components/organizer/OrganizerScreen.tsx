@@ -220,7 +220,7 @@ function OrganizerScreen(props: SurveyProps) {
       >
         <FAB
           style={{ backgroundColor: theme.colors.exit }}
-          icon="exit-to-app"
+          icon="close"
           onPress={() => {
             props.updateAuthentication({
               isOrganizer: false,
