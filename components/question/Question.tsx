@@ -92,7 +92,7 @@ export default function Question(props: SurveyProps) {
     if (loading) {
       return (
         <View style={styles.waiting}>
-          <Title style={styles.item}>Waiting for next question</Title>
+          <Title style={styles.item}>Waiting for moderator to reveal next question</Title>
           <ActivityIndicator size="large" />
         </View>
       );
@@ -100,7 +100,7 @@ export default function Question(props: SurveyProps) {
 
     return (
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "position" : "height"}
         style={styles.container}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

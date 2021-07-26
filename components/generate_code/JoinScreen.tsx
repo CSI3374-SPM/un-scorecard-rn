@@ -10,6 +10,7 @@ import {
   SurveyProps,
 } from "../../store/survey/SurveyReducer";
 import { DarkTheme, DefaultTheme } from "../../constants/Colors";
+import UserCategories from "./UserCategories";
 
 function JoinScreen(props: SurveyProps) {
   const [id, setID] = useState("");
@@ -22,6 +23,8 @@ function JoinScreen(props: SurveyProps) {
         label="Session code"
         value={id}
         onChangeText={(id) => setID(id)}
+        autoCorrect={false}
+        autoCapitalize='none'
       />
       <FAB
         icon=""
@@ -42,14 +45,16 @@ function JoinScreen(props: SurveyProps) {
 
 async function validateId(id: string, props: SurveyProps) {
   let surveyResults = await fetchSurveyResults(id);
-  console.log("Survey results ", !_.isNull(surveyResults));
 
   if (!_.isNull(surveyResults)) {
+    return <UserCategories />;
+    /*
     props.updateAuthentication({
       isOrganizer: false,
       surveyId: id,
       responseId: null,
     });
+    */
   } else {
     console.log("invalid id");
   }

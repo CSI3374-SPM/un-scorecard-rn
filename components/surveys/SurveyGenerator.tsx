@@ -1,4 +1,5 @@
 import { generateWHOSurvey, Survey } from "./Survey";
+import { generateUSDASurvey } from "./USDASurvey";
 
 export const newSurvey = (
   surveyLanguage: string,
@@ -6,6 +7,9 @@ export const newSurvey = (
 ): Survey => {
   if (surveyType == "who") {
     return generateWHOSurvey(surveyLanguage);
+  } else if(surveyType == "usda"){
+      return generateUSDASurvey();
+  } else{
+    return generateWHOSurvey("eng");
   }
-  return generateWHOSurvey("eng");
 };

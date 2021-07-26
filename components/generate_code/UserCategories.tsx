@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { FAB, TextInput } from "react-native-paper";
-import { StyleSheet, useColorScheme, View } from "react-native";
+import { FAB, TextInput, Title } from "react-native-paper";
+import { CheckBox, StyleSheet, useColorScheme, View } from "react-native";
 import { fetchSurveyResults } from "../../api/Wrapper";
 import { connect } from "react-redux";
 import _ from "lodash";
@@ -10,33 +10,19 @@ import {
   SurveyProps,
 } from "../../store/survey/SurveyReducer";
 import { DarkTheme, DefaultTheme } from "../../constants/Colors";
+import { Checkbox } from "react-native-paper";
 
-function ModerateExistingScreen(props: SurveyProps) {
-  const [id, setID] = useState("");
+function UserCategories(props: SurveyProps) {
+  const [checked, setChecked] = React.useState(false);
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
 
   return (
     <View style={styles.container}>
-      <TextInput
-        label="Session code"
-        value={id}
-        onChangeText={(id) => setID(id)}
-        autoCorrect={false}
-        autoCapitalize='none'
-      />
-      <FAB
-        icon=""
-        label="Go to survey"
-        style={{
-          backgroundColor: theme.colors.primary,
-          width: "55%",
-          alignSelf: "center",
-        }}
-        onPress={async () => {
-          await validateId(id, props);
-          setID("");
-        }}
+      <Title>Please select what best describes you</Title>
+      <Checkbox
+        status={checked ? "checked" : "unchecked"}
+        onPress={() => setChecked(!checked)}
       />
     </View>
   );
@@ -44,11 +30,11 @@ function ModerateExistingScreen(props: SurveyProps) {
 
 async function validateId(id: string, props: SurveyProps) {
   let surveyResults = await fetchSurveyResults(id);
-  console.log("Survey results ", surveyResults);
+  console.log("Survey results ", !_.isNull(surveyResults));
 
   if (!_.isNull(surveyResults)) {
     props.updateAuthentication({
-      isOrganizer: true,
+      isOrganizer: false,
       surveyId: id,
       responseId: null,
     });
@@ -57,10 +43,7 @@ async function validateId(id: string, props: SurveyProps) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ModerateExistingScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(UserCategories);
 
 const styles = StyleSheet.create({
   container: {
