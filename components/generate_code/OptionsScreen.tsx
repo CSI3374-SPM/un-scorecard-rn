@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, FAB, Title } from "react-native-paper";
 import { StyleSheet, useColorScheme, View, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -18,7 +18,11 @@ export default function OptionsScreen() {
     { label: "🇺🇸 - English", value: "eng" },
     //{ label: "🇯🇵 - 日本語", value: "ja" },
   ]);
-
+  useEffect(() => {
+    navigation.setOptions({
+      title: "Survey Tool",
+    });
+  });
   return (
     <View style={styles.container}>
       <View style={styles.organizerArea}>
