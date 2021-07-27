@@ -80,11 +80,6 @@ async function generateID(
   let id = surveyData?.id;
   if (id != null) {
     console.log("generated survey id " + id);
-    // setSurvey(selectedLanguage);
-    console.log(
-      "selected language " + selectedLanguage + " selected suvey: ",
-      selectedSurvey
-    );
 
     props.updateAuthentication({
       isOrganizer: true,
