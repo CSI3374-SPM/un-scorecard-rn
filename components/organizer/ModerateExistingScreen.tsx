@@ -21,9 +21,9 @@ function ModerateExistingScreen(props: SurveyProps) {
       <TextInput
         label="Session code"
         value={id}
-        onChangeText={(id) => setID(id)}
+        onChangeText={(id) => setID(id.trim())}
         autoCorrect={false}
-        autoCapitalize='none'
+        autoCapitalize="none"
       />
       <FAB
         icon=""

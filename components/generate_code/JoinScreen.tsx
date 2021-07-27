@@ -22,7 +22,7 @@ function JoinScreen(props: SurveyProps) {
       <TextInput
         label="Session code"
         value={id}
-        onChangeText={(id) => setID(id)}
+        onChangeText={(id) => setID(id.trim())}
         autoCorrect={false}
         autoCapitalize="none"
       />
