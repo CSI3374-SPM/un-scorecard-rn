@@ -28,11 +28,6 @@ import {
 import _ from "lodash";
 import { SurveyProps } from "../../store/survey/SurveyReducer";
 import FinishButton from "../log_out/FinishButton";
-import { useFocusEffect } from "@react-navigation/native";
-//import { Simulate } from "react-dom/test-utils";
-//import progress = Simulate.progress;
-//import { Simulate } from "react-dom/test-utils";
-//import load = Simulate.load;
 
 export const rating = (n: number) => 5 - n;
 
@@ -92,7 +87,9 @@ export default function Question(props: SurveyProps) {
     if (loading) {
       return (
         <View style={styles.waiting}>
-          <Title style={styles.item}>Waiting for moderator to reveal next question</Title>
+          <Title style={styles.item}>
+            Waiting for moderator to reveal next question
+          </Title>
           <ActivityIndicator size="large" />
         </View>
       );
@@ -100,11 +97,12 @@ export default function Question(props: SurveyProps) {
 
     return (
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "position" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
+        keyboardVerticalOffset={200}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.container}>
+          <>
             <ScrollView>
               <Title style={styles.item}>{questions[index].question}</Title>
               <RadioButton.Group
@@ -176,7 +174,7 @@ export default function Question(props: SurveyProps) {
             >
               Submit Answer
             </Button>
-          </View>
+          </>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     );
@@ -217,7 +215,6 @@ export default function Question(props: SurveyProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
     flexGrow: 1,
     padding: 12,
   },

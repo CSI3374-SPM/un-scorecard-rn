@@ -24,7 +24,7 @@ function JoinScreen(props: SurveyProps) {
         value={id}
         onChangeText={(id) => setID(id)}
         autoCorrect={false}
-        autoCapitalize='none'
+        autoCapitalize="none"
       />
       <FAB
         icon=""
@@ -47,14 +47,11 @@ async function validateId(id: string, props: SurveyProps) {
   let surveyResults = await fetchSurveyResults(id);
 
   if (!_.isNull(surveyResults)) {
-    return <UserCategories />;
-    /*
     props.updateAuthentication({
       isOrganizer: false,
       surveyId: id,
       responseId: null,
     });
-    */
   } else {
     console.log("invalid id");
   }
