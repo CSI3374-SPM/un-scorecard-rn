@@ -146,6 +146,7 @@ export const fetchSurveyResults = async (
           const question = questions.find(
             (question) => question.question === key
           );
+
           if (_.isUndefined(question)) {
             return null;
           }
@@ -153,9 +154,10 @@ export const fetchSurveyResults = async (
           // Get the question string (e.g. 'A.1.1') and find the
           // corresponding justification key in the raw results
           let qNum = question.question.split(" ")[0];
+          console.log("VERY IMPORTANT qnum: ", qNum);
           const justificationKey = Object.keys(rawResults).find(
             (justification) =>
-              justification.startsWith("Option:") &&
+              justification.startsWith("Optional:") &&
               justification.endsWith(qNum)
           );
           if (_.isUndefined(justificationKey)) {
@@ -202,7 +204,7 @@ export const fetchSurveyResultsStream = (
   });
 
   socket.on("survey_responses_updated", (rawData: any) => {
-    //console.log("results updated");
+    console.log("results updated");
     //console.log(rawData);
     if (!_.isNull(rawData)) {
       const rawResponses: any[] = rawData.Data;

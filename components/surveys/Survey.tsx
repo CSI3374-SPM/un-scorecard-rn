@@ -53,7 +53,7 @@ export const generateWHOSurvey = (surveyLanguage: string): Survey => {
 export const usdaQuestions = [
   makeQuestion(
     "A1.1 To what extent does/do the governance mechanism(s) for disaster risk management integrate the full breadth of food availability and access needs?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for answer A1.1",
     [
       "5 – The full spectrum of food availability and access functions routinely provide input to disaster resilience governance mechanism/meetings, and routinely contribute to all major disaster resilience programs and documents. (Participation may be through a nominated focal point combining input from many disciplines).",
       "4 – Representatives of most food sector functions usually attend major city disaster resilience meetings and contribute to major programs, but they may not be involved in all relevant activity.",
@@ -65,7 +65,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A1.2 To what extent did the governance mechanism(s) for disaster risk management integrate the emergency meals-to-you program during the COVID-19 response?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for answer A1.2",
     [
       "5 – The full spectrum of emergency meals-to-you program functions were engaged in relevant COVID-19 meetings, and routinely contributed to broader pandemic response and recovery programs and documents. (Participation may be through a nominated focal point combining input from many disciplines).",
       "4 – Representatives of emergency meals-to-you program usually attended major local COVID-19 meetings and but were not involved in all relevant activities.",
@@ -77,7 +77,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A2.1 To what extent is food availability and access included in disaster risk planning for disease outbreaks, pandemics, water shortages and other events?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for answer A2.1",
     [
       "5 – Food availability and access emergencies are fully included as a risk scenario in their own right, or as a component of a “composite” scenario. The likely impact on staff availability and food supply is modelled and planned for, both alone, and in combination with other risks where an epidemic or pandemic may hinder ability to respond.",
       "4 – Food availability and access barriers are addressed as above, but they tend to be considered in isolation from other risks, and thus the interaction with other risks may not be fully addressed.",
@@ -89,7 +89,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A2.2 To what extent is food supply chain and logistical impacts included in scenario planning for disasters such as a flood, hurricane, tornado, or earthquake?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for answer A2.2",
     [
       "5 – A comprehensive set of food supply chain and logistical impacts fully included in disaster planning scenarios. The likely impact on staff availability, food facilities, water and sanitation, treatment and care are planned for and modelled.",
       "4 – Food supply chain and logistical impacts are fully addressed as above, but they tend to be considered in isolation from other impacts, and thus the effect that they may have on disaster recovery is not fully assessed.",
@@ -101,7 +101,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A2.3 To what extent are pre-existing chronic health issues and nutritional needs included in disaster scenarios where food availability and access are likely to impede recovery?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for answer A2.3",
     [
       "5 – Disaster planning for food access and availability comprehensively reviewed and included pre-existing chronic health issues such as obesity and other childhood maladies, and nutritional needs.",
       "4 – Broadly, pre-existing chronic health issues, obesity and other childhood maladies, and nutritional needs are identified and included in food availability and access disaster planning.",
@@ -113,7 +113,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A3.1 To what extent is emergency and regular funding identified and available to address food availability and access risks and impacts of disasters?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for answer A3.1",
     [
       "5 – Funding (emergency and regular) is identified and accessible to address all known food availability and access implications.",
       "4 – Funding (emergency and regular) is identified and accessible to address all known food availability and access implications from the most probable scenario.",
@@ -125,7 +125,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A4.1 To what extent are key food sector facilities located and built in a manner that will allow them to continue to be operational after a disaster?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for answer A4.1",
     [
       "5 – All key food sector facilities are in locations and conform to codes that will allow them to survive in the “most severe” disaster scenario.",
       "4 – All key food sector facilities are in locations and conform to codes that will allow them to survive in the “most probable” disaster scenario.",
@@ -137,7 +137,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A5.1 To what extent are ecosystem services that provide food availability and access benefits identified and protected?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for answer A5.1",
     [
       "5 – All food sector relevant ecosystem services are identified, protected and known to be thriving.",
       "4 – All food relevant ecosystem services are identified and in theory protected but may not be thriving.",
@@ -149,7 +149,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A6.1 To what extent are the relevant food sector workforce, competencies and skills required to maintain food  access available to the city?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for answer A6.1",
     [
       "5 – All relevant food sector workforce competencies and skills identified and assessed to be adequate for disaster planning, service delivery and post disaster recovery, both in terms of skill depth and numbers.",
       "4 – All relevant food sector skills identified, and some minor shortfalls known to exist in certain skillsets or numbers thereof.",

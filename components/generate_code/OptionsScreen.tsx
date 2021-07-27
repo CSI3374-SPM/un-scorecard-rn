@@ -96,7 +96,7 @@ export default function OptionsScreen() {
 
           <FAB
             icon="account-arrow-right"
-            label="Moderate Survey"
+            label="Existing Survey"
             color={theme.colors.surface}
             style={{ backgroundColor: theme.colors.primary, width: "55%" }}
             onPress={() => navigation.navigate("ModerateExisting")}

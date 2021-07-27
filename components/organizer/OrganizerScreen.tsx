@@ -40,6 +40,7 @@ function OrganizerScreen(props: SurveyProps) {
 
   const requestResults = async () => {
     let resp = await fetchSurveyResults(props.data.authentication.surveyId);
+    console.log("");
     setResults(resp);
     console.log("results ", resp);
   };
@@ -79,6 +80,7 @@ function OrganizerScreen(props: SurveyProps) {
       requestCurrentQuestion();
     } else if (!_.isNull(socket)) {
       closeResultsSocket(socket);
+
       setSocket(null);
     }
     return () => {
@@ -103,7 +105,7 @@ function OrganizerScreen(props: SurveyProps) {
       setAnswers(0);
     } else {
       setAnswers(currentResponses(results, currentQuestion - 1, 0));
-      console.log("result ansers: ", answers);
+      console.log("result answers: ", answers);
     }
   }, [results, currentQuestion - 1]);
 
