@@ -16,7 +16,7 @@ export default function OptionsScreen() {
   const [language, setLanguage] = useState("");
   const [items, setItems] = useState([
     { label: "🇺🇸 - English", value: "eng" },
-    { label: "🇯🇵 - 日本語", value: "ja" },
+    //{ label: "🇯🇵 - 日本語", value: "ja" },
   ]);
 
   return (
@@ -56,20 +56,10 @@ export default function OptionsScreen() {
               popover={
                 <View>
                   <Text>
-                    Moderators are able to control surveys for users and view
-                    data as they are completed.
-                  </Text>
-                  <Text></Text>
-                  <Text></Text>
-                  <Text>
-                    "New Survey" generates a new session code for a survey that
-                    can be distributed to users requested to take the survey.
-                  </Text>
-                  <Text></Text>
-                  <Text></Text>
-                  <Text>
-                    "Moderate Survey" allows a moderator to control and view an
-                    existing survey with a previously generated session code.
+                    Moderators are able to create and administer surveys. "New Survey" creates a new
+                    survey and generates a unique survey ID to be shared with users to allow them to
+                    access the survey. "Existing Survey" allows a moderator to continue to
+                    administer a survey that has already previously been created.
                   </Text>
                 </View>
               }
@@ -125,12 +115,10 @@ export default function OptionsScreen() {
               width={300}
               popover={
                 <View>
-                  <Text>Users are able to take a survey.</Text>
-                  <Text></Text>
-                  <Text></Text>
                   <Text>
-                    "Take Survey" requires a session code that is given to the
-                    moderator.
+                    Users are able to complete surveys. "Take Survey" allows users to join a survey
+                    that was created by a moderator. A user will need the unique survey ID provided
+                    to them by their moderator.
                   </Text>
                 </View>
               }
@@ -154,18 +142,6 @@ export default function OptionsScreen() {
             onPress={() => navigation.navigate("Join")}
           />
         </View>
-      </View>
-
-      <View style={styles.quickStartArea}>
-        <Button
-          style={{ marginBottom: 40 }}
-          // @ts-ignore
-          onPress={() => navigation.navigate("QuickStart")}
-        >
-          <Text style={{ fontSize: 17, color: "#3498db" }}>
-            Quick Start Guide
-          </Text>
-        </Button>
       </View>
     </View>
   );
