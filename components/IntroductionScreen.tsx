@@ -69,6 +69,9 @@ export default function IntroductionScreen() {
       <Text>
         Peiyang Chang - Baylor University
       </Text>
+      <Text>
+        Josh McKone - Baylor University
+      </Text>
     </View>
   </View>
   );
