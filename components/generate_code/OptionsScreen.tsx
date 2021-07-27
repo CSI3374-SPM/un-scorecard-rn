@@ -56,10 +56,21 @@ export default function OptionsScreen() {
               popover={
                 <View>
                   <Text>
-                    Moderators are able to create and administer surveys. "New Survey" creates a new
-                    survey and generates a unique survey ID to be shared with users to allow them to
-                    access the survey. "Existing Survey" allows a moderator to continue to
-                    administer a survey that has already previously been created.
+                    Moderators are able to create and administer surveys.
+                  </Text>
+                  <Text></Text>
+                  <Text></Text>
+                  <Text>
+                    "New Survey" creates a new survey and generates a unique
+                    survey ID to be shared with users to allow them to access
+                    the survey.
+                  </Text>
+                  <Text></Text>
+                  <Text></Text>
+                  <Text>
+                    "Existing Survey" allows a moderator to continue to
+                    administer a survey that has already previously been
+                    created.
                   </Text>
                 </View>
               }
@@ -115,10 +126,12 @@ export default function OptionsScreen() {
               width={300}
               popover={
                 <View>
+                  <Text>Users are able to take a survey.</Text>
+                  <Text></Text>
+                  <Text></Text>
                   <Text>
-                    Users are able to complete surveys. "Take Survey" allows users to join a survey
-                    that was created by a moderator. A user will need the unique survey ID provided
-                    to them by their moderator.
+                    "Take Survey" requires a session code that is given to the
+                    moderator.
                   </Text>
                 </View>
               }

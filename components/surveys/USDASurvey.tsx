@@ -1,6 +1,6 @@
 import { Question, makeQuestion, Survey, makeSurvey } from "./Survey";
 
-const usdaQuestions = [
+export const usdaQuestions = [
   makeQuestion(
     "A1.1 To what extent does/do the governance mechanism(s) for disaster risk management integrate the full breadth of food availability and access needs?",
     "Optional: Please provide justification",

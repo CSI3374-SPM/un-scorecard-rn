@@ -7,9 +7,10 @@ export const newSurvey = (
 ): Survey => {
   if (surveyType == "who") {
     return generateWHOSurvey(surveyLanguage);
-  } else if(surveyType == "usda"){
-      return generateUSDASurvey();
-  } else{
+  } else if (surveyType == "usda") {
+    console.log("Generating USDA Survey");
+    return generateUSDASurvey();
+  } else {
     return generateWHOSurvey("eng");
   }
 };
