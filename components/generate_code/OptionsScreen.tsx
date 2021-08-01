@@ -100,7 +100,7 @@ export default function OptionsScreen() {
 
           <FAB
             icon="account-arrow-right"
-            label="Moderate Survey"
+            label="Existing Survey"
             color={theme.colors.surface}
             style={{ backgroundColor: theme.colors.primary, width: "55%" }}
             onPress={() => navigation.navigate("ModerateExisting")}
@@ -134,7 +134,7 @@ export default function OptionsScreen() {
                   <Text></Text>
                   <Text></Text>
                   <Text>
-                    "Take Survey" requires a session code that is given to the
+                    "Take Survey" requires a session code that is given by the
                     moderator.
                   </Text>
                 </View>
