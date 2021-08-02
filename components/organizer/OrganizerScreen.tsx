@@ -40,6 +40,7 @@ function OrganizerScreen(props: SurveyProps) {
 
   const requestResults = async () => {
     let resp = await fetchSurveyResults(props.data.authentication.surveyId);
+
     console.log("");
     setResults(resp);
     console.log("results ", resp);

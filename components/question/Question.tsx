@@ -151,6 +151,7 @@ export default function Question(props: SurveyProps) {
                       ...props.data.authentication,
                       responseId: newResponseId,
                     };
+
                     props.updateAuthentication(auth);
                   } else {
                     console.log("Failed to submit response");

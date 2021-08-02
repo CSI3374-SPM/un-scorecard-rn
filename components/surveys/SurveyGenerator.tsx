@@ -1,5 +1,5 @@
 import { generateWHOSurvey, Survey } from "./Survey";
-import { generateUSDASurvey } from "./USDASurvey";
+import { generateUSDASurvey } from "./Survey";
 
 export const newSurvey = (
   surveyLanguage: string,

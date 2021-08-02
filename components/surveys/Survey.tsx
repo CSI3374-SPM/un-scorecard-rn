@@ -53,7 +53,7 @@ export const generateWHOSurvey = (surveyLanguage: string): Survey => {
 export const usdaQuestions = [
   makeQuestion(
     "A1.1 To what extent does/do the governance mechanism(s) for disaster risk management integrate the full breadth of food availability and access needs?",
-    "Optional: Please provide justification for answer A1.1",
+    "Optional: Please provide justification for question A1.1",
     [
       "5 – The full spectrum of food availability and access functions routinely provide input to disaster resilience governance mechanism/meetings, and routinely contribute to all major disaster resilience programs and documents. (Participation may be through a nominated focal point combining input from many disciplines).",
       "4 – Representatives of most food sector functions usually attend major city disaster resilience meetings and contribute to major programs, but they may not be involved in all relevant activity.",
@@ -65,7 +65,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A1.2 To what extent did the governance mechanism(s) for disaster risk management integrate the emergency meals-to-you program during the COVID-19 response?",
-    "Optional: Please provide justification for answer A1.2",
+    "Optional: Please provide justification for question A1.2",
     [
       "5 – The full spectrum of emergency meals-to-you program functions were engaged in relevant COVID-19 meetings, and routinely contributed to broader pandemic response and recovery programs and documents. (Participation may be through a nominated focal point combining input from many disciplines).",
       "4 – Representatives of emergency meals-to-you program usually attended major local COVID-19 meetings and but were not involved in all relevant activities.",
@@ -77,7 +77,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A2.1 To what extent is food availability and access included in disaster risk planning for disease outbreaks, pandemics, water shortages and other events?",
-    "Optional: Please provide justification for answer A2.1",
+    "Optional: Please provide justification for question A2.1",
     [
       "5 – Food availability and access emergencies are fully included as a risk scenario in their own right, or as a component of a “composite” scenario. The likely impact on staff availability and food supply is modelled and planned for, both alone, and in combination with other risks where an epidemic or pandemic may hinder ability to respond.",
       "4 – Food availability and access barriers are addressed as above, but they tend to be considered in isolation from other risks, and thus the interaction with other risks may not be fully addressed.",
@@ -89,7 +89,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A2.2 To what extent is food supply chain and logistical impacts included in scenario planning for disasters such as a flood, hurricane, tornado, or earthquake?",
-    "Optional: Please provide justification for answer A2.2",
+    "Optional: Please provide justification for question A2.2",
     [
       "5 – A comprehensive set of food supply chain and logistical impacts fully included in disaster planning scenarios. The likely impact on staff availability, food facilities, water and sanitation, treatment and care are planned for and modelled.",
       "4 – Food supply chain and logistical impacts are fully addressed as above, but they tend to be considered in isolation from other impacts, and thus the effect that they may have on disaster recovery is not fully assessed.",
@@ -101,7 +101,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A2.3 To what extent are pre-existing chronic health issues and nutritional needs included in disaster scenarios where food availability and access are likely to impede recovery?",
-    "Optional: Please provide justification for answer A2.3",
+    "Optional: Please provide justification for question A2.3",
     [
       "5 – Disaster planning for food access and availability comprehensively reviewed and included pre-existing chronic health issues such as obesity and other childhood maladies, and nutritional needs.",
       "4 – Broadly, pre-existing chronic health issues, obesity and other childhood maladies, and nutritional needs are identified and included in food availability and access disaster planning.",
@@ -113,7 +113,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A3.1 To what extent is emergency and regular funding identified and available to address food availability and access risks and impacts of disasters?",
-    "Optional: Please provide justification for answer A3.1",
+    "Optional: Please provide justification for question A3.1",
     [
       "5 – Funding (emergency and regular) is identified and accessible to address all known food availability and access implications.",
       "4 – Funding (emergency and regular) is identified and accessible to address all known food availability and access implications from the most probable scenario.",
@@ -125,7 +125,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A4.1 To what extent are key food sector facilities located and built in a manner that will allow them to continue to be operational after a disaster?",
-    "Optional: Please provide justification for answer A4.1",
+    "Optional: Please provide justification for question A4.1",
     [
       "5 – All key food sector facilities are in locations and conform to codes that will allow them to survive in the “most severe” disaster scenario.",
       "4 – All key food sector facilities are in locations and conform to codes that will allow them to survive in the “most probable” disaster scenario.",
@@ -137,7 +137,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A5.1 To what extent are ecosystem services that provide food availability and access benefits identified and protected?",
-    "Optional: Please provide justification for answer A5.1",
+    "Option: Please provide justification for answer A5.1",
     [
       "5 – All food sector relevant ecosystem services are identified, protected and known to be thriving.",
       "4 – All food relevant ecosystem services are identified and in theory protected but may not be thriving.",
@@ -161,7 +161,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A6.2 To what extent are food availability and access data on vulnerabilities and capacities shared with other stakeholders who need it?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for question A6.2",
     [
       "5 – Relevant food availability and access data items are identified; quality data is reliably distributed to all stakeholders who need it, including the public as applicable.",
       "4 – All key food availability and access data items and feeds identified, and quality data is reliably distributed to most stakeholders, including the public as applicable.",
@@ -173,7 +173,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A7.1 To what extent do communities understand and are able to fulfill their roles in maintaining food availability and access before, during and after a disaster?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for question A7.1",
     [
       "5 – Each community or neighborhood understands, accepts and is able to execute the role expected of it before, during and after a disaster, with a designated organization to lead this food availability and access related work.",
       "4 – 90% of communities understand, accept and are able to execute the role expected of them.",
@@ -185,7 +185,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A7.1.2 To what extent did communities receive and act upon the emergency meals-to-you program?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for question A7.1.2",
     [
       "5 – The Emergency Meals-to-You program was universally received, accepted and acted upon.",
       "4 – The Emergency Meals-to-You program was broadly received, accepted and acted upon.",
@@ -197,7 +197,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A7.2 To what extent could the communities’ food availability and access needs be addressed by the Emergency Meals-to-You program?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for question A7.2",
     [
       "5 – Community organization(s) and schools are equipped to support the delivering and implementation of the Emergency Meals-to-You program.",
       "4 – >75% of neighborhoods could be covered. Community support groups and schools available.",
@@ -209,7 +209,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A8.1 To what extent is food availability and access infrastructure resilient?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for question A8.1",
     [
       "5 – All food availability and access infrastructure – including the services on which it depends – is rated capable of dealing with “most severe” scenario with minimal loss of service.",
       "4– All food availability and access infrastructure – including the services on which it depends – is rated capable of dealing with “most probable” scenario with minimal loss of service.",
@@ -221,7 +221,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A8.2 To what extent are emergency systems able to handle a sudden demand in food availability and access?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for question A8.2",
     [
       "5 – Surge capacity exists to deal with additional food availability and access needs likely to arise from “most severe” scenario and is tested either via actual events or practice drills – can be activated within 6 hours.",
       "4 – Surge capacity exists to deal with additional food availability and access needs likely to arise from “most probable” scenario and is tested either via actual events or practice drills – can be activated within 6 hours.",
@@ -233,7 +233,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A8.3 To what extent can the required infrastructure be maintained to continue food service delivering at schools before, during and after a disaster?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for question A8.3",
     [
       "5 – Food service delivery to schools could be maintained at the school in “most severe” disaster scenario. If services need to be moved, transportation facilities and routes are known to have required capacity and resilience.",
       "4 – Food service delivery could be maintained at the school in “most probable” disaster scenario. If services need to be moved, transportation facilities and routes are known to have required capacity and resilience.",
@@ -308,7 +308,7 @@ export const usdaQuestions = [
 const demoQuestions = [
   makeQuestion(
     "A1.1 To what extent does/do the governance mechanism(s) for disaster risk management integrate the full breadth of public health considerations?",
-    "Option: please provide justification for answer A1.1",
+    "Optional: please provide justification for answer A1.1",
     [
       "5 - The full spectrum of public health functions routinely provide input to the city's disaster resilience governance mechanism/meetings, and routinely contribute to all major disaster resilience programs and documents. (Participation may be through a nominated focal point combining input from many disciplines). ",
       "4 - Representatives of most public health functions usually attend major city disaster resilience meetings and contribute to major programs, but they may not be involved in all relevant activity. ",
@@ -320,7 +320,7 @@ const demoQuestions = [
   ),
   makeQuestion(
     "A2.1 To what extent are emergencies and disasters including disease outbreaks are included in disaster risk planning? ",
-    "Option: please provide justification for answer A2.1",
+    "Optional: please provide justification for answer A2.1",
     [
       '5 - Emergencies and disasters including disease outbreaks are fully included by the city either as a risk scenario in their own right, or as a component of a "composite" scenario. The likely impact on staff availability and on health facilities is modelled and planned for, both alone, and in combination with other risks where an epidemic or pandemic may hinder ability to respond. ',
       "4 - Emergencies and disasters including disease outbreaks are addressed as above, but they tend to be considered in isolation from other risks, and thus the interaction with other risks may not be fully addressed. ",
@@ -332,7 +332,7 @@ const demoQuestions = [
   ),
   makeQuestion(
     "A2.2 To what extent are public health impacts included in the city's scenario planning for other disaster risks? ",
-    "Option: please provide justification for answer A2.2",
+    "Optional: please provide justification for answer A2.2",
     [
       "5 - A comprehensive set of disaster health issues is fully included in its disaster planning scenarios. The likely impact on staff availability, health facilities, water and sanitation, treatment and care is planned for and modelled, including immediate impact and for long-term physical and psychological health issues. ",
       "4 - Disaster health issues are fully addressed as above, but they tend to be considered in isolation from other impacts, and thus the effect that they may have on disaster recovery is not fully assessed. ",
@@ -344,7 +344,7 @@ const demoQuestions = [
   ),
   makeQuestion(
     "A2.3 To what extent are pre-existing chronic health issues included in scenarios where disasters are likely to exacerbate these, or where they are likely to impede recovery? ",
-    "Option: please provide justification for answer A2.3",
+    "Optional: please provide justification for answer A2.3",
     [
       "5 - Chronic health conditions are comprehensively reviewed and included in scenario definition and planning; OR no stresses are thought to apply. ",
       "4 - Broadly, chronic health conditions are identified and included in scenario definition and planning. ",
