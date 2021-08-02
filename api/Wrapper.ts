@@ -214,7 +214,6 @@ export const fetchSurveyResultsStream = (
           .map((key) => {
             //console.log("Raw results: ", rawResults);
             // Find the question with the right key in the questions
-            console.log("Key: ", key, " question ", questions[0].question);
             const question = questions.find(
               (question) => question.question === key
             );
