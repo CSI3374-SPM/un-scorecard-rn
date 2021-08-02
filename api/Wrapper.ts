@@ -8,7 +8,6 @@ import surveySlice, {
 } from "../store/survey/SurveyReducer";
 import io from "socket.io-client";
 //import { whoSurveyE } from "../components/surveys/Survey";
-import { usdaSurvey } from "../components/surveys/USDASurvey";
 import { newSurvey } from "../components/surveys/SurveyGenerator";
 import { useEffect, useState } from "react"; //May need to still pass in Question and Survey
 
@@ -19,13 +18,6 @@ const api = axios.create({
   baseURL: apiUrl,
 });
 //Add map or array list to store surveys
-//export list/map that is accessed from each survey
-
-function setUpSurvey(surveyLanguage: string) {
-  const [language, setLanguage] = useState("eng");
-  setLanguage(surveyLanguage);
-  let survey = newSurvey(language, "who");
-}
 
 //const survey = usdaSurvey;
 //const survey = whoSurveyE;
@@ -133,8 +125,9 @@ export const fetchSurveyResults = async (
     },
     onFail
   );
+  console.log("data returned: ", data);
   if (!_.isNull(data)) {
-    console.log("Data from fetch survey: ", data);
+    console.log("Data from results: ", data);
     const rawResponses: any[] = data.Data;
     if (data.status === "ERROR" || _.isUndefined(rawResponses)) return null;
 
@@ -142,6 +135,7 @@ export const fetchSurveyResults = async (
     const results = rawResponses.map((rawResults) => {
       return Object.keys(rawResults)
         .map((key) => {
+          console.log("KEY: ", key);
           // Find the question with the right key in the questions
           const question = questions.find(
             (question) => question.question === key
@@ -205,7 +199,6 @@ export const fetchSurveyResultsStream = (
 
   socket.on("survey_responses_updated", (rawData: any) => {
     console.log("results updated");
-    //console.log(rawData);
     if (!_.isNull(rawData)) {
       const rawResponses: any[] = rawData.Data;
       if (rawData.status === "ERROR" || _.isUndefined(rawResponses)) {
@@ -221,6 +214,7 @@ export const fetchSurveyResultsStream = (
           .map((key) => {
             //console.log("Raw results: ", rawResults);
             // Find the question with the right key in the questions
+            console.log("Key: ", key, " question ", questions[0].question);
             const question = questions.find(
               (question) => question.question === key
             );
@@ -233,7 +227,7 @@ export const fetchSurveyResultsStream = (
             let qNum = question.question.split(" ")[0];
             const justificationKey = Object.keys(rawResults).find(
               (justification) =>
-                justification.startsWith("Option:") &&
+                justification.startsWith("Optional:") &&
                 justification.endsWith(qNum)
             );
             if (_.isUndefined(justificationKey)) {
@@ -245,6 +239,7 @@ export const fetchSurveyResultsStream = (
             const score: number = parseInt(rawResults[key]);
 
             const index = questions.indexOf(question);
+
             const response: SurveyResponse = {
               questionIndex: index,
               score,
@@ -253,6 +248,7 @@ export const fetchSurveyResultsStream = (
                   ? undefined
                   : justification,
             };
+            console.log("Response on stream: ", response);
             return response;
           })
           .filter(
