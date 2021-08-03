@@ -137,7 +137,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A5.1 To what extent are ecosystem services that provide food availability and access benefits identified and protected?",
-    "Option: Please provide justification for answer A5.1",
+    "Optional: Please provide justification for answer A5.1",
     [
       "5 – All food sector relevant ecosystem services are identified, protected and known to be thriving.",
       "4 – All food relevant ecosystem services are identified and in theory protected but may not be thriving.",
@@ -245,7 +245,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A9.1 To what extent do early warning systems exist for impending food availability and access emergencies?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for question A9.1",
     [
       "5 – Comprehensive and effective monitoring exists and will deliver effective early warnings to address the impacts for all food availability and access hazards. They will allow time for reaction (as far as technology permits). Warnings are seen as reliable and specific to the city.",
       "4 – Comprehensive monitoring exists even if it is not fully effective in all cases. Warnings exist but warning time maybe less than technology currently permits. Warnings are seen as reliable and specific.",
@@ -257,7 +257,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A9.2 To what extent are food sector and professionals integrated with the emergency management team?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for question A9.2",
     [
       "5 – The food sector is fully represented and engaged on the emergency management team and integrated into all emergency decision taking. Engagement has been tested via drills (within the last year) or live response.",
       "4 – Food availability and access is integrated but via remote input (phone, messaging). Engagement has been tested, but maybe more than 12 months ago.",
@@ -269,7 +269,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A9.3 To what extent can supply items and equipment required to maintain food availability and access be provided during and after a disaster.",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for question A9.3",
     [
       "5 – A comprehensive list of required items exists, and tested plans are known to be adequate to deliver them rapidly to the entire population.",
       "4 – A list exists but it may not be comprehensive, and plans may not be tested or fully adequate for the entire city.",
@@ -281,7 +281,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A10.1 To what extent do comprehensive post event food availability and access plans exist?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for question A10.1",
     [
       "5 – Fully comprehensive plans exist addressing longer term food availability and access needs after “most probable” and “most severe” scenario.",
       "4 – Fully comprehensive plans exist addressing longer term food availability and access needs after “most probable” scenario.",
@@ -293,7 +293,7 @@ export const usdaQuestions = [
   ),
   makeQuestion(
     "A10.2 To what extent do formalized mechanisms to learn from performance of the food sector systems before, during and after disasters exist?",
-    "Optional: Please provide justification",
+    "Optional: Please provide justification for question A10.2",
     [
       "5 – Defined learning mechanism exists that integrates food availability and access with other lessons and has been used with demonstrable results.",
       "4 – Defined learning mechanism exists that integrates food availability and access with other lessons but has not yet been used – no disasters.",
