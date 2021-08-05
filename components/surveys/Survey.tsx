@@ -196,14 +196,14 @@ export const usdaQuestions = [
     ]
   ),
   makeQuestion(
-    "A7.2 To what extent could the communities’ food availability and access needs be addressed by the Emergency Meals-to-You program?",
+    "A7.2 To what extent could the communities food availability and access needs be addressed by the Emergency Meals-to-You program?",
     "Optional: Please provide justification for question A7.2",
     [
       "5 – Community organization(s) and schools are equipped to support the delivering and implementation of the Emergency Meals-to-You program.",
       "4 – >75% of neighborhoods could be covered. Community support groups and schools available.",
       "3 – >50–75% of neighborhoods could be covered.",
       "2 – >25–50% of neighborhoods could be covered.",
-      "1 –Neighborhoods would need to be engaged to support implementation.",
+      "1 – Neighborhoods would need to be engaged to support implementation.",
       "0 – Not required in a pandemic or disaster.",
     ]
   ),
