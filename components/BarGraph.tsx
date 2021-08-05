@@ -20,13 +20,13 @@ export default function BarGraph(props: Props) {
     setData(props.data);
     setMax(
       props.data.reduce((a, b) => {
-        if (a < b) {
+        if (a <= b) {
+          if (b < 5) {
+            return 5;
+          }
           return b;
         }
-        if (b < 5) {
-          return 5;
-        }
-        return b;
+        return a;
       })
     );
   }, [props.data]);
@@ -61,7 +61,7 @@ export default function BarGraph(props: Props) {
           <VictoryChart theme={VictoryTheme.material}>
             <VictoryBar
               barWidth={(i) => 25}
-              alignment="start"
+              alignment="middle"
               data={data.map((y, i) => {
                 return { x: i.toString(), y };
               })}
