@@ -112,6 +112,7 @@ export const getQuestions = async (
     console.log("question 2 number: ", questions[1].number);
     console.log("question 2 text: ", questions[1].text);
     console.log("question 2 category: ", questions[1].category);
+    return questions;
   }
   return null;
 };
