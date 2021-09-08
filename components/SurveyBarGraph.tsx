@@ -18,16 +18,15 @@ const computeResponseSums = (
   return QuestionNum(surveyData, ndx);
 };
 
-const QuestionNum = (data: SurveyResponse[][] | null, ndx: number) => {
+const QuestionNum = (data: SurveyResponse[] | null, ndx: number) => {
   let scoreTotals = [0, 0, 0, 0, 0, 0];
   console.log("data in bar graph ", data);
-  let responses: SurveyResponse[] = data["Data"];
-  if (!_.isNull(responses)) {
-    let currentResponses = _.filter(responses, { question_id: ndx + 1 });
+  if (!_.isNull(data)) {
+    let currentResponses = _.filter(data, { id: ndx + 1 });
     currentResponses.map((response) => {
       if (!_.isUndefined(response)) {
-        if (response["score"] >= 0 && response["score"] <= 5) {
-          scoreTotals[response["score"]]++;
+        if (response.score >= 0 && response.score <= 5) {
+          scoreTotals[response.score]++;
         }
       }
     });

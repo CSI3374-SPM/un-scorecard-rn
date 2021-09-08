@@ -159,7 +159,7 @@ export const fetchSurveyResults = async (
 
           const index = questions.indexOf(question);
           const response: SurveyResponse = {
-            questionIndex: index,
+            questionNumber: index,
             score,
             justification:
               justification === "No response given" ? undefined : justification,
@@ -235,7 +235,7 @@ export const fetchSurveyResultsStream = (
             const index = questions.indexOf(question);
 
             const response: SurveyResponse = {
-              questionIndex: index,
+              questionNumber: index,
               score,
               justification:
                 justification === "No response given"
@@ -305,7 +305,7 @@ export const addSurveyResponse = async (
 };
 
 const convertResponse = (response: SurveyResponse, map: any) => {
-  const question = questions[response.questionIndex];
+  const question = questions[response.questionNumber];
   map[question.question] = response.score;
   map[question.justification] = makeJustification(response.justification);
 };

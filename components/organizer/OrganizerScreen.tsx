@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Text, List, Subheading, FAB } from "react-native-paper";
 import { Image, StyleSheet, useColorScheme, View } from "react-native";
-import {
-  fetchSurveyResults,
-  getSurveyProgress,
-  updateSurveyProgress,
-  fetchSurveyResultsStream,
-  closeResultsSocket,
-} from "../../api/Wrapper";
+import { getSurveyProgress, updateSurveyProgress } from "../../api/Wrapper";
 import { connect } from "react-redux";
 import FinishButton from "../log_out/FinishButton";
 import { useNavigation } from "@react-navigation/core";
@@ -25,6 +19,7 @@ import SurveyBarGraph from "../SurveyBarGraph";
 import { DefaultTheme } from "../../constants/Colors";
 import { DarkTheme } from "../../constants/Colors";
 import {
+  closeResultsSocketV2,
   fetchSurveyResultsStreamV2,
   fetchSurveyResultsV2,
   getQuestions,
@@ -107,13 +102,13 @@ function OrganizerScreen(props: SurveyProps) {
       );
       requestCurrentQuestion();
     } else if (!_.isNull(socket)) {
-      closeResultsSocket(socket);
+      closeResultsSocketV2(socket);
       setSocket(null);
     }
     return () => {
       if (!_.isNull(socket)) {
         console.log("results a");
-        closeResultsSocket(socket);
+        closeResultsSocketV2(socket);
       }
     };
   }, [props.data.authentication.surveyId]);
@@ -122,7 +117,7 @@ function OrganizerScreen(props: SurveyProps) {
     return () => {
       if (!_.isNull(socket)) {
         console.log("results b");
-        closeResultsSocket(socket);
+        closeResultsSocketV2(socket);
       }
     };
   }, []);
@@ -153,7 +148,7 @@ function OrganizerScreen(props: SurveyProps) {
               {answers}/
               {_.isNull(results)
                 ? 0 // @ts-ignore
-                : results["ResultCount"]}
+                : results.length}
               {" answers "}
             </Subheading>
             <View style={styles.indicatorContainer}>
@@ -202,8 +197,8 @@ function OrganizerScreen(props: SurveyProps) {
           {_.isNull(results)
             ? "0"
             : _.filter(
-                _.filter(results.Data, {
-                  question_id: currentQuestion + 1,
+                _.filter(results, {
+                  id: currentQuestion + 1,
                 }),
                 {
                   function(justification) {
@@ -215,7 +210,7 @@ function OrganizerScreen(props: SurveyProps) {
                   <>
                     <List.Item
                       title={<Text>{response.justification}</Text>}
-                      key={response.user_id}
+                      key={response.userId}
                     ></List.Item>
                   </>
                 );

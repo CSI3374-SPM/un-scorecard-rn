@@ -5,6 +5,7 @@ import _ from "lodash";
 import Question from "../components/question/QuestionRedux";
 import { SurveyResponse } from "../store/survey/SurveyReducer";
 import io from "socket.io-client";
+import { reset } from "react-native-svg/lib/typescript/lib/Matrix2D";
 export type QuestionType = {
   id: number;
   number: number;
@@ -216,13 +217,50 @@ export const fetchSurveyResultsStreamV2 = (
         socket.emit("survey_responses_unsubscribe", { surveyId });
         onFail(socket);
       }
+      console.log("Raw data ", rawResponses);
+      const results = rawResponses.map((rawResults) => {
+        const response: SurveyResponse = {
+          userId: rawResults["user_id"],
+          id: rawResults["question_id"],
+          score: rawResults["score"],
+          justification: rawResults["justification"],
+        };
 
-      console.log("Responses on stream ", rawResponses);
+        return response;
+      });
+      callback(results);
     }
   });
   return socket;
 };
 
+export const getSurveyProgressV2 = async (
+  surveyId: string,
+  onFail: (e: any) => void = console.log
+): Promise<SurveyProgressResponse | null> => {
+  const data = await request(
+    {
+      method: "GET",
+      url: `api/survey/${surveyId}/progress`,
+      headers: { Accept: "appliaction/json" },
+    },
+    onFail
+  );
+
+  if (_.isNull(data) || data.status !== "OK") {
+    onFail("Failed to get survey progress");
+    return null;
+  }
+  return {
+    status: data.status,
+    currentQuestion: data.currentQuestion,
+    surveyId: data.survey_id,
+  };
+};
+export type SurveyProgressResponse = ApiResponse & {
+  currentQuestion?: number;
+  surveyId?: string;
+};
 const makeJustification = (justification?: string | null) => {
   return _.isUndefined(justification) || _.isNull(justification)
     ? "No response given"

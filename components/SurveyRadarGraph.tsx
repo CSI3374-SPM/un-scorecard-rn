@@ -45,16 +45,16 @@ const computeEssentialAverages = (surveyData: SurveyResponse[][] | null) => {
   return [essentialAvgs];
 };
 
-const averageQuestionNum = (data: SurveyResponse[][] | null, ndx: number) => {
+const averageQuestionNum = (data: SurveyResponse[] | null, ndx: number) => {
   let total: number = 0;
   let numResp = 0;
-  let responses = data["Data"];
-
+  let responses = data;
+  console.log("Data in radar: ", data);
   if (!_.isUndefined(responses)) {
-    let currentResponses = _.filter(responses, { question_id: ndx + 1 });
+    let currentResponses = _.filter(responses, { id: ndx + 1 });
     currentResponses.forEach((response: SurveyResponse) => {
-      console.log("response score ", response["score"]);
-      total += toNumber(response["score"]);
+      console.log("response score ", response.score);
+      total += toNumber(response.score);
       numResp++;
     });
     return total / numResp;
