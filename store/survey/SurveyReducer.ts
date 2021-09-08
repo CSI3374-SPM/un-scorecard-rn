@@ -9,6 +9,7 @@ import { Dispatch } from "redux";
 // The data field for the state
 export interface SurveyResponse {
   questionIndex: number;
+  id: number;
   // Score restricted to 0 to 5
   score: number;
   justification?: string;

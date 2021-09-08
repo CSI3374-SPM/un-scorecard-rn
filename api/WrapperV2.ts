@@ -3,11 +3,16 @@ const { manifest } = Constants;
 import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 import Question from "../components/question/QuestionRedux";
-export type Question = {
+import { SurveyResponse } from "../store/survey/SurveyReducer";
+import io from "socket.io-client";
+export type QuestionType = {
+  id: number;
   number: number;
   text: string;
   category: string;
+  options: string[];
 };
+
 // const apiUrl = process.env.API_URL;
 export const apiUrl =
   typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
@@ -97,22 +102,129 @@ export const getQuestions = async (
   );
 
   if (!_.isNull(data)) {
-    console.log("Data from fetch survey: ", data);
     const questions = data.map((questionData: any[]) => {
-      const question: Question = {
-        number: questionData[0],
-        text: questionData[1],
-        category: questionData[2],
+      const question: QuestionType = {
+        id: questionData[0],
+        number: questionData[1],
+        text: questionData[2],
+        category: questionData[3],
+        options: ["1: something", "2: something else", "3: another option"],
       };
       return question;
     });
-    console.log("question 1 number: ", questions[0].number);
-    console.log("question 1 text: ", questions[0].text);
-    console.log("question 1 category: ", questions[0].category);
-    console.log("question 2 number: ", questions[1].number);
-    console.log("question 2 text: ", questions[1].text);
-    console.log("question 2 category: ", questions[1].category);
+
     return questions;
   }
   return null;
+};
+
+export const addSurveyResponseV2 = async (
+  surveyId: string,
+  responses: SurveyResponse[],
+  userID: string | null,
+  onFail: (e: any) => void = console.log
+) => {
+  let convertedResponses = {};
+  console.log("Sending responses");
+  responses.map((response) =>
+    convertResponse(response, userID, convertedResponses)
+  );
+  const data = await request(
+    {
+      method: "POST",
+      url: `/api/create/response/${surveyId}`,
+      data: {
+        ...convertedResponses,
+      },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+    onFail
+  );
+  if (_.isNull(data) || data.status !== "OK") {
+    onFail("Survey response creation failed");
+    return null;
+  }
+  console.log("data user id ", data);
+  return data;
+};
+
+const convertResponse = (
+  response: SurveyResponse,
+  userID: string | null,
+  map: any
+) => {
+  map["user_id"] = userID;
+  map["question_id"] = response.id;
+  map["score"] = response.score;
+  map["justification"] = makeJustification(response.justification);
+};
+
+export const fetchSurveyResultsV2 = async (
+  surveyId: string,
+  questionID: number | null,
+  onFail: (e: any) => void = console.log
+) => {
+  const data = await request(
+    {
+      method: "GET",
+      url: "/api/get/responses",
+      params: {
+        survey_id: surveyId,
+        question_id: questionID,
+      },
+    },
+    onFail
+  );
+
+  return data;
+};
+
+const makeSocket = () => {
+  return io(apiUrl, { transports: ["websocket"], timeout: 30000 });
+};
+const closeSocket = (socket: SocketIOClient.Socket) => {
+  console.log("WebSocket connection closing");
+  socket.off("connect");
+  socket.off("disconnect");
+  socket.close();
+};
+
+export const closeResultsSocketV2 = (socket: SocketIOClient.Socket) => {
+  socket.off("survey_responses_updated");
+  closeSocket(socket);
+};
+
+export const fetchSurveyResultsStreamV2 = (
+  surveyId: string,
+  callback: (results: SurveyResponse[] | null) => void,
+  onFail: (socket: SocketIOClient.Socket) => void = closeResultsSocketV2
+) => {
+  const socket = makeSocket();
+  socket.on("connect", () => {
+    console.log("connected to responses");
+    socket.emit("survey_responses_subscribe", {
+      surveyId,
+    });
+  });
+
+  socket.on("survey_responses_updated", (rawData: any) => {
+    if (!_.isNull(rawData)) {
+      const rawResponses: any[] = rawData.Data;
+      if (rawData.status === "ERROR" || _.isUndefined(rawResponses)) {
+        socket.emit("survey_responses_unsubscribe", { surveyId });
+        onFail(socket);
+      }
+
+      console.log("Responses on stream ", rawResponses);
+    }
+  });
+  return socket;
+};
+
+const makeJustification = (justification?: string | null) => {
+  return _.isUndefined(justification) || _.isNull(justification)
+    ? "No response given"
+    : justification;
 };

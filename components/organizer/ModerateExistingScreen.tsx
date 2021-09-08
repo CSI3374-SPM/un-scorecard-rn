@@ -10,6 +10,7 @@ import {
   SurveyProps,
 } from "../../store/survey/SurveyReducer";
 import { DarkTheme, DefaultTheme } from "../../constants/Colors";
+import { getQuestions } from "../../api/WrapperV2";
 
 function ModerateExistingScreen(props: SurveyProps) {
   const [id, setID] = useState("");
@@ -43,10 +44,9 @@ function ModerateExistingScreen(props: SurveyProps) {
 }
 
 async function validateId(id: string, props: SurveyProps) {
-  let surveyResults = await fetchSurveyResults(id);
-  console.log("Survey results ", surveyResults);
+  let questions = await getQuestions(id);
 
-  if (!_.isNull(surveyResults)) {
+  if (!_.isNull(questions)) {
     props.updateAuthentication({
       isOrganizer: true,
       surveyId: id,

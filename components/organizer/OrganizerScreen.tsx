@@ -5,7 +5,6 @@ import {
   fetchSurveyResults,
   getSurveyProgress,
   updateSurveyProgress,
-  questions,
   fetchSurveyResultsStream,
   closeResultsSocket,
 } from "../../api/Wrapper";
@@ -21,30 +20,41 @@ import {
 } from "../../store/survey/SurveyReducer";
 import SurveyRadarGraph from "../SurveyRadarGraph";
 import { ScrollView } from "react-native-gesture-handler";
-import _ from "lodash";
+import _, { toNumber } from "lodash";
 import SurveyBarGraph from "../SurveyBarGraph";
 import { DefaultTheme } from "../../constants/Colors";
 import { DarkTheme } from "../../constants/Colors";
+import {
+  fetchSurveyResultsStreamV2,
+  fetchSurveyResultsV2,
+  getQuestions,
+  QuestionType,
+} from "../../api/WrapperV2";
 
 function OrganizerScreen(props: SurveyProps) {
   const navigator = useNavigation<RootNavigationProp>();
   // @ts-ignore
   const [results, setResults]: [
-    SurveyResponse[][] | null,
-    (r: SurveyResponse[][] | null) => void
+    SurveyResponse[] | null,
+    (r: SurveyResponse[] | null) => void
   ] = useState(null);
 
   const [expanded, setExpanded] = React.useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(0);
 
-  const requestResults = async () => {
-    let resp = await fetchSurveyResults(props.data.authentication.surveyId);
-
-    console.log("");
-    setResults(resp);
-    console.log("results ", resp);
-  };
+  // @ts-ignore
+  const [questions, setQuestions]: [
+    QuestionType[] | null,
+    (questions: QuestionType[] | null) => void
+  ] = useState([]);
+  useEffect(() => {
+    async function loadQuestions() {
+      setQuestions(await getQuestions(props.data.authentication.surveyId));
+      console.log("Fetched questions from organizer screen");
+    }
+    loadQuestions();
+  }, []);
 
   const [socket, setSocket]: [
     SocketIOClient.Socket | null,
@@ -57,6 +67,10 @@ function OrganizerScreen(props: SurveyProps) {
       props.data.authentication.surveyId
     );
     if (!_.isNull(surveyProgress)) {
+      console.log(
+        "Updated current question to: ",
+        surveyProgress.currentQuestion
+      );
       let currentQuestion = surveyProgress.currentQuestion;
       if (currentQuestion) {
         setCurrentQuestion(currentQuestion);
@@ -74,14 +88,26 @@ function OrganizerScreen(props: SurveyProps) {
   });
 
   useEffect(() => {
+    async function loadResults() {
+      setResults(
+        await fetchSurveyResultsV2(props.data.authentication.surveyId, null)
+      );
+    }
+    loadResults();
+    console.log("Loaded results from organizer screen");
+  }, [props.data.authentication.surveyId]);
+
+  useEffect(() => {
     if (_.isNull(socket) && props.data.authentication.surveyId != "") {
       setSocket(
-        fetchSurveyResultsStream(props.data.authentication.surveyId, setResults)
+        fetchSurveyResultsStreamV2(
+          props.data.authentication.surveyId,
+          setResults
+        )
       );
       requestCurrentQuestion();
     } else if (!_.isNull(socket)) {
       closeResultsSocket(socket);
-
       setSocket(null);
     }
     return () => {
@@ -105,15 +131,20 @@ function OrganizerScreen(props: SurveyProps) {
     if (_.isNull(results)) {
       setAnswers(0);
     } else {
-      setAnswers(currentResponses(results, currentQuestion - 1, 0));
-      console.log("result answers: ", answers);
+      console.log("Setting answers");
+      setAnswers(currentResponses(results, currentQuestion, 0));
     }
-  }, [results, currentQuestion - 1]);
+  }, [results, currentQuestion]);
 
+  // @ts-ignore
+  // @ts-ignore
   return (
     <View style={styles.container}>
       <ScrollView>
-        <SurveyRadarGraph surveyData={results} />
+        <SurveyRadarGraph
+          surveyData={results}
+          currentQuestion={currentQuestion}
+        />
         <View style={styles.currentQuestionTitle}>
           <Subheading style={styles.title}>Current Question</Subheading>
           <View style={styles.titleRight}>
@@ -122,13 +153,18 @@ function OrganizerScreen(props: SurveyProps) {
               {answers}/
               {_.isNull(results)
                 ? 0 // @ts-ignore
-                : results.length}
+                : results["ResultCount"]}
               {" answers "}
             </Subheading>
             <View style={styles.indicatorContainer}>
-              {answers ==
-              // @ts-ignore
-              results?.length ? (
+              {_.isNull(results) ? (
+                <Image
+                  style={styles.indicator}
+                  source={require("../../assets/images/red-circle.png")}
+                />
+              ) : answers ==
+                // @ts-ignore
+                results?.length ? (
                 <Image
                   style={styles.indicator}
                   source={require("../../assets/images/green-circle.png")}
@@ -142,55 +178,48 @@ function OrganizerScreen(props: SurveyProps) {
             </View>
           </View>
         </View>
-        <Text style={styles.item}>
-          {currentQuestion - 1 > -1 && currentQuestion - 1 < questions.length
-            ? questions[currentQuestion - 1].question
-            : "Could not find question"}
-        </Text>
 
-        <SurveyBarGraph
-          surveyData={results}
-          questionIndex={currentQuestion - 1}
-        />
+        <View style={styles.questionContainer}>
+          <Text style={styles.questionNumber}>
+            {currentQuestion > -1 && currentQuestion < questions.length
+              ? questions[currentQuestion].number + " -"
+              : ""}
+          </Text>
+          <Text style={styles.item}>
+            {currentQuestion > -1 && currentQuestion < questions.length
+              ? questions[currentQuestion].text
+              : "Could not find question"}
+          </Text>
+        </View>
+
+        <SurveyBarGraph surveyData={results} questionIndex={currentQuestion} />
 
         <List.Accordion
           style={styles.item}
-          title={`Justifications`}
+          title="Justifications"
           left={(props) => <List.Icon {...props} icon="folder" />}
         >
           {_.isNull(results)
-            ? "0" // @ts-ignore
-            : results.map((ID: SurveyResponse[], respIndex: number) =>
-                ID.filter(
-                  (res: SurveyResponse) =>
-                    res.questionIndex === currentQuestion - 1 &&
-                    !_.isUndefined(res.justification)
-                ).map((res: SurveyResponse, ansIndex: number) => {
-                  populatedScores.push(res.score);
-                  //{score in populatedScores ? ():()}
-                  // @ts-ignore
-                  return (
-                    <>
-                      {res.score in populatedScores}
-                      <List.Subheader>
-                        <Subheading style={styles.title}>
-                          {res.score}
-                        </Subheading>
-                      </List.Subheader>
-                      <List.Item
-                        title={
-                          <Text>
-                            {!_.isUndefined(res.justification)
-                              ? res.justification
-                              : "No justification given"}
-                          </Text>
-                        }
-                        key={`justification-${respIndex}-${ansIndex}`}
-                      />
-                    </>
-                  );
-                })
-              )}
+            ? "0"
+            : _.filter(
+                _.filter(results.Data, {
+                  question_id: currentQuestion + 1,
+                }),
+                {
+                  function(justification) {
+                    return justification != "No response given";
+                  },
+                }
+              ).map((response) => {
+                return (
+                  <>
+                    <List.Item
+                      title={<Text>{response.justification}</Text>}
+                      key={response.user_id}
+                    ></List.Item>
+                  </>
+                );
+              })}
         </List.Accordion>
         <View style={styles.separator} />
       </ScrollView>
@@ -239,7 +268,7 @@ function OrganizerScreen(props: SurveyProps) {
           style={{ backgroundColor: theme.colors.confirm }}
           icon="arrow-right"
           color="white"
-          onPress={() => pushNextQuestion(props, setCurrentQuestion)}
+          onPress={() => pushNextQuestion(props, questions, setCurrentQuestion)}
         />
       </View>
     </View>
@@ -247,30 +276,34 @@ function OrganizerScreen(props: SurveyProps) {
 }
 
 const currentResponses = (
-  data: SurveyResponse[][],
+  data: SurveyResponse[][] | null,
   ndx: number,
   answers: number
 ) => {
-  if (_.isNull(data)) return 0;
+  let responses = data["Data"];
+  if (_.isUndefined(responses)) return 0;
   let scoreTotals = [0, 0, 0, 0, 0, 0];
-  data.forEach((responder) => {
-    const response = responder.find(
-      (question) => question.questionIndex === ndx
-    );
-    if (!_.isUndefined(response)) {
-      if (response.score >= 0 && response.score <= 5) {
-        scoreTotals[response.score]++;
+  responses
+    .filter((response: SurveyResponse) => {
+      return response["question_id"] == ndx;
+    })
+    .map((response: SurveyResponse) => {
+      let score = toNumber(response["score"]);
+      console.log("score: ", score);
+      if (score >= 0 && score <= 5) {
+        scoreTotals[score]++;
       }
-    }
-  });
+    });
   for (var i = 0; i < scoreTotals.length; i++) {
     answers += scoreTotals[i];
   }
+  console.log("answers: ", answers);
   return answers;
 };
 
 async function pushNextQuestion(
   props: SurveyProps,
+  questions: QuestionType[],
   setCurrentQuestion: (n: number) => void
 ) {
   let surveyProgress = await getSurveyProgress(
@@ -348,5 +381,17 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     marginRight: 16,
+  },
+  questionNumber: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginRight: 5,
+  },
+  questionContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    flexWrap: "wrap",
+    alignItems: "center",
+    marginLeft: 16,
   },
 });

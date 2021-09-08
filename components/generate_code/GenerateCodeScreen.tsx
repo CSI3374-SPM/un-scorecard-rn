@@ -5,6 +5,7 @@ import { createSurvey } from "../../api/Wrapper";
 import { SurveyProps } from "../../store/survey/SurveyReducer";
 import { DarkTheme, DefaultTheme } from "../../constants/Colors";
 import DropDownPicker from "react-native-dropdown-picker";
+import { createSurveyV2 } from "../../api/WrapperV2";
 
 export default function GenerateCodeScreen(props: SurveyProps) {
   const [city, setCity] = useState("");
@@ -74,7 +75,7 @@ async function generateID(
   selectedLanguage: string,
   selectedSurvey: string
 ) {
-  var surveyData = await createSurvey(selectedLanguage, selectedSurvey, city);
+  var surveyData = await createSurveyV2(selectedLanguage, selectedSurvey, city);
   console.log("survey data: ", surveyData);
 
   let id = surveyData?.id;

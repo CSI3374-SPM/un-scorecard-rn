@@ -12,7 +12,6 @@ import {
   addSurveyEmail,
   addSurveyResponse,
   getSurveyProgressStream,
-  questions,
   closeProgressSocket,
 } from "../../api/Wrapper";
 
@@ -25,12 +24,16 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import _ from "lodash";
+import _, { set } from "lodash";
 import { SurveyProps } from "../../store/survey/SurveyReducer";
 import FinishButton from "../log_out/FinishButton";
+import {
+  addSurveyResponseV2,
+  getQuestions,
+  QuestionType,
+} from "../../api/WrapperV2";
 
 export const rating = (n: number) => 5 - n;
-
 export default function Question(props: SurveyProps) {
   const [index, setIndex]: [number, (index: number) => void] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(1);
@@ -40,6 +43,7 @@ export default function Question(props: SurveyProps) {
     (j: string) => void
   ] = useState("");
   const [email, setEmail] = useState("");
+  const [questions, setQuestions] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [socket, setSocket]: [
@@ -56,6 +60,14 @@ export default function Question(props: SurveyProps) {
       setLoading(false);
     }
   };
+
+  // @ts-ignore
+  useEffect(() => {
+    async function loadQuestions() {
+      setQuestions(await getQuestions(props.data.authentication.surveyId));
+    }
+    loadQuestions();
+  }, [props.data.authentication.surveyId]);
 
   useEffect(() => {
     if (props.data.authentication.surveyId != "")
@@ -83,6 +95,14 @@ export default function Question(props: SurveyProps) {
     };
   }, []);
 
+  if (_.isNull(questions)) {
+    return (
+      <View style={styles.waiting}>
+        <Title style={styles.item}>Loading questions</Title>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
   if (index < questions.length) {
     if (loading) {
       return (
@@ -95,6 +115,7 @@ export default function Question(props: SurveyProps) {
       );
     }
 
+    // @ts-ignore
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -104,16 +125,16 @@ export default function Question(props: SurveyProps) {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <>
             <ScrollView>
-              <Title style={styles.item}>{questions[index].question}</Title>
+              <Title style={styles.item}>{questions[index].text}</Title>
               <RadioButton.Group
                 onValueChange={(n: string) => setChecked(rating(parseInt(n)))}
                 value={`${rating(checked)}`}
               >
-                {questions[index].descriptions.map((text, ndx) => (
+                {questions[index].options.map((text, ndx) => (
                   <RadioButton.Item
                     label={text}
                     value={`${ndx}`}
-                    key={`${ndx}-${questions[index].question}-${text}`}
+                    key={`${ndx}-${questions[index].number}-${text}`}
                   />
                 ))}
               </RadioButton.Group>
@@ -121,7 +142,7 @@ export default function Question(props: SurveyProps) {
             <TextInput
               style={styles.item}
               multiline
-              label={questions[index].justification}
+              label={"Optional: Please provide justification"}
               value={justification}
               onChangeText={(text) => setJustification(text)}
             />
@@ -132,7 +153,9 @@ export default function Question(props: SurveyProps) {
               disabled={checked < 0}
               onPress={async () => {
                 if (checked > -1) {
+                  console.log("index: ", index);
                   let newAnswer = {
+                    id: questions[index].id,
                     questionIndex: index,
                     score: checked,
                     justification:
@@ -141,7 +164,7 @@ export default function Question(props: SurveyProps) {
                   let ans = _.clone(props.data.responses);
                   ans.push(newAnswer);
                   props.updateAnswer(ans);
-                  let newResponseId = await addSurveyResponse(
+                  let newResponseId = await addSurveyResponseV2(
                     props.data.authentication.surveyId,
                     [newAnswer],
                     props.data.authentication.responseId
@@ -210,7 +233,6 @@ export default function Question(props: SurveyProps) {
     );
   }
 }
-
 // }
 
 const styles = StyleSheet.create({

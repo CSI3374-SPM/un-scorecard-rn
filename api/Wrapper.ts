@@ -25,11 +25,6 @@ const survey = newSurvey("eng", "usda");
 
 // @ts-ignore
 export const questions = survey.questions;
-const makeJustification = (justification?: string | null) => {
-  return _.isUndefined(justification) || _.isNull(justification)
-    ? "No response given"
-    : justification;
-};
 
 /**
  * Send a request to the API with the given configuration

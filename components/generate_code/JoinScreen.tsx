@@ -46,8 +46,6 @@ function JoinScreen(props: SurveyProps) {
 async function validateId(id: string, props: SurveyProps) {
   let questions = await getQuestions(id);
   if (!_.isNull(questions)) {
-    console.log(questions);
-
     props.updateAuthentication({
       isOrganizer: false,
       surveyId: id,
