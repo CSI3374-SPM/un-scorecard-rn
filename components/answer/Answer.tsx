@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, useColorScheme } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Title, Text, Divider, FAB } from "react-native-paper";
@@ -11,6 +11,8 @@ import { DarkTheme, DefaultTheme } from "../../constants/Colors";
 export default function Answer(props: SurveyProps) {
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
+  const progress = 0;
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -33,7 +35,21 @@ export default function Answer(props: SurveyProps) {
             <Divider />
           </View>
         ))}
-        <FinishButton />
+        <FAB
+          icon=""
+          label="Exit Survey"
+          style={{
+            backgroundColor: theme.colors.exit,
+          }}
+          onPress={() => {
+            props.updateAuthentication({
+              isOrganizer: false,
+              surveyId: "",
+              responseId: null,
+            });
+            props.updateAnswer([]);
+          }}
+        />
       </View>
     </ScrollView>
   );

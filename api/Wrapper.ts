@@ -514,7 +514,7 @@ export const updateSurveyProgress = async (
     onFail
   );
   if (_.isNull(data) || data.status !== "OK") {
-    onFail("Failed to send emails");
+    onFail("Failed to update survey progress");
     return null;
   }
   return {

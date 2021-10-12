@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FAB, TextInput } from "react-native-paper";
 import { StyleSheet, useColorScheme, View } from "react-native";
 import { createSurvey } from "../../api/Wrapper";
-import { SurveyProps } from "../../store/survey/SurveyReducer";
+import { SurveyProps, SurveyResponse } from "../../store/survey/SurveyReducer";
 import { DarkTheme, DefaultTheme } from "../../constants/Colors";
-import DropDownPicker from "react-native-dropdown-picker";
-import { createSurveyV2 } from "../../api/WrapperV2";
+import DropDownPicker, { ItemType } from "react-native-dropdown-picker";
+import { createSurveyV2, getSurveyOptions } from "../../api/WrapperV2";
+import { set } from "lodash";
+import { Simulate } from "react-dom/test-utils";
+
+export type SurveyOption = {
+  label: string;
+  value: string;
+};
 
 export default function GenerateCodeScreen(props: SurveyProps) {
   const [city, setCity] = useState("");
@@ -19,12 +26,21 @@ export default function GenerateCodeScreen(props: SurveyProps) {
   ]);
 
   const [openSurvey, setOpenSurvey] = useState(false);
-  const [survey, setSurvey] = useState("");
+  const [survey, setSurvey] = useState(null);
+  // @ts-ignore
   const [surveyItems, setSurveyItems] = useState([
-    //{ label: "WHO", value: "who" },
-    { label: "USDA", value: "usda" },
+    {
+      label: "USDA",
+      value: "usda",
+    },
   ]);
 
+  useEffect(() => {
+    async function loadSurveyOptions() {
+      await getSurveyOptions(setSurveyItems);
+    }
+    loadSurveyOptions();
+  }, []);
   // @ts-ignore
   return (
     <View style={styles.container}>
@@ -63,7 +79,7 @@ export default function GenerateCodeScreen(props: SurveyProps) {
           alignSelf: "center",
         }}
         color={theme.colors.surface}
-        onPress={async () => await generateID(city, props, language, survey)}
+        onPress={async () => await generateID(city, props, language, survey[0])}
       />
     </View>
   );
@@ -76,7 +92,6 @@ async function generateID(
   selectedSurvey: string
 ) {
   var surveyData = await createSurveyV2(selectedLanguage, selectedSurvey, city);
-  console.log("survey data: ", surveyData);
 
   let id = surveyData?.id;
   if (id != null) {

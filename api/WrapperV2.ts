@@ -1,17 +1,27 @@
 import Constants from "expo-constants";
 const { manifest } = Constants;
 import axios, { AxiosRequestConfig } from "axios";
-import _ from "lodash";
+import _, { get } from "lodash";
 import Question from "../components/question/QuestionRedux";
 import { SurveyResponse } from "../store/survey/SurveyReducer";
 import io from "socket.io-client";
 import { reset } from "react-native-svg/lib/typescript/lib/Matrix2D";
+import { doc } from "prettier";
+import { closeProgressSocket, questions } from "./Wrapper";
+import { useState } from "react";
+import { SurveyOption } from "../components/generate_code/GenerateCodeScreen";
+
 export type QuestionType = {
   id: number;
   number: number;
   text: string;
   category: string;
-  options: string[];
+  options: OptionType[];
+};
+
+export type OptionType = {
+  text: string;
+  score: number;
 };
 
 // const apiUrl = process.env.API_URL;
@@ -102,6 +112,12 @@ export const getQuestions = async (
     onFail
   );
 
+  const options: OptionType[] = await Promise.all(
+    data.map((questionData: any[]) => {
+      return getQuestionOptions(questionData[0]);
+    })
+  ).catch((e: Error) => console.log(e));
+
   if (!_.isNull(data)) {
     const questions = data.map((questionData: any[]) => {
       const question: QuestionType = {
@@ -109,7 +125,7 @@ export const getQuestions = async (
         number: questionData[1],
         text: questionData[2],
         category: questionData[3],
-        options: ["1: something", "2: something else", "3: another option"],
+        options: options[questionData[0] - 1],
       };
       return question;
     });
@@ -117,6 +133,26 @@ export const getQuestions = async (
     return questions;
   }
   return null;
+};
+
+export const getQuestionOptions = async (
+  questionId: string,
+  onFail: (e: any) => void = console.log
+) => {
+  const data: OptionType[] = await request(
+    {
+      method: "GET",
+      url: `/api/get/question_options`,
+      params: {
+        question_id: questionId,
+      },
+    },
+    onFail
+  );
+
+  if (!_.isNull(data)) {
+    return data;
+  }
 };
 
 export const addSurveyResponseV2 = async (
@@ -197,6 +233,44 @@ export const closeResultsSocketV2 = (socket: SocketIOClient.Socket) => {
   closeSocket(socket);
 };
 
+export const closeProgressSocketV2 = (socket: SocketIOClient.Socket) => {
+  socket.off("survey_progress_updated");
+  closeSocket(socket);
+};
+
+export const fetchConnectedUsers = (callback: (clients: number) => void) => {
+  const socket = makeSocket();
+  console.log("connections socket connected");
+  socket.on("survey_progress_updated", () => {
+    socket.emit("get_clients");
+  });
+  socket.on("get_clients", (connectedClients: number) => {
+    console.log("clients on wrapper: ", connectedClients);
+    callback(connectedClients.connections);
+  });
+
+  return socket;
+};
+
+// @ts-ignore
+export const getSurveyOptions = async (
+  callback,
+  onFail: (e: any) => void = console.log
+) => {
+  const data = await request(
+    {
+      method: "GET",
+      url: "api/get/options/",
+    },
+    onFail
+  );
+
+  let options = data.map((option: string) => {
+    return { label: option, value: option };
+  });
+  callback(options);
+};
+
 export const fetchSurveyResultsStreamV2 = (
   surveyId: string,
   callback: (results: SurveyResponse[] | null) => void,
@@ -257,6 +331,73 @@ export const getSurveyProgressV2 = async (
     surveyId: data.survey_id,
   };
 };
+
+export const getSurveyProgressStreamV2 = (
+  surveyId: string,
+  callback: (currentProgress: number) => void,
+  onFail: (socket: SocketIOClient.Socket) => void = closeProgressSocketV2
+) => {
+  const socket = makeSocket();
+  socket.on("connect", () => {
+    console.log("progress socket connected");
+    socket.emit("survey_progress_subscribe", {
+      surveyId,
+    });
+  });
+
+  socket.on("survey_progress_updated", (rawData: any) => {
+    console.log("Got progress update");
+    if (_.isNull(rawData) || rawData.status !== "OK") {
+      socket.emit("survey_progress_unsubscribe", {
+        surveyId,
+      });
+      onFail(socket);
+    }
+    let data: SurveyProgressResponse = {
+      status: rawData.status,
+      currentQuestion: rawData.currentQuestion,
+      surveyId: rawData.survey_id,
+    };
+
+    if (!_.isUndefined(data.currentQuestion)) {
+      callback(data.currentQuestion);
+    }
+  });
+  return socket;
+};
+
+export const updateSurveyProgressV2 = async (
+  surveyId: string,
+  currentQuestion: number,
+  onFail: (e: any) => void = console.log
+): Promise<SurveyProgressResponse | null> => {
+  console.log("Updating survey progress ", currentQuestion);
+  const data = await request(
+    {
+      method: "POST",
+      url: `api/survey/${surveyId}/progress/update`,
+      data: {
+        currentQuestion,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    },
+    onFail
+  );
+
+  if (_.isNull(data) || data.status !== "OK") {
+    onFail("Failed to update survey progress");
+    return null;
+  }
+  return {
+    status: data.status,
+    currentQuestion: data.currentQuestion,
+    surveyId: data.survey_id,
+  };
+};
+
 export type SurveyProgressResponse = ApiResponse & {
   currentQuestion?: number;
   surveyId?: string;

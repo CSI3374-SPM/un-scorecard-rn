@@ -23,7 +23,10 @@ import {
   fetchSurveyResultsStreamV2,
   fetchSurveyResultsV2,
   getQuestions,
+  getSurveyProgressV2,
   QuestionType,
+  updateSurveyProgressV2,
+  fetchConnectedUsers,
 } from "../../api/WrapperV2";
 
 function OrganizerScreen(props: SurveyProps) {
@@ -33,11 +36,15 @@ function OrganizerScreen(props: SurveyProps) {
     SurveyResponse[] | null,
     (r: SurveyResponse[] | null) => void
   ] = useState(null);
+  const [currentQuestionResults, setCurrentQuestionResults]: [
+    SurveyResponse[] | null,
+    (r: SurveyResponse[] | null) => void
+  ] = useState(null);
 
   const [expanded, setExpanded] = React.useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(0);
-
+  const [clients, setClients] = useState(0);
   // @ts-ignore
   const [questions, setQuestions]: [
     QuestionType[] | null,
@@ -57,8 +64,13 @@ function OrganizerScreen(props: SurveyProps) {
   ] = useState(null as SocketIOClient.Socket | null);
   const handlePress = () => setExpanded(!expanded);
 
+  const [connectionsSocket, setConnectionsSocket]: [
+    SocketIOClient.Socket | null,
+    (s: SocketIOClient.Socket | null) => void
+  ] = useState(null as SocketIOClient.Socket | null);
+
   const requestCurrentQuestion = async () => {
-    let surveyProgress = await getSurveyProgress(
+    let surveyProgress = await getSurveyProgressV2(
       props.data.authentication.surveyId
     );
     if (!_.isNull(surveyProgress)) {
@@ -83,13 +95,12 @@ function OrganizerScreen(props: SurveyProps) {
   });
 
   useEffect(() => {
-    async function loadResults() {
-      setResults(
-        await fetchSurveyResultsV2(props.data.authentication.surveyId, null)
-      );
+    if (
+      _.isNull(connectionsSocket) &&
+      props.data.authentication.surveyId != ""
+    ) {
+      setConnectionsSocket(fetchConnectedUsers(setClients));
     }
-    loadResults();
-    console.log("Loaded results from organizer screen");
   }, [props.data.authentication.surveyId]);
 
   useEffect(() => {
@@ -145,21 +156,21 @@ function OrganizerScreen(props: SurveyProps) {
           <View style={styles.titleRight}>
             <Subheading style={styles.title}>
               {" "}
-              {answers}/
-              {_.isNull(results)
+              {_.isNull(answers)
                 ? 0 // @ts-ignore
-                : results.length}
+                : answers}
+              /{clients}
               {" answers "}
             </Subheading>
             <View style={styles.indicatorContainer}>
-              {_.isNull(results) ? (
+              {_.isNull(answers) ? (
                 <Image
                   style={styles.indicator}
                   source={require("../../assets/images/red-circle.png")}
                 />
-              ) : answers ==
+              ) : clients ==
                 // @ts-ignore
-                results?.length ? (
+                answers ? (
                 <Image
                   style={styles.indicator}
                   source={require("../../assets/images/green-circle.png")}
@@ -278,22 +289,15 @@ const currentResponses = (
   let responses = data["Data"];
   if (_.isUndefined(responses)) return 0;
   let scoreTotals = [0, 0, 0, 0, 0, 0];
-  responses
-    .filter((response: SurveyResponse) => {
-      return response["question_id"] == ndx;
-    })
-    .map((response: SurveyResponse) => {
-      let score = toNumber(response["score"]);
-      console.log("score: ", score);
-      if (score >= 0 && score <= 5) {
-        scoreTotals[score]++;
-      }
-    });
-  for (var i = 0; i < scoreTotals.length; i++) {
-    answers += scoreTotals[i];
-  }
-  console.log("answers: ", answers);
-  return answers;
+  let currentResponses = responses.filter((response: SurveyResponse) => {
+    console.log("Response: ", response);
+    console.log("index: ", ndx);
+    return response["question_id"] == ndx;
+  });
+
+  console.log("Current responses: ", currentResponses);
+
+  return currentResponses;
 };
 
 async function pushNextQuestion(
@@ -301,21 +305,29 @@ async function pushNextQuestion(
   questions: QuestionType[],
   setCurrentQuestion: (n: number) => void
 ) {
-  let surveyProgress = await getSurveyProgress(
+  let surveyProgress = await getSurveyProgressV2(
     props.data.authentication.surveyId
   );
-
+  console.log("survey progress: ", surveyProgress);
   if (surveyProgress != null) {
+    console.log("survey progress not null");
     let currentQuestion = surveyProgress.currentQuestion;
-    if (currentQuestion && currentQuestion + 1 <= questions.length) {
-      updateSurveyProgress(
+    console.log("currentQuestion ", currentQuestion);
+    console.log("length ", questions.length);
+    console.log(currentQuestion);
+
+    if (
+      !_.isUndefined(currentQuestion) &&
+      currentQuestion + 1 <= questions.length
+    ) {
+      updateSurveyProgressV2(
         props.data.authentication.surveyId,
         currentQuestion + 1
       );
       setCurrentQuestion(currentQuestion + 1);
     }
   }
-  console.log("updated question availability");
+  console.log("updated question availability ");
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrganizerScreen);

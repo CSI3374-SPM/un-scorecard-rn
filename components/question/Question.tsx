@@ -8,12 +8,7 @@ import {
   FAB,
   Text,
 } from "react-native-paper";
-import {
-  addSurveyEmail,
-  addSurveyResponse,
-  getSurveyProgressStream,
-  closeProgressSocket,
-} from "../../api/Wrapper";
+import { addSurveyEmail, closeProgressSocket } from "../../api/Wrapper";
 
 import { ScrollView } from "react-native-gesture-handler";
 import {
@@ -29,14 +24,15 @@ import { SurveyProps } from "../../store/survey/SurveyReducer";
 import FinishButton from "../log_out/FinishButton";
 import {
   addSurveyResponseV2,
+  closeProgressSocketV2,
   getQuestions,
-  QuestionType,
+  getSurveyProgressStreamV2,
 } from "../../api/WrapperV2";
 
 export const rating = (n: number) => 5 - n;
 export default function Question(props: SurveyProps) {
   const [index, setIndex]: [number, (index: number) => void] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState(1);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [checked, setChecked]: [number, (n: number) => void] = useState(-1);
   const [justification, setJustification]: [
     string,
@@ -53,8 +49,9 @@ export default function Question(props: SurveyProps) {
 
   const progress = (newCurrentQuestion: number) => {
     console.log("function ran, index: ", index);
+    console.log("newCurrentQuestion ", newCurrentQuestion);
     setCurrentQuestion(newCurrentQuestion);
-    if (index + 1 > newCurrentQuestion) {
+    if (index > newCurrentQuestion) {
       setLoading(true);
     } else {
       setLoading(false);
@@ -72,16 +69,16 @@ export default function Question(props: SurveyProps) {
   useEffect(() => {
     if (props.data.authentication.surveyId != "")
       setSocket(
-        getSurveyProgressStream(props.data.authentication.surveyId, progress)
+        getSurveyProgressStreamV2(props.data.authentication.surveyId, progress)
       );
     else if (!_.isNull(socket)) {
-      closeProgressSocket(socket);
+      closeProgressSocketV2(socket);
       setSocket(null);
     }
     return () => {
       if (!_.isNull(socket)) {
         console.log("progress a");
-        closeProgressSocket(socket);
+        closeProgressSocketV2(socket);
       }
     };
   }, [props.data.authentication.surveyId]);
@@ -90,7 +87,7 @@ export default function Question(props: SurveyProps) {
     return () => {
       if (!_.isNull(socket)) {
         console.log("progress b");
-        closeProgressSocket(socket);
+        closeProgressSocketV2(socket);
       }
     };
   }, []);
@@ -130,11 +127,11 @@ export default function Question(props: SurveyProps) {
                 onValueChange={(n: string) => setChecked(rating(parseInt(n)))}
                 value={`${rating(checked)}`}
               >
-                {questions[index].options.map((text, ndx) => (
+                {questions[index].options.map((option) => (
                   <RadioButton.Item
-                    label={text}
-                    value={`${ndx}`}
-                    key={`${ndx}-${questions[index].number}-${text}`}
+                    label={`${option.score}.- ${option.text}`}
+                    value={`${option.score}`}
+                    key={`${option.score}-${questions[index].number}-${option.text}`}
                   />
                 ))}
               </RadioButton.Group>
@@ -157,7 +154,7 @@ export default function Question(props: SurveyProps) {
                   let newAnswer = {
                     id: questions[index].id,
                     questionIndex: index,
-                    score: checked,
+                    score: questions[index].options[checked].score,
                     justification:
                       justification !== "" ? justification : undefined,
                   };

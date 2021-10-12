@@ -598,7 +598,7 @@ export const englishQuestions = [
     ]
   ),
   makeQuestion(
-    "A9.4 To what extent can the city supply items and equipment required to maintain public health during and after a disaster. ",
+    "A9.4 To what extent can the city supply items and equipment required to maintain public health during and after a disaster? ",
     "Optional: please provide justification for answer A9.4",
     [
       "5 - A comprehensive list of required items exists, and tested plans are known to be adequate to deliver them rapidly to the entire population. ",

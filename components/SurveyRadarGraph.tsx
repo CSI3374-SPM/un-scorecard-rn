@@ -49,11 +49,9 @@ const averageQuestionNum = (data: SurveyResponse[] | null, ndx: number) => {
   let total: number = 0;
   let numResp = 0;
   let responses = data;
-  console.log("Data in radar: ", data);
   if (!_.isUndefined(responses)) {
     let currentResponses = _.filter(responses, { id: ndx + 1 });
     currentResponses.forEach((response: SurveyResponse) => {
-      console.log("response score ", response.score);
       total += toNumber(response.score);
       numResp++;
     });
@@ -67,7 +65,6 @@ export default function SurveyRadarGraph(props: Props) {
   const [data, setData]: [Memo[], (m: Memo[]) => void] = useState([]);
 
   useEffect(() => {
-    console.log("Question in radar: ", props.currentQuestion);
     setData(computeEssentialAverages(props.surveyData, props.currentQuestion));
   }, [props.surveyData]);
   return !_.isNull(props.surveyData) &&
