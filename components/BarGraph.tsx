@@ -65,7 +65,7 @@ export default function BarGraph(props: Props) {
               data={data.map((y, i) => {
                 return { x: i.toString(), y };
               })}
-              domain={[0, max]}
+              domain={{ x: [0, 5], y: [0, max] }}
             />
           </VictoryChart>
         </View>
