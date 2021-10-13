@@ -20,8 +20,8 @@ export default function GenerateCodeScreen(props: SurveyProps) {
   const [openSurvey, setOpenSurvey] = useState(false);
   const [survey, setSurvey] = useState("");
   const [surveyItems, setSurveyItems] = useState([
-    //{ label: "WHO", value: "who" },
-    { label: "USDA", value: "usda" },
+    { label: "WHO", value: "who" },
+    //{ label: "USDA", value: "usda" },
   ]);
 
   // @ts-ignore

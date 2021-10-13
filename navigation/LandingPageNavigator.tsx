@@ -25,7 +25,7 @@ export default function LandingPageNavigator() {
       <Stack.Screen
         name="Join"
         component={JoinScreen}
-        options={{ title: "USDA Survey", headerBackTitle: "Back" }}
+        options={{ title: "Take Survey", headerBackTitle: "Back" }}
       />
       <Stack.Screen
         name="ModerateExisting"
