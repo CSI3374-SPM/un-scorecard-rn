@@ -42,7 +42,7 @@ export const generateWHOSurvey = (surveyLanguage: string): Survey => {
   console.log("Survey language in Survey component: ", surveyLanguage);
 
   if (surveyLanguage == "eng") {
-    return makeSurvey(demoQuestions);
+    return makeSurvey(englishQuestions);
   } else if (surveyLanguage == "ja") {
     console.log("Entered japanese making statement");
     return makeSurvey(englishQuestions);

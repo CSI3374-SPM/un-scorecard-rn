@@ -32,7 +32,7 @@ import FinishButton from "../log_out/FinishButton";
 export const rating = (n: number) => 5 - n;
 
 export default function Question(props: SurveyProps) {
-  const [index, setIndex]: [number, (index: number) => void] = useState(0);
+  const [index, setIndex] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [checked, setChecked]: [number, (n: number) => void] = useState(-1);
   const [justification, setJustification]: [
@@ -48,13 +48,9 @@ export default function Question(props: SurveyProps) {
   ] = useState(null as SocketIOClient.Socket | null);
 
   const progress = (newCurrentQuestion: number) => {
-    console.log("function ran, index: ", index);
+    // @ts-ignore
+
     setCurrentQuestion(newCurrentQuestion);
-    if (index + 1 > newCurrentQuestion) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
   };
 
   useEffect(() => {
@@ -82,6 +78,17 @@ export default function Question(props: SurveyProps) {
       }
     };
   }, []);
+
+  useEffect(() => {
+    setIndex((index) => {
+      if (index >= currentQuestion) {
+        setLoading(true);
+      } else {
+        setLoading(false);
+      }
+      return index;
+    });
+  }, [index, currentQuestion]);
 
   if (index < questions.length) {
     if (loading) {
@@ -159,15 +166,7 @@ export default function Question(props: SurveyProps) {
 
                   setChecked(-1);
                   setJustification("");
-                  setIndex(index + 1);
-                  console.log(index + 1);
-                  console.log(currentQuestion);
-                  if (index + 1 > currentQuestion - 1) {
-                    setLoading(true);
-                  } else {
-                    setLoading(false);
-                  }
-                  console.log("Changed index ", index);
+                  setIndex((index) => index + 1);
                 } else {
                   alert("Please select a score");
                 }
