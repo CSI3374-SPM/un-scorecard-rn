@@ -1,15 +1,11 @@
 import Constants from "expo-constants";
-const { manifest } = Constants;
 import axios, { AxiosRequestConfig } from "axios";
-import _, { get } from "lodash";
-import Question from "../components/question/QuestionRedux";
+import _ from "lodash";
 import { SurveyResponse } from "../store/survey/SurveyReducer";
 import io from "socket.io-client";
-import { reset } from "react-native-svg/lib/typescript/lib/Matrix2D";
-import { doc } from "prettier";
-import { closeProgressSocket, questions } from "./Wrapper";
-import { useState } from "react";
-import { SurveyOption } from "../components/generate_code/GenerateCodeScreen";
+import { languageDictionary } from "../languages/LanguageDictionary";
+
+const { manifest } = Constants;
 
 export type QuestionType = {
   id: number;
@@ -27,7 +23,7 @@ export type OptionType = {
 // const apiUrl = process.env.API_URL;
 export const apiUrl =
   typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-    ? `http://${manifest.debuggerHost?.split(`:`).shift()?.concat(`:5000`)}`
+    ? `http://${manifest.debuggerHost?.split(`:`).shift()?.concat(`:5001`)}`
     : `http://unboxdev.ecs.baylor.edu:5000`;
 
 const api = axios.create({
@@ -119,7 +115,7 @@ export const getQuestions = async (
   ).catch((e: Error) => console.log(e));
 
   if (!_.isNull(data)) {
-    const questions = data.map((questionData: any[]) => {
+    return data.map((questionData: any[]) => {
       const question: QuestionType = {
         id: questionData[0],
         number: questionData[1],
@@ -129,8 +125,6 @@ export const getQuestions = async (
       };
       return question;
     });
-
-    return questions;
   }
   return null;
 };
@@ -203,7 +197,7 @@ export const fetchSurveyResultsV2 = async (
   questionID: number | null,
   onFail: (e: any) => void = console.log
 ) => {
-  const data = await request(
+  return await request(
     {
       method: "GET",
       url: "/api/get/responses",
@@ -214,8 +208,6 @@ export const fetchSurveyResultsV2 = async (
     },
     onFail
   );
-
-  return data;
 };
 
 const makeSocket = () => {
@@ -253,6 +245,32 @@ export const fetchConnectedUsers = (callback: (clients: number) => void) => {
 };
 
 // @ts-ignore
+export const getSurveyLanguages = async (
+  surveyType,
+  callback,
+  onFail: (e: any) => void = console.log
+) => {
+  const data = await request(
+    {
+      method: "GET",
+      url: `api/get/language_options/${surveyType}`,
+    },
+    onFail
+  );
+  console.log("Language data: ", data);
+
+  let languages = data.map((language: string) => {
+    let currentLanguage = languageDictionary[language];
+    return {
+      label: currentLanguage.flag + " - " + currentLanguage.name,
+      value: language,
+    };
+  });
+  console.log("Setting languages: ", languages);
+  callback(languages);
+};
+
+// @ts-ignore
 export const getSurveyOptions = async (
   callback,
   onFail: (e: any) => void = console.log
@@ -264,7 +282,6 @@ export const getSurveyOptions = async (
     },
     onFail
   );
-
   let options = data.map((option: string) => {
     return { label: option, value: option };
   });

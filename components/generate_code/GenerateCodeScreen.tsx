@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { FAB, TextInput } from "react-native-paper";
 import { StyleSheet, useColorScheme, View } from "react-native";
-import { createSurvey } from "../../api/Wrapper";
-import { SurveyProps, SurveyResponse } from "../../store/survey/SurveyReducer";
+import { SurveyProps } from "../../store/survey/SurveyReducer";
 import { DarkTheme, DefaultTheme } from "../../constants/Colors";
-import DropDownPicker, { ItemType } from "react-native-dropdown-picker";
-import { createSurveyV2, getSurveyOptions } from "../../api/WrapperV2";
-import { set } from "lodash";
-import { Simulate } from "react-dom/test-utils";
+import DropDownPicker from "react-native-dropdown-picker";
+import {
+  createSurveyV2,
+  getSurveyLanguages,
+  getSurveyOptions,
+} from "../../api/WrapperV2";
 
 export type SurveyOption = {
   label: string;
@@ -21,7 +22,7 @@ export default function GenerateCodeScreen(props: SurveyProps) {
   const [open, setOpen] = useState(false);
   const [language, setLanguage] = useState("");
   const [items, setItems] = useState([
-    { label: "🇺🇸 - English", value: "eng" },
+    { label: "🇺🇸 - English", value: "en" },
     //{ label: "🇯🇵 - 日本語", value: "ja" },
   ]);
 
@@ -30,8 +31,8 @@ export default function GenerateCodeScreen(props: SurveyProps) {
   // @ts-ignore
   const [surveyItems, setSurveyItems] = useState([
     {
-      label: "USDA",
-      value: "usda",
+      label: "UN",
+      value: "who",
     },
   ]);
 
@@ -41,6 +42,13 @@ export default function GenerateCodeScreen(props: SurveyProps) {
     }
     loadSurveyOptions();
   }, []);
+
+  useEffect(() => {
+    async function loadSurveyLanguages() {
+      await getSurveyLanguages(survey, setItems);
+    }
+    loadSurveyLanguages();
+  }, [survey]);
   // @ts-ignore
   return (
     <View style={styles.container}>
@@ -48,16 +56,6 @@ export default function GenerateCodeScreen(props: SurveyProps) {
         label="City"
         value={city}
         onChangeText={(city) => setCity(city)}
-      />
-
-      <DropDownPicker
-        open={open}
-        value={language}
-        items={items}
-        setOpen={setOpen}
-        setValue={setLanguage}
-        setItems={setItems}
-        placeholder="Survey language"
       />
 
       <DropDownPicker
@@ -70,6 +68,16 @@ export default function GenerateCodeScreen(props: SurveyProps) {
         placeholder="Survey Type"
       />
 
+      <DropDownPicker
+        open={open}
+        value={language}
+        items={items}
+        setOpen={setOpen}
+        setValue={setLanguage}
+        setItems={setItems}
+        placeholder="Survey language"
+      />
+
       <FAB
         icon=""
         label="Create Survey"
@@ -79,7 +87,7 @@ export default function GenerateCodeScreen(props: SurveyProps) {
           alignSelf: "center",
         }}
         color={theme.colors.surface}
-        onPress={async () => await generateID(city, props, language, survey[0])}
+        onPress={async () => await generateID(city, props, language, survey)}
       />
     </View>
   );
