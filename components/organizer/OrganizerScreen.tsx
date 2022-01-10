@@ -36,15 +36,12 @@ function OrganizerScreen(props: SurveyProps) {
     SurveyResponse[] | null,
     (r: SurveyResponse[] | null) => void
   ] = useState(null);
-  const [currentQuestionResults, setCurrentQuestionResults]: [
-    SurveyResponse[] | null,
-    (r: SurveyResponse[] | null) => void
-  ] = useState(null);
 
   const [expanded, setExpanded] = React.useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(0);
   const [clients, setClients] = useState(0);
+  var scores: number[] = [];
   // @ts-ignore
   const [questions, setQuestions]: [
     QuestionType[] | null,
@@ -137,8 +134,8 @@ function OrganizerScreen(props: SurveyProps) {
     if (_.isNull(results)) {
       setAnswers(0);
     } else {
-      console.log("Setting answers");
-      setAnswers(currentResponses(results, currentQuestion, 0));
+      console.log("Setting answers", results, currentQuestion);
+      setAnswers(currentResponses(results, currentQuestion, 0).length);
     }
   }, [results, currentQuestion]);
 
@@ -152,7 +149,11 @@ function OrganizerScreen(props: SurveyProps) {
           currentQuestion={currentQuestion}
         />
         <View style={styles.currentQuestionTitle}>
-          <Subheading style={styles.title}>Current Question</Subheading>
+          <Subheading style={styles.title}>
+            {_.isUndefined(questions[currentQuestion])
+              ? "Loading Question"
+              : "Question " + questions[currentQuestion].number}
+          </Subheading>
           <View style={styles.titleRight}>
             <Subheading style={styles.title}>
               {" "}
@@ -186,11 +187,6 @@ function OrganizerScreen(props: SurveyProps) {
         </View>
 
         <View style={styles.questionContainer}>
-          <Text style={styles.questionNumber}>
-            {currentQuestion > -1 && currentQuestion < questions.length
-              ? questions[currentQuestion].number + " -"
-              : ""}
-          </Text>
           <Text style={styles.item}>
             {currentQuestion > -1 && currentQuestion < questions.length
               ? questions[currentQuestion].text
@@ -208,22 +204,16 @@ function OrganizerScreen(props: SurveyProps) {
           {_.isNull(results)
             ? "0"
             : _.filter(
-                _.filter(results, {
-                  id: currentQuestion + 1,
-                }),
-                {
-                  function(justification) {
-                    return justification != "No response given";
-                  },
-                }
-              ).map((response) => {
+                results,
+                (res: SurveyResponse) =>
+                  res.questionNumber === currentQuestion + 1 &&
+                  res.justification != "No response given"
+              ).map((res: SurveyResponse) => {
                 return (
-                  <>
-                    <List.Item
-                      title={<Text>{response.justification}</Text>}
-                      key={response.userId}
-                    ></List.Item>
-                  </>
+                  <List.Item
+                    title={res.score + " - " + res.justification}
+                    key={res.id}
+                  />
                 );
               })}
         </List.Accordion>
@@ -286,13 +276,15 @@ const currentResponses = (
   ndx: number,
   answers: number
 ) => {
-  let responses = data["Data"];
+  let responses = data;
+  console.log("responses: ", responses);
+  console.log("data: ", data);
   if (_.isUndefined(responses)) return 0;
   let scoreTotals = [0, 0, 0, 0, 0, 0];
   let currentResponses = responses.filter((response: SurveyResponse) => {
     console.log("Response: ", response);
     console.log("index: ", ndx);
-    return response["question_id"] == ndx;
+    return response["questionNumber"] == ndx + 1;
   });
 
   console.log("Current responses: ", currentResponses);

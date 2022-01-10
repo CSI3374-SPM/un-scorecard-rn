@@ -4,6 +4,7 @@ import _ from "lodash";
 import { SurveyResponse } from "../store/survey/SurveyReducer";
 import io from "socket.io-client";
 import { languageDictionary } from "../languages/LanguageDictionary";
+import { questions } from "./Wrapper";
 
 const { manifest } = Constants;
 
@@ -115,13 +116,13 @@ export const getQuestions = async (
   ).catch((e: Error) => console.log(e));
 
   if (!_.isNull(data)) {
-    return data.map((questionData: any[]) => {
+    return data.map((questionData: any[], index: number) => {
       const question: QuestionType = {
         id: questionData[0],
         number: questionData[1],
         text: questionData[2],
         category: questionData[3],
-        options: options[questionData[0] - 1],
+        options: options[index],
       };
       return question;
     });
@@ -315,6 +316,7 @@ export const fetchSurveyResultsStreamV2 = (
           id: rawResults["question_id"],
           score: rawResults["score"],
           justification: rawResults["justification"],
+          questionNumber: rawResults["question_num"],
         };
 
         return response;

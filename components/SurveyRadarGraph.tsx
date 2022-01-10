@@ -50,7 +50,7 @@ const averageQuestionNum = (data: SurveyResponse[] | null, ndx: number) => {
   let numResp = 0;
   let responses = data;
   if (!_.isUndefined(responses)) {
-    let currentResponses = _.filter(responses, { id: ndx + 1 });
+    let currentResponses = _.filter(responses, { questionNumber: ndx + 1 });
     currentResponses.forEach((response: SurveyResponse) => {
       total += toNumber(response.score);
       numResp++;

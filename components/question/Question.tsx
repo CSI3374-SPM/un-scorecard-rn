@@ -93,6 +93,7 @@ export default function Question(props: SurveyProps) {
   }, []);
 
   if (_.isNull(questions)) {
+    console.log("Questions is null");
     return (
       <View style={styles.waiting}>
         <Title style={styles.item}>Loading questions</Title>

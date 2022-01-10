@@ -19,9 +19,10 @@ const computeResponseSums = (
 };
 
 const QuestionNum = (data: SurveyResponse[] | null, ndx: number) => {
+  console.log("data in survey bar graph: ", data);
   let scoreTotals = [0, 0, 0, 0, 0, 0];
   if (!_.isNull(data)) {
-    let currentResponses = _.filter(data, { id: ndx + 1 });
+    let currentResponses = _.filter(data, { questionNumber: ndx + 1 });
     currentResponses.map((response) => {
       if (!_.isUndefined(response)) {
         if (response.score >= 0 && response.score <= 5) {
