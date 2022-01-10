@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Text, List, Subheading, FAB } from "react-native-paper";
+import { FAB, List, Subheading, Text } from "react-native-paper";
 import { Image, StyleSheet, useColorScheme, View } from "react-native";
-import { getSurveyProgress, updateSurveyProgress } from "../../api/Wrapper";
 import { connect } from "react-redux";
-import FinishButton from "../log_out/FinishButton";
 import { useNavigation } from "@react-navigation/core";
 import { RootNavigationProp } from "../../types";
 import {
@@ -14,19 +12,17 @@ import {
 } from "../../store/survey/SurveyReducer";
 import SurveyRadarGraph from "../SurveyRadarGraph";
 import { ScrollView } from "react-native-gesture-handler";
-import _, { toNumber } from "lodash";
+import _ from "lodash";
 import SurveyBarGraph from "../SurveyBarGraph";
-import { DefaultTheme } from "../../constants/Colors";
-import { DarkTheme } from "../../constants/Colors";
+import { DarkTheme, DefaultTheme } from "../../constants/Colors";
 import {
   closeResultsSocketV2,
+  fetchConnectedUsers,
   fetchSurveyResultsStreamV2,
-  fetchSurveyResultsV2,
   getQuestions,
   getSurveyProgressV2,
   QuestionType,
   updateSurveyProgressV2,
-  fetchConnectedUsers,
 } from "../../api/WrapperV2";
 
 function OrganizerScreen(props: SurveyProps) {
@@ -41,7 +37,6 @@ function OrganizerScreen(props: SurveyProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState(0);
   const [clients, setClients] = useState(0);
-  var scores: number[] = [];
   // @ts-ignore
   const [questions, setQuestions]: [
     QuestionType[] | null,
@@ -83,8 +78,6 @@ function OrganizerScreen(props: SurveyProps) {
   };
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
-  let populatedScores: number[] = [];
-
   useEffect(() => {
     navigator.setOptions({
       title: props.data.authentication.surveyId,
@@ -281,15 +274,11 @@ const currentResponses = (
   console.log("data: ", data);
   if (_.isUndefined(responses)) return 0;
   let scoreTotals = [0, 0, 0, 0, 0, 0];
-  let currentResponses = responses.filter((response: SurveyResponse) => {
+  return responses.filter((response: SurveyResponse) => {
     console.log("Response: ", response);
     console.log("index: ", ndx);
     return response["questionNumber"] == ndx + 1;
   });
-
-  console.log("Current responses: ", currentResponses);
-
-  return currentResponses;
 };
 
 async function pushNextQuestion(
