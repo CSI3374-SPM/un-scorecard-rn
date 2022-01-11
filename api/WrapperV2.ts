@@ -21,10 +21,7 @@ export type OptionType = {
 };
 
 // const apiUrl = process.env.API_URL;
-export const apiUrl =
-  typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-    ? `http://${manifest.debuggerHost?.split(`:`).shift()?.concat(`:5001`)}`
-    : `http://unboxdev.ecs.baylor.edu:5000`;
+export const apiUrl = `http://unboxdev.ecs.baylor.edu:5000`;
 
 const api = axios.create({
   baseURL: apiUrl,

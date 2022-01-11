@@ -31,7 +31,7 @@ export default function GenerateCodeScreen(props: SurveyProps) {
   // @ts-ignore
   const [surveyItems, setSurveyItems] = useState([
     {
-      label: "UN",
+      label: "who",
       value: "who",
     },
   ]);
