@@ -4,7 +4,6 @@ import _ from "lodash";
 import { SurveyResponse } from "../store/survey/SurveyReducer";
 import io from "socket.io-client";
 import { languageDictionary } from "../languages/LanguageDictionary";
-import { questions } from "./Wrapper";
 
 const { manifest } = Constants;
 
@@ -379,6 +378,7 @@ export const getSurveyProgressStreamV2 = (
     };
 
     if (!_.isUndefined(data.currentQuestion)) {
+      console.log("Current question in wrapper: ", data.currentQuestion);
       callback(data.currentQuestion);
     }
   });

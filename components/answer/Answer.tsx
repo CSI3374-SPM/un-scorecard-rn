@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { View, StyleSheet, useColorScheme } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Title, Text, Divider, FAB } from "react-native-paper";
-import FinishButton from "../log_out/FinishButton";
 import { rating } from "../question/Question";
 import { questions } from "../../api/Wrapper";
 import { SurveyProps } from "../../store/survey/SurveyReducer";
@@ -11,7 +10,6 @@ import { DarkTheme, DefaultTheme } from "../../constants/Colors";
 export default function Answer(props: SurveyProps) {
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
-  const progress = 0;
 
   return (
     <ScrollView>
@@ -42,17 +40,21 @@ export default function Answer(props: SurveyProps) {
             backgroundColor: theme.colors.exit,
           }}
           onPress={() => {
-            props.updateAuthentication({
-              isOrganizer: false,
-              surveyId: "",
-              responseId: null,
-            });
-            props.updateAnswer([]);
+            handleExit(props);
           }}
         />
       </View>
     </ScrollView>
   );
+}
+
+function handleExit(props: SurveyProps) {
+  props.updateAuthentication({
+    isOrganizer: false,
+    surveyId: "",
+    responseId: null,
+  });
+  props.updateAnswer([]);
 }
 
 const styles = StyleSheet.create({
