@@ -21,7 +21,10 @@ export type OptionType = {
 };
 
 // const apiUrl = process.env.API_URL;
-export const apiUrl = `http://unboxdev.ecs.baylor.edu:5000`;
+export const apiUrl =
+  //typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
+  //? `http://${manifest.debuggerHost?.split(`:`).shift()?.concat(`:5001`)}`
+  `http://unboxdev.ecs.baylor.edu:5000`;
 
 const api = axios.create({
   baseURL: apiUrl,
@@ -229,10 +232,6 @@ export const closeProgressSocketV2 = (socket: SocketIOClient.Socket) => {
 
 export const fetchConnectedUsers = (callback: (clients: number) => void) => {
   const socket = makeSocket();
-  console.log("connections socket connected");
-  socket.on("survey_progress_updated", () => {
-    socket.emit("get_clients");
-  });
   socket.on("get_clients", (connectedClients: number) => {
     console.log("clients on wrapper: ", connectedClients);
     callback(connectedClients.connections);
